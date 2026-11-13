@@ -1,3 +1,4 @@
+import { DomesticPhoneDirective } from '../../../shared/domestic-phone.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -10,13 +11,14 @@ import { BranchService } from 'src/app/service/branch.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
+  imports: [DomesticPhoneDirective, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-add-cfmaster',
   templateUrl: './add-cfmaster.component.html',
   styleUrls: ['./add-cfmaster.component.scss'],
 })
 export class AddCfmasterComponent {
 
+  citydata:any[]=[];cityError='' ;
   form:FormGroup;
       branchdata:any;
       data:any;
@@ -49,10 +51,7 @@ export class AddCfmasterComponent {
               });
       }
 
-      ngOnInit(){
-
-
-      }
+      ngOnInit(){this.api.GetCities().subscribe({next:(rows:any)=>{this.citydata=rows;},error:()=>{this.cityError='Could not load company cities. Please reload.';}});}
 
 
 
@@ -76,7 +75,7 @@ export class AddCfmasterComponent {
         this.api.AddCfmaster(payload).subscribe({
           next: (response: any) => {
             console.log('Master successfully:', response);
-            this.messageService.add({ severity: 'success', summary: 'success', detail: 'Create CF Master Type successfully' });
+            this.messageService.add({ severity: 'success', summary: 'success', detail: 'Credit party created' });
 
             setTimeout(() => {
              this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

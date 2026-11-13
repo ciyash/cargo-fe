@@ -1,4 +1,5 @@
 <app-header></app-header>
+<main class="reports-shell">
 <div class="text-center " style="" *ngIf="data4?.length">
   <i
   class="fa fa-print"
@@ -21,7 +22,7 @@
 
 <div class="container  border rounded bg-light" id="print-section" style="background-color: #e3eaf8;" *ngIf="data4?.length">
   <div class="container-fluid" *ngIf="pfdata">
-    <h4 class="text-center fw-bold">{{ pfdata.companyName }}</h4>
+    <h4 class="text-center fw-bold">{{ pfdata.companyId?.name || pfdata.companyName }}</h4>
     <p class="text-center fw-bold">
       Address: {{ pfdata.location }} - {{ pfdata.branchId?.name }} |
       Phone No: {{ pfdata.phone }}
@@ -43,7 +44,7 @@
     </div>
   
     <div class="table-responsive">
-      <table class="table table-bordered table-sm table-striped">
+      <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm table-striped">
         <thead class="table-secondary text-center align-middle">
           <tr>
             <th>No.</th>
@@ -81,7 +82,8 @@
           
         </tbody>
         
-      </table>
+      </table></div>
     </div>
   </div>
  
+</main>

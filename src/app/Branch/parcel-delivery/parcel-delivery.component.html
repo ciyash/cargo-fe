@@ -103,11 +103,16 @@
               id="receiverMobile1"
               formControlName="receiverMobile"
               placeholder="Enter receiver phone"
-            />
+             domesticPhone />
           </div>
 
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Freight collected now</label>
+            <input type="number" min="0" step="0.01" class="form-control" formControlName="toPayDeliveredAmount" [readOnly]="data2[0]?.bookingType !== 'toPay'" />
+            <small>To Pay: collect full freight. Paid / Credit / FOC: zero.</small>
+          </div>
           <div class="col-md-2 d-flex align-items-end mb-3">
-            <button type="button" class="btn btn-success btn-lg w-100" (click)="updateParcelStatus()">
+            <button type="button" class="btn btn-success btn-lg w-100" (click)="updateParcelStatus()" [disabled]="saving || form2.invalid">
               Submit
             </button>
           </div>

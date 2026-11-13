@@ -16,6 +16,8 @@ import { BranchService } from 'src/app/service/branch.service';
 declare var $: any;
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-report-status-date',
@@ -81,7 +83,7 @@ export class ReportStatusDateComponent {
       const day = ('0' + today.getDate()).slice(-2);
       const month = ('0' + (today.getMonth() + 1)).slice(-2);
       const year = today.getFullYear();
-      return `${year}-${month}-${day}`; // ✔ HTML date input format
+      return `${year}-${month}-${day}`; // âœ” HTML date input format
     }
 
 

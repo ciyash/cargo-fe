@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenService } from 'src/app/service/token.service';
 import { environment } from 'src/environments/environment';
 import { HeaderComponent } from '../header/header.component';
-@Component({standalone:true, selector:'app-dashboard', imports:[CommonModule,FormsModule,RouterModule,HeaderComponent], templateUrl:'./dashboard.component.html', styleUrls:['./dashboard.component.scss']})
+@Component({standalone:true, selector:'app-dashboard',host:{class:'company-dashboard-page'}, imports:[CommonModule,FormsModule,RouterModule,HeaderComponent], templateUrl:'./dashboard.component.html', styleUrls:['./dashboard.component.scss']})
 export class DashboardComponent implements OnInit, OnDestroy {
   today = this.localDate(new Date()); date = this.today;
   sales: any[] = []; statuses: any[] = []; accounts: any[] = [];

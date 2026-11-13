@@ -9,6 +9,8 @@ import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-regularcustomer-booking',
@@ -22,12 +24,12 @@ export class RegularcustomerBookingComponent implements OnInit {
   pfdata: any;
 
   constructor(private router: Router, private api: BranchService) {
-    // ✅ Try to get data from router state
+    // âœ… Try to get data from router state
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras?.state?.['data7']) {
       this.data7 = navigation.extras.state['data7'];
       console.log('Customer data from router state:', this.data7);
-      // ✅ Store in localStorage for refresh support
+      // âœ… Store in localStorage for refresh support
       // localStorage.setItem('regularCustomerData', JSON.stringify(this.data7));
 
     }
@@ -36,7 +38,7 @@ export class RegularcustomerBookingComponent implements OnInit {
   ngOnInit(): void {
     this.getProfileData();
 
-    // ✅ Fallback: if data7 not set in constructor, get from localStorage
+    // âœ… Fallback: if data7 not set in constructor, get from localStorage
     if (!this.data7) {
       const storedData = localStorage.getItem('regularCustomerData');
 

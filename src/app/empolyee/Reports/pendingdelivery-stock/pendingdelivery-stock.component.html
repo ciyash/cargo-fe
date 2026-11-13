@@ -1,4 +1,5 @@
 <app-header></app-header>
+<main class="reports-shell">
 
 <h5 class="text-center fw-bold text-danger" style="">
   <u> Parcel Pending Delivery Stock Report</u>
@@ -16,25 +17,13 @@
           <input type="date" class="form-control " formControlName="toDate">
         </div>
 
-        <!-- <div class="col-md-6">
-          <label class="form-label form-after">From City</label>
-          <select #selectElem class="form-select form-select-sm" formControlName="fromCity">
-            <option value="all" selected> select all</option>
-            <option *ngFor="let row2 of citydata" [value]="row2.cityName">{{ row2.cityName }}</option>
-          </select>
-        </div> -->
+        
         <div class="col-md-6">
             <label class="form-label form-after">From City</label>
             <input type="text" class="form-control" formControlName="fromCity" readonly />
           </div>
 
-        <!-- <div class="col-md-6">
-          <label class="form-label form-after">Pickup Branch</label>
-          <select #pickupbranch class="form-select form-select-sm" formControlName="pickUpBranch">
-            <option value="all" selected> select all</option>
-            <option *ngFor="let row4 of pdata" [value]="row4.branchUniqueId"> {{ row4.name }} </option>
-          </select>
-        </div> -->
+        
         <div class="col-md-6">
             <label class="form-label form-after">	From City Branch Name</label>
             <input type="text" class="form-control" [value]="ffdata?.name || ''" readonly />
@@ -61,3 +50,5 @@
     </form>
   </div>
 </div>
+
+</main>

@@ -15,6 +15,8 @@ import { ToastrService } from 'ngx-toastr';
 import { BranchService } from 'src/app/service/branch.service';
 declare var $: any;
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-pendingdelivery-stock',
@@ -88,7 +90,7 @@ export class PendingdeliveryStockComponent {
 
         // To City
         $(this.selectElem2.nativeElement).select2();
-        $(this.selectElem2.nativeElement).val('all').trigger('change'); // ✅
+        $(this.selectElem2.nativeElement).val('all').trigger('change'); // âœ…
         $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
           const selectedToCity = event.params.data.id;
           this.form.patchValue({ toCity: selectedToCity });
@@ -97,7 +99,7 @@ export class PendingdeliveryStockComponent {
 
         // Drop Branch
         $(this.droupbranch.nativeElement).select2();
-        $(this.droupbranch.nativeElement).val('all').trigger('change'); // ✅
+        $(this.droupbranch.nativeElement).val('all').trigger('change'); // âœ…
         $(this.droupbranch.nativeElement).on('select2:select', (event: any) => {
           const selectedDropBranch = event.params.data.id;
           this.form.patchValue({ dropBranch: selectedDropBranch });

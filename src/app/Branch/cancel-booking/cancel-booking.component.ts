@@ -64,8 +64,8 @@ export class CancelBookingComponent {
     const today = new Date();
     this.todayDate = today.toLocaleDateString('en-GB');
     this.form1 = this.fb.group({
-      refundCharge: ['', Validators.required],
-      refundAmount: ['', Validators.required],
+      refundCharge: [0],
+      refundAmount: [0],
       cancelDate: [this.todayDate, Validators.required], // ✅ Now this will work
       cancelByUser: ['', Validators.required],
       cancelBranch: ['', Validators.required],
@@ -86,7 +86,7 @@ export class CancelBookingComponent {
 
     });
 
-    this.GetAllEmployee();
+
     this.getProfileData();
   }
   getProfileData() {
@@ -114,7 +114,8 @@ export class CancelBookingComponent {
           //   this.data2 = [res]; // Wrap the object into an array
           //   this.errorMessage = '';
           if (res && res.booking) {
-            this.data2 = [res.booking]; // Now each item is booking itself
+            this.data2 = [res.booking];
+            this.form1.patchValue({refundAmount:res.booking.bookingType==='paid'?res.booking.grandTotal:0,refundCharge:0});
           } else {
             this.data2 = [];
           }
@@ -163,6 +164,7 @@ export class CancelBookingComponent {
 
 
   cancelbooking() {
+    if(this.data2?.[0]?.bookingStatus!==0){this.toast.warning('Only bookings before loading can be cancelled');return;}
     const payload1 = {
       ...this.form1.value,
       grnNo: this.searchTerm
@@ -171,10 +173,12 @@ export class CancelBookingComponent {
     this.api.BookingCancel(payload1, this.searchTerm).subscribe(
       (res) => {
         console.log('Booking cancelled successfully:', res);
-        this.toast.success("Parcel successfully cancelled");
+        this.toast.success('Cancellation request processed');
+        this.searchUser();
       },
       (err) => {
         console.error('Error cancelling booking:', err);
+        this.toast.error(err.error?.message || 'Cancellation could not be completed');
       }
     );
   }

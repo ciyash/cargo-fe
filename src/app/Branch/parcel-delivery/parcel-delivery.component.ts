@@ -1,3 +1,4 @@
+import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -11,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
+  imports: [DomesticPhoneDirective, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-parcel-delivery',
   templateUrl: './parcel-delivery.component.html',
   styleUrls: ['./parcel-delivery.component.scss']
@@ -31,6 +32,7 @@ export class ParcelDeliveryComponent {
   citydata: any;
   pfdata: any;
   showReceiptToPrint = false;
+  saving = false;
 
   constructor(
     private api: BranchService,
@@ -46,8 +48,9 @@ export class ParcelDeliveryComponent {
 
     this.form2 = this.fb.group({
       grnNo: ['', Validators.required],
-      receiverName: [''],
-      receiverMobile: [''],
+      receiverName: ['', Validators.required],
+      receiverMobile: ['', [Validators.required, Validators.pattern(/^\+?\d{7,15}$/)]],
+      toPayDeliveredAmount: [0, [Validators.required, Validators.min(0)]],
       lrNumber: [''],
     });
   }
@@ -78,10 +81,11 @@ export class ParcelDeliveryComponent {
       this.api.GetGRNnumber(this.searchTerm.trim()).subscribe(
         (res: any) => {
           console.log("data:",res);
-          this.GetAllEmployee();
+
 
           if (res && res.booking) {
-            this.data2 = [res.booking]; // Flattened structure
+            this.data2 = [res.booking];
+            this.form2.patchValue({grnNo:res.booking.grnNo,receiverName:res.booking.receiverName,receiverMobile:res.booking.receiverMobile,toPayDeliveredAmount:res.booking.bookingType === 'toPay' ? res.booking.grandTotal : 0});
             this.errorMessage = '';
           } else {
             this.data2 = [];
@@ -113,19 +117,28 @@ export class ParcelDeliveryComponent {
   }
 
   updateParcelStatus() {
+    this.form2.markAllAsTouched();
+    if (this.saving || this.form2.invalid) return;
+    const row=this.data2[0];
+    const due=row?.bookingType==='toPay'?Number(row.grandTotal):0;
+    if (!row || row.bookingStatus!==2 || Math.abs(Number(this.form2.value.toPayDeliveredAmount)-due)>0.001) { this.toast.warning('Confirm the full To Pay amount before delivery; other freight types collect zero'); return; }
+    this.saving=true;
     const payload = {
       grnNo: this.form2.value.grnNo,
       receiverName: this.form2.value.receiverName,
       receiverMobile: this.form2.value.receiverMobile,
+      toPayDeliveredAmount: Number(this.form2.value.toPayDeliveredAmount),
     };
 
     this.api.ReceivedParcelUpdate(payload).subscribe(
       (res: any) => {
+        this.saving=false;
         this.updata = res;
         this.toast.success(res.message || 'Parcel status updated successfully', 'Success');
         this.searchUser(); // Refresh data
       },
       (error) => {
+        this.saving=false;
         const errMsg = error.error?.message || 'Failed to update parcel status';
         this.toast.error(errMsg, 'Error');
       }

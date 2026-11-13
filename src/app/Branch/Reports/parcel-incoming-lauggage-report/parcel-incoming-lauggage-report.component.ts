@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   selector: 'app-parcel-incoming-lauggage-report',

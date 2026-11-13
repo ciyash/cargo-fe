@@ -12,6 +12,8 @@ declare var $: any;
 import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-dispatched-report',
@@ -203,7 +205,7 @@ DispatchReport() {
       console.log("res:",res);
 
       if (res.message) {
-        this.toast.success(res.message); // ✅ show success toast
+        this.toast.success(res.message); // âœ… show success toast
       } else {
         this.toast.success("Report loaded successfully");
       }
@@ -215,7 +217,7 @@ DispatchReport() {
     error: (err) => {
       console.error("API Error:", err);
       const errorMessage = err?.error?.message || "Report loading failed. Please try again.";
-      this.toast.error(errorMessage); // ✅ show error toast
+      this.toast.error(errorMessage); // âœ… show error toast
     }
   });
 }

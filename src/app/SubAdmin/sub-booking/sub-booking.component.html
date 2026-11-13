@@ -1,4 +1,5 @@
 <app-header></app-header>
+<div class="container mb-2"><div class="d-flex align-items-center justify-content-end gap-2"><small class="text-muted" *ngIf="packageLoading || dispatchLoading">Loading dispatch &amp; package types...</small><button type="button" class="btn btn-outline-secondary btn-sm" (click)="loadBookingOptions()" [disabled]="packageLoading || dispatchLoading">Refresh lists</button></div><p class="text-danger small mb-1" role="alert" *ngIf="dispatchError">{{dispatchError}}</p><p class="text-danger small mb-1" role="alert" *ngIf="packageError">{{packageError}}</p></div>
 <div class="container"><app-billing></app-billing></div>
 <div class="container">
   <app-search-grn-number [embedded]="true"></app-search-grn-number>
@@ -67,8 +68,8 @@ word-wrap: break-word">Parcel Booking</h4>
           <label class="form-label">Dispatch Type </label>
           <!-- <input type="text" class="form-control form-select-sm" formControlName="dispatchType"  /> -->
           <select #dispatchtype class="form-select form-select-sm" formControlName="dispatchType">
-            <option value="" selected>Select Dispatch Type</option>
-            <option *ngFor="let dp of dptype" value="{{dp.name}}">{{dp.name}}</option>
+            <option value="">Select Dispatch Type</option>
+            <option *ngFor="let dp of dptype; trackBy:optionName" [value]="dp.name">{{dp.name}}</option>
           </select>
         </div>
         <div class="col-md-4">
@@ -88,16 +89,16 @@ word-wrap: break-word">Parcel Booking</h4>
 
           <!-- Show this only when bookingType is 'credit' -->
           <!-- <div *ngIf="form.get('bookingType')?.value === 'credit'" class="mt-2">
-        <label class="form-label form-after">Agent</label>
+        <label class="form-label form-after">Credit party</label>
           <select  class="form-select form-select-sm" formControlName="toCity">
-            <option value="" selected>Select Company</option>
+            <option value="" selected>Select credit party</option>
             <option *ngFor="let row of companyList" [value]="row.name">{{ row.name }}</option>
           </select>
         </div> -->
           <div *ngIf="form.get('bookingType')?.value === 'credit'" class="mt-2">
-            <label class="form-label form-after">Agent</label>
+            <label class="form-label form-after">Credit party</label>
             <select class="form-select form-select-sm" formControlName="agent" (change)="onCompanySelect($event)">
-              <option value="" selected>Select Company</option>
+              <option value="" selected>Select credit party</option>
               <option *ngFor="let row of companyList" [value]="row.name">{{ row.name }}</option>
             </select>
           </div>
@@ -128,8 +129,8 @@ word-wrap: break-word">Parcel Booking</h4>
                     (input)="calculateTotal(i)"></td>
                 <td>
                   <select class="form-control form-select-sm" formControlName="packageType">
-                    <option value="" selected>Select Package Type</option>
-                    <option *ngFor="let pack of packdata" value="{{pack.name}}">{{pack.name}}</option>
+                    <option value="">Select Package Type</option>
+                    <option *ngFor="let pack of packdata; trackBy:optionName" [value]="pack.name">{{pack.name}}</option>
                   </select>
                 </td>
                 <td><input type="text" class="form-control form-select-sm" formControlName="contains"></td>
@@ -183,7 +184,7 @@ word-wrap: break-word">Parcel Booking</h4>
               <!-- Other Fields (Auto-populated) -->
               <div class="col-md-3">
                 <label class="form-label form-after">Sender Mobile Number</label>
-                <input class="form-control form-select-sm" formControlName="senderMobile">
+                <input class="form-control form-select-sm" formControlName="senderMobile" domesticPhone>
               </div>
 
               <div class="col-md-3">
@@ -217,7 +218,7 @@ word-wrap: break-word">Parcel Booking</h4>
               </div>
               <div class="col-md-3">
                 <label class="form-label form-after">Receiver Mobile Number </label>
-                <input class="form-control form-select-sm " formControlName="receiverMobile">
+                <input class="form-control form-select-sm " formControlName="receiverMobile" domesticPhone>
               </div>
               <div class="col-md-3">
                 <label class="form-label">Receiver Address </label>

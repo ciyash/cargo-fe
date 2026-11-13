@@ -9,6 +9,8 @@ import { BranchService } from 'src/app/service/branch.service';
 import { saveAs } from 'file-saver';
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-parcelbooking-serialno',
@@ -28,7 +30,7 @@ export class ParcelbookingSerialnoComponent implements OnInit {
   constructor(private router: Router, private api: BranchService) {}
 
   ngOnInit(): void {
-    const dataString = localStorage.getItem('serialData'); // ✅ Correct key
+    const dataString = localStorage.getItem('serialData'); // âœ… Correct key
     if (dataString) {
       this.data2 = JSON.parse(dataString);
       console.log("Data received from localStorage:", this.data2);

@@ -5,39 +5,21 @@
 <input required type="text" name="searchTerm" aria-label="Shipment search value" placeholder="Enter shipment number or customer details" class="form-control" [(ngModel)]="searchTerm">
 <div class="shipment-search-actions"><button type="button" class="btn btn-outline-secondary" (click)="searchTerm = ''; data2 = []; errorMessage = ''">Clear</button><button type="submit" class="btn btn-primary" [disabled]="!(searchTerm || '').trim()" data-bs-toggle="modal" data-bs-target="#extraLargeModal">Find shipment</button></div>
 </form></div>
-<!-- Modal -->
+
 <div class="modal fade" id="extraLargeModal" tabindex="-1" aria-labelledby="extraLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="extraLargeModalLabel"> Parcel Details </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="extraLargeModalLabel">Shipment details</h5>
+        <button type="button" class="btn btn-outline-secondary btn-sm ms-auto me-3" *ngIf="canEdit && !editing" (click)="startEdit()">Edit booking</button><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="container mt-4" *ngIf="data2?.length">
-          <div class="header">
-            <!-- <h2>Parcel Details</h2> -->
-            <div>
-              <!-- <button class="btn btn-secondary">BACK</button> -->
-              <span class="stamp">{{ data2[0].bookingType | uppercase }}</span>
-              <!-- <img src="https://via.placeholder.com/30" alt="Icons" class="ms-2"> -->
-            </div>
-          </div>
-          
-          <h2 class="text-danger text-center" *ngIf="data2[0].bookingStatus === 0" >Booking</h2>
-          <h2 class="text-danger text-center" *ngIf="data2[0].bookingStatus === 1" >Loading</h2>
-          <h2 class="text-danger text-center" *ngIf="data2[0].bookingStatus === 2" >Unloading</h2>
-          <h2 class="text-danger text-center" *ngIf="data2[0].bookingStatus === 3" >Missing</h2>
-          <h2 class="text-danger text-center" *ngIf="data2[0].bookingStatus === 5" >Cancel</h2>
-          <h2 class="text-danger text-center" *ngIf="data2[0].bookingStatus === 4" > Already Delivered</h2>
-
-
-          <div class="row">
-            <div class="col-12">  
-              <strong>GRN No: {{ data2[0].grnNo }}</strong> | <strong>LR No: {{ data2[0].lrNumber }}</strong>
-            </div>
-          </div>
-          <div  *ngIf="data2[0].bookingStatus===2">
+        <div class="shipment-details" *ngIf="data2?.length">
+          <div class="shipment-overview">
+ <div><span class="eyebrow">SHIPMENT REFERENCE</span><h3>{{ data2[0].lrNumber || data2[0].grnNo }}</h3><span>GRN {{ data2[0].grnNo }} Ãƒâ€šÃ‚Â· {{ data2[0].fromCity }} ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ {{ data2[0].toCity }}</span></div>
+ <div class="shipment-badges"><span class="status-badge">{{ ['Booked','Loaded','Unloaded','Missing','Delivered','Cancelled'][data2[0].bookingStatus] || 'Pending' }}</span><span class="payment-badge">{{ data2[0].bookingType | uppercase }}</span></div>
+</div>
+ <div class="edit-details" *ngIf="editing && activeTab==='booking'"><div class="section-title">Edit contact details</div><div class="edit-grid"><label *ngFor="let field of editFields">{{field.label}}<input [(ngModel)]="editDraft[field.key]" [name]="field.key" [domesticPhone]="field.key.endsWith('Mobile')" [phoneInputActive]="field.key.endsWith('Mobile')"></label></div><div class="edit-actions"><button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="saving" (click)="editing=false">Cancel edit</button><button type="button" class="btn btn-primary btn-sm" [disabled]="saving" (click)="saveEdit()">{{saving?'Saving...':'Save booking'}}</button></div></div><div *ngIf="data2[0].bookingStatus===2">
             <div class="col-12 section-title">Delivery Details</div>
             <div >
               <form [formGroup]="form" >
@@ -54,13 +36,15 @@
                 <div class="col-md-4 ">
                   <div class="form-group">
                     <label>Delivery Receiver Phone</label>
-                    <input type="text" [(ngModel)]="data2[0].receiverMobile" formControlName="receiverMobile">
+                    <input type="text" [(ngModel)]="data2[0].receiverMobile" formControlName="receiverMobile" domesticPhone>
                   </div>
                 </div>
                 <div class="col-md-4  ">
                   <div class="form-group mt-4 ">
                     <label></label>
-                    <button class="btn btn-success btn-sm" data-bs-dismiss="modal"  (click)="updateParcelStatus()"> Submit</button>
+                    <label>Freight collected now</label>
+                    <input type="number" min="0" step="0.01" formControlName="toPayDeliveredAmount" [readOnly]="data2[0]?.bookingType !== 'toPay'">
+                    
                   </div>
                 </div>
               </div>
@@ -69,16 +53,9 @@
           </div>
 
 
-          <!-- <div class="row" >
-            <span *ngIf="data2[0].bookingStatus === 0" class="badge bg-primary">Booking</span>
-            <span *ngIf="data2[0].bookingStatus === 1" class="badge bg-primary">Loading</span>
-            <span *ngIf="data2[0].bookingStatus === 2" class="badge bg-warning">Unloading</span>
-            <span *ngIf="data2[0].bookingStatus === 3" class="badge bg-danger">Missing</span>
-            <span *ngIf="data2[0].bookingStatus === 5" class="badge bg-secondary">Cancel</span>
-          </div> -->
-          <!-- Item Details -->
-          <div class="row">
-            <div class="col-12 section-title">Item Details</div>
+          
+          
+          <div class="row"><div class="col-12 section-title">Item Details</div>
             <div class="col-12">
               <div class="row" *ngFor="let item of data2[0].packages">
                 <div class="col-md-2 form-group">
@@ -109,9 +86,8 @@
             </div>
           </div>
         
-          <!-- Customer Details -->
-          <div class="row">
-            <div class="col-12 section-title">Customer Details</div>
+          
+          <div class="row"><div class="col-12 section-title">Customer Details</div>
             <div class="col-12">
               <div class="row">
                 <div class="col-md-6">
@@ -146,9 +122,8 @@
             </div>
           </div>
         
-          <!-- Booking Details -->
-          <div class="row">
-            <div class="col-12 section-title">Booking Details</div>
+          
+          <div class="row"><div class="col-12 section-title">Booking Details</div>
             <div class="col-12">
               <div class="row">
                 <div class="col-md-6">
@@ -187,7 +162,7 @@
                     </div>
                     <div class="col-md-6 form-group">
                       <label>Booking Status</label>
-                      <input type="text" [value]="data2[0].bookingStatus" readonly>
+                      <input type="text" [value]="['Booked','Loaded','Unloaded','Missing','Delivered','Cancelled'][data2[0].bookingStatus]" readonly>
                     </div>
                   </div>
                 </div>
@@ -207,9 +182,8 @@
             </div>
           </div>
         
-          <!-- Loading Details -->
-          <div class="row">
-            <div class="col-12 section-title">Loading Details</div>
+          
+          <div class="row"><div class="col-12 section-title">Loading Details</div>
             <div class="col-12">
               <div class="row">
                 <div class="col-md-6 form-group">
@@ -240,9 +214,8 @@
             </div>
           </div>
         
-          <!-- Unloading Details -->
-          <div class="row">
-            <div class="col-12 section-title">Unloading Details</div>
+          
+          <div class="row"><div class="col-12 section-title">Unloading Details</div>
             <div class="col-12">
               <div class="row">
                 <div class="col-md-6 form-group">
@@ -265,9 +238,8 @@
             </div>
           </div>
         
-          <!-- Delivery Details -->
-          <div class="row">
-            <div class="col-12 section-title">Delivery Details</div>
+          
+          <div class="row"><div class="col-12 section-title">Delivery Details</div>
             <div class="col-12">
               <div class="row">
                 <div class="col-md-6 form-group">
@@ -302,8 +274,8 @@
             </div>
           </div>
         
-          <!-- Cancel Details -->
-          <div class="row">
+          
+          <div class="row" *ngIf="data2[0].bookingStatus === 5">
             <div class="col-12 section-title">Cancel Details</div>
             <div class="col-12">
               <div class="row">
@@ -339,9 +311,8 @@
             </div>
           </div>
         
-          <!-- Charge Details -->
-          <div class="row">
-            <div class="col-12 section-title">Charge Details</div>
+          
+          <div class="row"><div class="col-12 section-title">Charge Details</div>
             <div class="col-12">
               <div class="row">
                 <div class="col-md-4 form-group">
@@ -379,54 +350,13 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >OK</button>
-        <button type="button" class="btn btn-primary">Save Changes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+        
       </div>
     </div>
   </div>
 </div>
-  <style>
-    .stamp {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 24px;
-      color: red;
-      transform: rotate(15deg);
-      text-decoration: none;
-      border: 2px dashed red;
-      padding: 5px 20px;
-      z-index: 1;
-    }
-    .section-title {
-      background-color: #007bff;
-      color: white;
-      padding: 5px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-    }
-    .form-group label {
-      font-weight: bold;
-      margin-bottom: 2px;
-    }
-    .form-group input {
-      border: 1px solid #007bff;
-      padding: 5px;
-      width: 100%;
-    }
-    .row {
-      margin-bottom: 15px;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .header .btn {
-      margin-left: 10px;
-    }
-  </style>
+  
 
 
 
@@ -445,61 +375,5 @@
 
 
 
- <!-- Search Results -->
- <!-- <div *ngIf="data2" class="mt-4">
-    <h5>Search Results:</h5>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>LR/Gr Number</th>
-          <th>Pickup</th>
-          <th>Drop</th>
-          <th>From</th>
-          <th>To</th>
-          <th>Sender</th>
-          <th>Receiver</th>
-          <th>Charges</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of data2;">
-          <td >{{ user.bookingDate | date:'dd/MM/YYYY' }}</td>
-          <td style="cursor: pointer; color: blueviolet;" (click)="orderinvoice(user.grnNo)">{{ user.lrNumber }} </td>
-          <td>{{ user.pickUpBranch }}</td>
-          <td>{{ user.dropBranch }}</td>
-          <td>{{ user.fromCity }}</td>
-          <td>{{ user.toCity }}</td>
-          <td> {{user.senderName}} <br> {{user.senderMobile}} </td>
-          <td> {{user.receiverName}} <br> {{user.receiverMobile}} </td>
-          <td> {{user.grandTotal | currency:'INR':true:'1.0-1' }} </td>
-          <td style="cursor: pointer;" (click)="updateParcelStatus(user.grnNo)">
-            <ng-container *ngIf="user.bookingStatus=='0'">
-              <i class="fa fa-times-circle mb-2 text-danger" title="Booked"></i>Parcel Booked
-          </ng-container>
-          <ng-container *ngIf="user.bookingStatus=='1'">
-              <i class="fa fa-check-circle mb-2 text-success" title="Parcel Load"></i> Parcel Load
-          </ng-container>
-          <ng-container *ngIf="user.bookingStatus=='2'">
-              <i class="fa fa-check-circle mb-2 text-primary" title="Parcel OnLoad"></i> Parcel OnLoad
-          </ng-container>
-          <ng-container *ngIf="user.bookingStatus=='3'">
-              <i class="fa fa-check-circle mb-2 text-warning" title="Parcel Missing"></i> Parcel Missing 
-          </ng-container>
-          <ng-container *ngIf="user.bookingStatus=='4'">
-              <i class="fa fa-check-circle mb-2 text-success" title="Parcel Delivered"></i> Parcel
-              Delivered
-          </ng-container>
-          <ng-container *ngIf="user.bookingStatus=='5'">
-              <i class="pi pi-times-circle mb-2 text-danger" title="Parcel Cancel"></i> Parcel Cancel
-          </ng-container>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div *ngIf="errorMessage" class="text-danger mt-3">
-    {{ errorMessage }}
-  </div> -->
+ 
+ 

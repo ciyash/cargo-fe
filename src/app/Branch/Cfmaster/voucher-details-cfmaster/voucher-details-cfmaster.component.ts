@@ -97,7 +97,7 @@ export class VoucherDetailsCfmasterComponent {
       this.api.GetVoucherDetails(payload).subscribe({
         next: (response: any) => {
           console.log('Parcel loaded successfully:', response);
-          this.toast.success('Credit Voucher Successfully Generated','Success')
+          this.toast.success('Credit statements loaded','Success')
           setTimeout(() => {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
               this.router.navigate(['/voucherdetailscf']);

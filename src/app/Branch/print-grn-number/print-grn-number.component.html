@@ -1,160 +1,17 @@
-<app-header></app-header>
-<div class="print-area" style="margin-top: 8%;">
-  <div class="container" *ngIf="pfdata">
-    <h4 class="text-center fw-bold">{{ pfdata.companyId?.name }}</h4>
-    <p class="text-center fw-bold">
-      Address: {{ pfdata.location }} - {{ pfdata.branchId?.name }} |
-      Phone No: {{ pfdata.phone }}
-    </p>
-  </div>
-  <div class="container-fluid mt-3" >
-    <div class="row" >
-      <div class="col-3">
-        <p class="fw-bold" >SENDER'S COPY</p>
-      </div>
-      <div class="col-6">
-        <!-- <h5 class="text-center">LR No: {{ data1.lrNumber }}</h5> -->
-        <h5 class="text-center" *ngIf="data1?.lrNumber">LR No: {{ data1.lrNumber }}</h5>
-
-      </div>
-      <div class="col-3 text-end">
-            Status: 
-        <span class="text-success fw-bold font-size-100"> <ng-container *ngIf="data1?.bookingType === 'paid'">PAID</ng-container></span>
-        <span class="text-danger fw-bold font-size-100"> <ng-container *ngIf="data1?.bookingType === 'toPay'">TOPAY</ng-container></span>
-        <span class="text-warning fw-bold font-size-100"> <ng-container *ngIf="data1?.bookingType === 'credit'">CREDIT</ng-container></span>
-        <span class="text-primary fw-bold font-size-100"> <ng-container *ngIf="data1?.bookingType === 'clr'">CLR</ng-container></span>
-      </div>
-    </div>
-    <div class="d-flex justify-content-between">
-     
-          
-      </div>
-    <div class="table-responsive mt-3">
-      <table class="table table-bordered text-white table-custom">
-        <thead class="table-header">
-          <tr>
-            <th width="35%">From Branch</th>
-            <th width="33%">To Branch</th>
-            <th width="32%">Date</th>
-          </tr>
-          <tr *ngIf="data1">
-            <td class="fw-bold">{{data1.pickUpBranchname}} - ({{data1.fromCity}})</td>
-            <td class="fw-bold">{{data1.dropBranchname}} - ({{data1.toCity}})</td>
-            <td>{{ data1.bookingDate | date: 'dd/MMM/yyyy' }}</td>
-          </tr>
-          <tr>
-            <th>Sender Details</th>
-            <th>Receiver Details</th>
-            <th></th>
-          </tr>
-        </thead>
-  
-        <tbody>
-  
-          <tr>
-            <td>
-              <span> Name: {{ data1.senderName }}</span> <br>
-              <span > Mobile: {{data1.senderMobile}}</span>
-            </td>
-            <td>
-              <span >Name: {{data1.receiverName}} </span><br>
-              <span>Mobile: {{data1.receiverMobile}}</span>
-            </td>
-            <td>
-              <div *ngIf="qrData" class="qr-code ">
-                <h6>LR No: {{ data1.lrNumber }}</h6>
-                <qrcode *ngIf="qrData" [qrdata]="qrData" [width]="50" [errorCorrectionLevel]="'M'"></qrcode>
-              </div>
-            </td>
-          </tr>
-          <tr class="text-primary">
-            <th width="25%">Details of Contents</th>
-            <th width="25%">No of Article</th>
-            <th width="50%">Charges</th>
-          </tr>
-  
-          <tr *ngFor="let cdata of data1.packages; let i = index">
-            <td>{{ cdata.contains }} ({{ cdata.packageType }})</td>
-            <td>{{ cdata.quantity }}</td>
-            <td *ngIf="i === 0" [attr.rowspan]="data1.packages.length">
-              <p style="margin-bottom: -5px;">Freight Charges: {{data1.totalCharge | currency:'INR':true:'1.0-0'}}</p>
-              <p style="margin-bottom: -5px;" *ngIf="data1.doorDeliveryCharges != '0'">Door Delivery Charges: {{
-                data1.doorDeliveryCharges | currency:'INR':true:'1.0-0' }}</p>
-              <p style="margin-bottom: -5px;" *ngIf="data1.doorPickupCharges != '0'">Door Pickup Charges: {{
-                data1.doorPickupCharges | currency:'INR':true:'1.0-0' }}</p>
-              <p style="margin-bottom: -5px;" *ngIf="data1.hamaliCharges != '0'">Hamali Charges: {{ data1.hamaliCharges |
-                currency:'INR':true:'1.0-0' }}</p>
-              <p style="margin-bottom: -5px;" *ngIf="data1.serviceCharges != '0'">LR Charges: {{ data1.serviceCharges |
-                currency:'INR':true:'1.0-0' }}</p>
-              <!-- <p><strong>NET AMOUNT: {{ data1.grandTotal | currency:'INR':true:'1.0-0' }}</strong></p> -->
-            </td>
-          </tr>
-  
-  
-          <tr>
-            <td colspan="3">
-              <p ><strong>NET AMOUNT: {{ data1.grandTotal | currency:'INR':true:'1.0-0' }}</strong></p>
-            </td>
-          </tr>
-  
-  
-        </tbody>
-  
-        <tfoot class="table-light text-center fw-bold">
-          <!-- <tr rowspan="1 " > -->
-  
-  
-  
-        </tfoot>
-  
-  
-  
-      </table>
-  
-      <div class="d-flex justify-content-end">
-        <h6 class="text-end">SenderSign</h6>&nbsp;&nbsp;
-        <hr class="text-end" style="border: 1px solid #1a1818; width: 10%;">
-      </div>
-  
-      <h6><u>Terms & Conditions</u></h6>
-      <div class="d-flex justify-content-center">
-        <p><i class="fa fa-arrow-right"></i> The Consignments are Packed, carried at Owner's risk. The Company does not
-          know the contents <br>
-          <i class="fa fa-arrow-right"></i> The Consignor is reponsible to provide the forms<br>
-          <i class="fa fa-arrow-right"></i> The Owners of the consignments are lible to pay all the taxes, cess or duties
-          that may be levied by the Government Authorities at the time of checking within 24 Hours.
-        </p>
-      </div>
-  
-      <div class="d-flex justify-content-center">
-        <div *ngIf="qrData" class="qr-code">
-          <qrcode *ngIf="qrData" [qrdata]="qrData" class="bg-light" [width]="140" [errorCorrectionLevel]="'M'"></qrcode>
-          <h6>LRno/GRno: {{ data1.lrNumber }}</h6>
-        </div>
-      </div>
-  
-    </div>
-  
-  </div>
-
-  <div class="container-fluid d-flex justify-content-evenly" *ngIf="data1">
-    <div class="row">
-  
-    </div>
-    <div>
-  
-    </div>
-  </div>
-  
-  
-  <div *ngIf="!loading" class="text-center m-3">
-    <div class="hide-on-print hide-on-pdf">
-      <button type="button" class="btn btn-sm btn-danger m-3" (click)="printPage()">
-        <i class="pi pi-print"></i> Print
-      </button>
-      <button type="button" class="btn btn-sm btn-primary ml-2" (click)="goBack()">
-        <i class="fa fa-arrow-left"></i> Go To Back
-      </button>
-    </div>
-  </div>
+<div class="receipt-page" [class.embedded]="embedded">
+  <header class="receipt-toolbar screen-only">
+    <div><span class="eyebrow">BOOKINGS / RECEIPT</span><h1>Booking receipt</h1><p>Review your consignment details and print the sender's copy.</p></div>
+    <div class="toolbar-actions"><a *ngIf="!embedded" routerLink="/booking" class="receipt-button secondary">&#8592; Back to booking</a><button type="button" class="receipt-button" (click)="printPage()" [disabled]="loading || !data1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9V3h12v6M6 18H3V9h18v9h-3M6 14h12v7H6z"/></svg>Print receipt</button></div>
+  </header>
+  <div class="receipt-state" *ngIf="loading" role="status">Loading booking receipt...</div>
+  <div class="receipt-state" *ngIf="error" role="alert"><p>{{error}}</p><button type="button" class="receipt-button secondary" (click)="loadReceipt()">Retry</button></div>
+  <article class="receipt-paper" *ngIf="data1">
+    <header class="receipt-heading"><div class="company-identity"><span class="company-mark">{{initials}}</span><div><h2>{{companyName}}</h2><p *ngIf="pfdata?.companyId?.address">{{pfdata.companyId.address}}</p><p *ngIf="pfdata?.companyId?.phone || pfdata?.phone">Phone: {{pfdata.companyId?.phone || pfdata.phone}}</p></div></div><div class="receipt-reference"><span class="eyebrow">CONSIGNMENT RECEIPT</span><strong>{{data1.lrNumber || 'GRN ' + data1.grnNo}}</strong><span>GRN {{data1.grnNo}}</span></div></header>
+    <div class="receipt-strip"><span>Sender's copy</span><span>Freight payment <b class="payment-badge" [class.to-pay]="data1.bookingType === 'toPay'">{{paymentLabel}}</b></span></div>
+    <section class="route-details" aria-label="Shipment route"><div><span class="field-label">From branch</span><strong>{{data1.pickUpBranchname || '—'}}</strong><span>{{data1.fromCity}}</span></div><div><span class="field-label">To branch</span><strong>{{data1.dropBranchname || '—'}}</strong><span>{{data1.toCity}}</span></div><div><span class="field-label">Booking date</span><strong>{{data1.bookingDate | date:'dd MMM yyyy'}}</strong><span>{{data1.dispatchType || 'Own logistics'}}</span></div></section>
+    <section class="party-details"><div><h3>Sender / Consignor</h3><strong>{{data1.senderName || '—'}}</strong><p>{{data1.senderMobile}}</p><p *ngIf="data1.senderAddress">{{data1.senderAddress}}</p><p *ngIf="data1.senderGst || data1.senderGST">GSTIN: {{data1.senderGst || data1.senderGST}}</p></div><div><h3>Receiver / Consignee</h3><strong>{{data1.receiverName || '—'}}</strong><p>{{data1.receiverMobile}}</p><p *ngIf="data1.receiverAddress">{{data1.receiverAddress}}</p><p *ngIf="data1.receiverGst">GSTIN: {{data1.receiverGst}}</p></div></section>
+    <section class="package-section"><h3>Parcel details</h3><div class="receipt-table-wrap"><table><thead><tr><th>Contents / Package</th><th class="numeric">Qty</th><th class="numeric">Weight</th><th class="numeric">Rate</th><th class="numeric">Amount</th></tr></thead><tbody><tr *ngFor="let parcel of data1.packages"><td><strong>{{parcel.contains || parcel.packageType || 'Parcel'}}</strong><small *ngIf="parcel.contains">{{parcel.packageType}}</small></td><td class="numeric">{{parcel.quantity}}</td><td class="numeric">{{parcel.weight ?? parcel.actulWeight ?? '—'}}</td><td class="numeric">{{(parcel.unitPrice || 0) | currency:'INR':'symbol':'1.2-2'}}</td><td class="numeric">{{(parcel.totalPrice || 0) | currency:'INR':'symbol':'1.2-2'}}</td></tr></tbody></table></div></section>
+    <section class="receipt-bottom"><div class="receipt-notes"><span class="field-label">Total articles</span><strong>{{data1.totalQuantity || '—'}}</strong><p *ngIf="data1.remarks"><span class="field-label">Remarks</span>{{data1.remarks}}</p><p *ngIf="data1.eWayBillNo"><span class="field-label">E-way bill</span>{{data1.eWayBillNo}}</p></div><div class="charges"><div><span>Freight charges</span><span>{{(data1.totalCharge || 0) | currency:'INR':'symbol':'1.2-2'}}</span></div><div *ngIf="+data1.serviceCharges"><span>Service / LR charges</span><span>{{data1.serviceCharges | currency:'INR':'symbol':'1.2-2'}}</span></div><div *ngIf="+data1.hamaliCharges"><span>Hamali charges</span><span>{{data1.hamaliCharges | currency:'INR':'symbol':'1.2-2'}}</span></div><div *ngIf="+data1.doorPickupCharges"><span>Door pickup</span><span>{{data1.doorPickupCharges | currency:'INR':'symbol':'1.2-2'}}</span></div><div *ngIf="+data1.doorDeliveryCharges"><span>Door delivery</span><span>{{data1.doorDeliveryCharges | currency:'INR':'symbol':'1.2-2'}}</span></div><div *ngIf="+data1.parcelGstAmount"><span>GST</span><span>{{data1.parcelGstAmount | currency:'INR':'symbol':'1.2-2'}}</span></div><div class="net-amount"><strong>Net amount</strong><strong>{{(data1.grandTotal || 0) | currency:'INR':'symbol':'1.2-2'}}</strong></div></div></section>
+    <footer class="receipt-footer"><div class="receipt-qr"><qrcode [qrdata]="qrData" [width]="82" [errorCorrectionLevel]="'M'"></qrcode><span>GRN {{data1.grnNo}}</span></div><div class="terms"><h3>Terms &amp; conditions</h3><ol><li>Consignments are packed and carried at owner's risk. The company does not know the contents.</li><li>The consignor is responsible for providing the required forms.</li><li>The owner is liable for taxes, cess or duties levied by government authorities at the time of checking, payable within 24 hours.</li></ol></div><div class="signature"><span></span>Sender's signature</div></footer>
+  </article>
 </div>

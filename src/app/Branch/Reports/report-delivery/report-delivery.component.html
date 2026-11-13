@@ -1,4 +1,5 @@
 <app-header></app-header>
+<main class="reports-shell">
 <h5 class="text-center fw-bold text-danger"  style=" "><u>
 Delivered Stock report
   </u>
@@ -85,7 +86,7 @@ background-color: #fff;">
     </h6>
   </div>
   <div class="table-responsive mb-1 ">
-    <table class="table table-bordered table-sm text-center align-middle">
+    <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
       <thead>
         <tr>
           <th>From : {{payload.fromDate | date: 'dd-MM-yyyy'}} To : {{payload.toDate | date: 'dd-MM-yyyy'}}</th>
@@ -94,12 +95,12 @@ background-color: #fff;">
         </tr>
       </thead>
 
-    </table>
+    </table></div>
   </div>
 
 
   <div class="table-responsive">
-    <table class="table table-bordered table-sm text-center align-middle">
+    <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
       <thead class="table-secondary">
         <tr>
           <th>No</th>
@@ -130,10 +131,10 @@ background-color: #fff;">
           <td>{{items.Amount}}</td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
 
     <div class="table-responsive">
-      <table class="table table-bordered table-sm text-center align-middle">
+      <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
         <thead class="table-secondary">
           <tr>
             <th>Sr. No</th>
@@ -171,7 +172,7 @@ background-color: #fff;">
             }}</td>
             <td>{{summmaryData.totalNetAmount}}</td>
         </tbody>
-      </table>
+      </table></div>
     </div>
     
 
@@ -193,3 +194,5 @@ background-color: #fff;">
 
 
 
+
+</main>

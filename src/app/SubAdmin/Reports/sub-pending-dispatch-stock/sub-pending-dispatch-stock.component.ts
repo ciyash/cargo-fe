@@ -17,6 +17,8 @@ import {  ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-sub-pending-dispatch-stock',
@@ -94,7 +96,7 @@ export class SubPendingDispatchStockComponent {
         const day = ('0' + today.getDate()).slice(-2);
         const month = ('0' + (today.getMonth() + 1)).slice(-2);
         const year = today.getFullYear();
-        return `${year}-${month}-${day}`; // ✔ HTML date input format
+        return `${year}-${month}-${day}`; // âœ” HTML date input format
       }
 
 
@@ -302,7 +304,7 @@ export class SubPendingDispatchStockComponent {
     const XLSX = await import('xlsx');
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-      // 1️⃣ Add Company Header Sheet
+      // 1ï¸âƒ£ Add Company Header Sheet
       const headerData = [
         ['Pending Dispatch Stock Report'],
         [this.pfdata?.companyName ?? ''],
@@ -312,19 +314,19 @@ export class SubPendingDispatchStockComponent {
       const headerSheet = XLSX.utils.aoa_to_sheet(headerData);
       XLSX.utils.book_append_sheet(wb, headerSheet, 'Report Info');
 
-      // 2️⃣ Add Summary Table
+      // 2ï¸âƒ£ Add Summary Table
       if (this.summaryTable) {
         const summarySheet = XLSX.utils.table_to_sheet(this.summaryTable.nativeElement);
         XLSX.utils.book_append_sheet(wb, summarySheet, 'Summary');
       }
 
-      // 3️⃣ Add Bookings Table
+      // 3ï¸âƒ£ Add Bookings Table
       if (this.bookingsTable) {
         const bookingsSheet = XLSX.utils.table_to_sheet(this.bookingsTable.nativeElement);
         XLSX.utils.book_append_sheet(wb, bookingsSheet, 'Bookings');
       }
 
-      // 4️⃣ Save Excel File
+      // 4ï¸âƒ£ Save Excel File
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const blob = new Blob([excelBuffer], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

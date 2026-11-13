@@ -6,6 +6,8 @@ import { Component } from '@angular/core';
 import { BranchService } from 'src/app/service/branch.service';
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-vocher-details-report',

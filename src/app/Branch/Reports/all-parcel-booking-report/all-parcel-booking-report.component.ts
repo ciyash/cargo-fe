@@ -10,6 +10,8 @@ import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-all-parcel-booking-report',
@@ -39,7 +41,7 @@ export class AllParcelBookingReportComponent {
   ngOnInit(): void {
     this.getProfileData();
 
-    const storedData = localStorage.getItem('allparcelReportData'); // ✅ Use the correct key
+    const storedData = localStorage.getItem('allparcelReportData'); // âœ… Use the correct key
     if (storedData) {
       this.data1 = JSON.parse(storedData);
       console.log('Received:', this.data1);

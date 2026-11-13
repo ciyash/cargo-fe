@@ -10,6 +10,8 @@ import * as FileSaver from 'file-saver';
 import { Toast, ToastrService } from 'ngx-toastr';
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-delivery-stock-report',

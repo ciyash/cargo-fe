@@ -10,6 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-collection-report',
@@ -123,7 +125,7 @@ export class CollectionReportComponent implements OnInit, AfterViewInit {
 
         localStorage.setItem('collectiondata', JSON.stringify(finalData));
         const baseUrl = window.location.origin;
-        const collectiondataUrl = `${baseUrl}/cloud/collectiondata`;
+        const collectiondataUrl = `${baseUrl}/collectiondata`;
         window.open(collectiondataUrl, '_blank');
 
         // const dataStr = encodeURIComponent(JSON.stringify(finalData));

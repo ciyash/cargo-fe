@@ -1,9 +1,10 @@
 <app-header></app-header>
+<main class="reports-shell">
 <div style="">
   <div class="container ">
     <h5 class="text-center fw-bold text-danger"><u>PARCEL BOOKING REPORT</u></h5>
     <div class="border p-5" style="margin-top: 2rem;">
-      <!-- Parcel Booking Report -->
+      
       <form [formGroup]="form" novalidate>
         <div class="row mb-3 mt-4">
           <div class="col-md-3">
@@ -65,7 +66,7 @@
       </form>
       <hr class="mt-5 pb-4">
   
-      <!-- All Parcel Booking Report -->
+      
       <div class="container mt-1 pb-4">
         <h5 class="text-center fw-bold text-danger"><u>All Parcel Booking Report</u></h5>
         <div class="rounded p-4" style="margin-top: 2rem;">
@@ -144,7 +145,7 @@
         </div>
       </div>
   
-      <!-- Parcel Booking Report With Serial No -->
+      
       <div class="container">
         <h5 class="text-center fw-bold text-danger"><u>Parcel Booking Report With Serial No</u></h5>
         <div class="rounded p-4" style="margin-top: 1rem;">
@@ -188,7 +189,7 @@
         </div>
       </div>
   
-      <!-- Parcel Cancel Report -->
+      
       <div class="container mt-1">
         <h5 class="text-center fw-bold text-danger"><u>Parcel Cancel Report</u></h5>
         <div class="rounded p-4" style="margin-top: 1rem;">
@@ -244,7 +245,7 @@
         </div>
       </div>
   
-      <!-- Parcel Booking Summary Report -->
+      
       <div class="container mt-1">
         <h5 class="text-center fw-bold text-danger"><u>Parcel Booking Summary Report</u></h5>
         <div class="rounded p-4" style="margin-top: 1rem;">
@@ -305,7 +306,7 @@
       </div>
 
 
-      <!-- Parcel Booking Details On Mobile Number -->
+      
       <div class="container mt-1">
         <h5 class="text-center fw-bold text-danger"><u>Parcel Booking Details On Mobile Number</u></h5>
         <div class="rounded p-4" style="margin-top: 1rem;">
@@ -329,7 +330,7 @@
           
               <div class="col-md-6 mb-3">
                 <label class="form-label">Mobile Number</label>
-                <input type="text" class="form-control form-control-sm" placeholder="Enter Sender Mobile" formControlName="mobile">
+                <input type="text" class="form-control form-control-sm" placeholder="Enter Sender Mobile" formControlName="mobile" domesticPhone>
               </div>
           
               <div class="col-md-6 mt-2 d-flex align-items-center">
@@ -385,7 +386,7 @@
         </div>
       </div>
   
-      <!-- Regular Customer Booking -->
+      
       <div class="container mt-1">
         <h5 class="text-center fw-bold text-danger"><u>Regular Customer Booking</u></h5>
         <div class="rounded p-4" style="margin-top: 1rem;">
@@ -447,7 +448,7 @@
                   formControlName="name"
                   (input)="searchUser()" />
               
-                <!-- Search result dropdown -->
+                
                 <div *ngIf="searchResults.length > 0"
                   class="position-absolute w-100 mt-1 border rounded bg-white z-3"
                   style="max-height: 160px; overflow-y: auto;">
@@ -470,3 +471,5 @@
     </div>
   </div>
 </div>
+
+</main>

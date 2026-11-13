@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../USER/header/header.component';
 import { FooterComponent } from '../../USER/footer/footer.component';
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -18,6 +18,7 @@ declare const SlimSelect: any;
   styleUrls: ['./loading-report.component.scss']
 })
 export class LoadingReportComponent {
+  @Input() embedded = false;
     @ViewChild('selectElem') selectElem!: ElementRef;
     @ViewChild('demoSelect') demoSelect!: ElementRef;
     @ViewChild('pickupbranch') pickupbranch!: ElementRef;

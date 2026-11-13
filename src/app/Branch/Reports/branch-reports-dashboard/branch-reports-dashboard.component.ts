@@ -1,3 +1,4 @@
+import { DomesticPhoneDirective } from '../../../shared/domestic-phone.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -12,8 +13,10 @@ import { ChangeDetectorRef, NgZone } from '@angular/core';
 
 // jsdhdfbhddshn
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
+  imports: [DomesticPhoneDirective, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-branch-reports-dashboard',
   templateUrl: './branch-reports-dashboard.component.html',
   styleUrls: ['./branch-reports-dashboard.component.scss'],
@@ -357,9 +360,9 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
 //
         localStorage.setItem('parcelReportData', JSON.stringify(finalData));
 
-      // Open the /cloud/reports route correctly in new tab
+      // Open the /reports route correctly in new tab
       const baseUrl = window.location.origin;
-      const reportUrl = `${baseUrl}/cloud/reports`;
+      const reportUrl = `${baseUrl}/reports`;
       window.open(reportUrl, '_blank');
 
       },
@@ -400,9 +403,9 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
 
         localStorage.setItem('allparcelReportData', JSON.stringify(finalData1));
 
-        // Open the /cloud/reports route correctly in new tab
+        // Open the /reports route correctly in new tab
         const baseUrl = window.location.origin;
-        const allpercelbookingUrl = `${baseUrl}/cloud/allpercelbooking`;
+        const allpercelbookingUrl = `${baseUrl}/allpercelbooking`;
         window.open(allpercelbookingUrl, '_blank');
 
       },
@@ -446,7 +449,7 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
 
         localStorage.setItem('serialData', JSON.stringify(finalData11));
         const baseUrl = window.location.origin;
-        const bookingserialUrl = `${baseUrl}/cloud/bookingserial`;
+        const bookingserialUrl = `${baseUrl}/bookingserial`;
         window.open(bookingserialUrl, '_blank');
 
 
@@ -494,7 +497,7 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
 
         localStorage.setItem('bookingSummaryData', JSON.stringify(finalData9));
         const baseUrl = window.location.origin;
-        const bookingsummaryUrl = `${baseUrl}/cloud/bookingsummary`;
+        const bookingsummaryUrl = `${baseUrl}/bookingsummary`;
         window.open(bookingsummaryUrl, '_blank');
 
       },
@@ -530,11 +533,11 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
         };
         // localStorage.setItem('cancelReportData', JSON.stringify(finalData7));
         this.toast.success('Cancel Report generated successfully!');
-        // window.open('/cancel-report', '_blank');
+        // window.open('/cancelreport', '_blank');
 
         localStorage.setItem('CancelData', JSON.stringify(finalData7));
         const baseUrl = window.location.origin;
-        const cancelreportUrl = `${baseUrl}/cloud/cancelreport`;
+        const cancelreportUrl = `${baseUrl}/cancelreport`;
         window.open(cancelreportUrl, '_blank');
       },
       error: (error: any) => {
@@ -582,7 +585,7 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
 
         localStorage.setItem('mobileBookingData', JSON.stringify(finalData5));
         const baseUrl = window.location.origin;
-        const bookingmobileUrl = `${baseUrl}/cloud/bookingmobile`;
+        const bookingmobileUrl = `${baseUrl}/bookingmobile`;
         window.open(bookingmobileUrl, '_blank');
 
       },
@@ -637,7 +640,7 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
 
         localStorage.setItem('regularcustmerData', JSON.stringify(finalData2));
         const baseUrl = window.location.origin;
-        const regularcustmerUrl = `${baseUrl}/cloud/regularcustmer`;
+        const regularcustmerUrl = `${baseUrl}/regularcustmer`;
         window.open(regularcustmerUrl, '_blank');
       },
       error: (error: any) => {

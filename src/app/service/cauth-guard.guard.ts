@@ -3,7 +3,7 @@ import { TokenService } from './token.service';
 import { inject } from '@angular/core';
 
 export const cauthGuardGuard: CanActivateFn = () => {
-  return inject(TokenService).isLogged()
+  return inject(TokenService).isLogged() && inject(TokenService).isAdmin()
     ? true
-    : inject(Router).createUrlTree(['/clogin']);
+    : inject(Router).createUrlTree(['/login']);
 };

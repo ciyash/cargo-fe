@@ -29,7 +29,7 @@ export class CompanyLoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.route.snapshot.queryParamMap.get('registered')) this.successMessage = 'Company registered. Sign in to create your admins and subadmins.';
+    if (this.route.snapshot.queryParamMap.get('registered')) this.successMessage = 'Company registered. Sign in to set up your company and create a Company Admin.';
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -50,7 +50,7 @@ export class CompanyLoginComponent implements OnInit {
       next: (res: any) => {
         this.submitting = false;
         this.token.saveToken(res.token);
-        this.token.saveUser({ role: 'company', company: res.company });
+        this.token.saveUser({role:'company_admin',accountType:'company',permissions:res.permissions,company:res.company});
         this.token.setCompanyLoginFlag(); // ✅ Mark as company login (admin role)
         this.router.navigate(['/create-admin']);
       },

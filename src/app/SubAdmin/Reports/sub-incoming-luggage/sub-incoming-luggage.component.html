@@ -1,4 +1,5 @@
 <app-header></app-header>
+<main class="reports-shell">
 <h5 class="text-center fw-bold text-danger"  style=" "><u>
   Parcel Incoming Luggages Report
   </u>
@@ -25,13 +26,7 @@ background-color: #fff;">
             </div>
           </div>
 
-          <!-- <div class="col-md-6">
-            <label class="form-label form-after">From City</label>
-            <select #selectElem class="form-select form-select-sm" formControlName="fromCity">
-              <option value="all" selected> All From City</option>
-              <option *ngFor="let row2 of citydata" [value]="row2.cityName">{{ row2.cityName }}</option>
-            </select>
-          </div> -->
+          
           <div class="col-md-6">
             <label class="form-label form-after">From City</label>
             <select #selectElem class="form-select form-select-sm" formControlName="fromCity" >
@@ -81,3 +76,5 @@ background-color: #fff;">
 
 
 
+
+</main>

@@ -9,6 +9,8 @@ import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-parcel-incoming-report',
@@ -180,7 +182,7 @@ export class ParcelIncomingReportComponent {
         'Sender Name': item.senderName,
         'Receiver Name': item.receiverName,
         'Item(s)': item.packages?.map((p: { packageType: any; quantity: any; totalPrice: any; }) =>
-          `${p.packageType} (Qty: ${p.quantity}, ₹${p.totalPrice})`).join('; ') || '',
+          `${p.packageType} (Qty: ${p.quantity}, â‚¹${p.totalPrice})`).join('; ') || '',
         'Status': item.bookingType,
         'Delivery Receiver Name': item.deliveryEmployee || '-',
         'Delivery Receiver No': item.receiverMobile,
@@ -202,7 +204,7 @@ export class ParcelIncomingReportComponent {
       'Status': '',
       'Delivery Receiver Name': '',
       'Delivery Receiver No': 'Total Amount:',
-      'Amount': `₹${this.totalGrand}`,
+      'Amount': `â‚¹${this.totalGrand}`,
       'SIGN': ''
     });
 

@@ -9,6 +9,8 @@ import { BranchService } from 'src/app/service/branch.service';
 import * as FileSaver from 'file-saver';
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-parcel-booking-report',

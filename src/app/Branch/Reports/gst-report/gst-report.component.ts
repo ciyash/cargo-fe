@@ -9,6 +9,8 @@ import { BranchService } from 'src/app/service/branch.service';
 declare var $: any;
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-gst-report',

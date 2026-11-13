@@ -1,4 +1,5 @@
 <app-header></app-header>
+<main class="reports-shell">
 <div class="text-center" style="">
   <i class="fa fa-print" aria-hidden="true" style="font-size: 38px;color: green;cursor: pointer;" (click)="print()"></i>
   <i class="fa fa-file-excel-o mx-2" (click)="Export()" style="font-size: 30px;color: green;cursor: pointer;" aria-hidden="true"></i>
@@ -6,7 +7,7 @@
 <div class="container-fluid  " id="printableArea">
   <div>
     <div class="container-fluid" *ngIf="pfdata">
-      <h4 class="text-center fw-bold">{{ pfdata.companyName }}</h4>
+      <h4 class="text-center fw-bold">{{ pfdata.companyId?.name || pfdata.companyName }}</h4>
       <p class="text-center fw-bold">
         Address: {{ pfdata.location }} - {{ pfdata.branchId?.name }} |
         Phone No: {{ pfdata.phone }}
@@ -30,12 +31,12 @@
       <h5 class="mt-4 text-uppercase">{{ category }}</h5>
 
       <div *ngIf="data[category]?.bookings?.length > 0; else noBookings">
-        <table class="table table-bordered">
+        <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered">
           <thead>
             <tr>
               <th>S.No</th>
               <th>GRN No</th>
-              <!-- <th>Manual Ticket No</th> -->
+              
               <th>Status</th>
               <th>Date</th>
               <th>From Branch</th>
@@ -49,7 +50,7 @@
               <th>Charge</th>
               <th>Hamali</th>
               <th>Value of Goods</th>
-              <!-- <th>Invoice No</th> -->
+              
               <th>E-way Bill No</th>
             </tr>
           </thead>
@@ -57,7 +58,7 @@
             <tr *ngFor="let booking of (data[category]?.bookings || []); let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ booking.grnNo || '-' }}</td>
-              <!-- <td>{{ booking.manualTicketNo || '-' }}</td> -->
+              
               <td>{{ getBookingStatus(booking.bookingStatus) }}</td>
               <td>{{ booking.bookingDate | date: 'dd/MM/yyyy' }}</td>
               <td>{{ booking.pickUpBranchname || '-' }}</td>
@@ -71,10 +72,10 @@
               <td>{{ booking.grandTotal || 0 }}</td>
               <td>{{ booking.hamali || 0 }}</td>
               <td>{{ booking.valueOfGoods || 0 }}</td>
-              <!-- <td>{{ booking.invoiceNo || '-' }}</td> -->
+              
               <td>{{ booking.eWayBillNo || '-' }}</td>
             </tr>
-            <!-- Totals Row -->
+            
             <tr class="table-success fw-bold">
               <td colspan="11">Total</td>
               <td>{{ data[category].allTotalQuantity }}</td>
@@ -83,18 +84,16 @@
               <td colspan="4"></td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       <ng-template #noBookings>
-        <div class="alert alert-warning">No bookings found for {{ category }}</div>
+        <div class="report-empty" role="status"><i class="pi pi-inbox" aria-hidden="true"></i><span>No bookings found for {{ category | uppercase }}</span></div>
       </ng-template>
     </div>
 
   </div>
 </div>
 
-<!-- <div class="text-center mt-4">
-    <button class="btn btn-sm btn-primary m-3" (click)="downloadAsPDF()"> <i class="fa fa-file-pdf-o"></i> </button>
-    <button class="btn btn-sm btn-primary m-3" (click)="print()"> <i class="fa fa-print"></i> </button>
-  </div> -->
+
+</main>

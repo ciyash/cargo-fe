@@ -1,8 +1,9 @@
 
 <app-header></app-header>
+<main class="reports-shell">
 
 <div class="container mt-5" >
-  <!-- <h5 class="text-center"></h5> -->
+  
   <app-search-grn-number [embedded]="true"></app-search-grn-number>
 </div>
 
@@ -82,7 +83,7 @@
       </ng-template>
     </p-table>
 
-    <!-- Bootstrap Pagination -->
+    
     <nav *ngIf="totalPages > 1" class="mt-3">
       <ul class="pagination justify-content-center">
         <li class="page-item" [class.disabled]="currentPage === 1">
@@ -103,7 +104,7 @@
   </div>
 </div>
 
-<!-- GRN Print Dialog -->
+
 <p-dialog
   [(visible)]="visible"
   [modal]="true"
@@ -120,3 +121,4 @@
   </ng-container>
 </p-dialog>
     
+</main>

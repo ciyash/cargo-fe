@@ -121,12 +121,14 @@ export class AdminService {
     name: string;
     username: string;
     branchId: string;
+    branchCity?: string;
     location: string;
     phone: number;
     email: string;
     password: string;
     documents: string;
     role: string;
+    permissions?: string[];
     // companyName:String;
   }) {
     const token1 = this.token.getToken();
@@ -144,12 +146,14 @@ export class AdminService {
         name: value.name,
         'username': value.username,
         'branchId': value.branchId,
+        branchCity: value.branchCity,
         'location': value.location,
         'phone': value.phone,
         'email': value.email,
         'password': value.password,
         'documents': value.documents,
         'role': value.role,
+        permissions: value.permissions,
         // "companyName":value.companyName
 
 
@@ -200,15 +204,18 @@ export class AdminService {
 
 
   UpdateEmployee(value: {
+    id: string;
     name: string;
     username: string;
     branchId: string;
+    branchCity?: string;
     location: string;
     phone: number;
     email: string;
     password: string;
     documents: string;
     role: string;
+    permissions?: string[];
     companyName:String;
 
   }) {
@@ -220,17 +227,19 @@ export class AdminService {
       })
     };
     return this.http.patch(
-      AUTH_API + 'subadmin-auth/update-profile/',
+      AUTH_API + 'subadmin-auth/update-profile/' + encodeURIComponent(value.id),
       {
         name: value.name,
         'username': value.username,
         'branchId': value.branchId,
+        branchCity: value.branchCity,
         'location': value.location,
         'phone': value.phone,
         'email': value.email,
         'password': value.password,
         'documents': value.documents,
         'role': value.role,
+        permissions: value.permissions,
         "companyName":value.companyName,
 
     },

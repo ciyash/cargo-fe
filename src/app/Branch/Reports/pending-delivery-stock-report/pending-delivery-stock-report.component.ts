@@ -16,6 +16,8 @@ import { BranchService } from 'src/app/service/branch.service';
 declare var $: any;
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-pending-delivery-stock-report',
@@ -78,7 +80,7 @@ export class PendingDeliveryStockReportComponent
     setTimeout(() => {
       // From City
       $(this.selectElem.nativeElement).select2();
-      $(this.selectElem.nativeElement).val('all').trigger('change'); // ✅ force default
+      $(this.selectElem.nativeElement).val('all').trigger('change'); // Ã¢Å“â€¦ force default
       $(this.selectElem.nativeElement).on('select2:select', (event: any) => {
         const selectedCity = event.params.data.id;
         this.form.patchValue({ fromCity: selectedCity });
@@ -87,7 +89,7 @@ export class PendingDeliveryStockReportComponent
 
       // Pickup Branch
       $(this.pickupbranch.nativeElement).select2();
-      $(this.pickupbranch.nativeElement).val('all').trigger('change'); // ✅
+      $(this.pickupbranch.nativeElement).val('all').trigger('change'); // Ã¢Å“â€¦
       $(this.pickupbranch.nativeElement).on('select2:select', (event: any) => {
         const selectedBranch = event.params.data.id;
         this.form.patchValue({ pickUpBranch: selectedBranch });
@@ -96,7 +98,7 @@ export class PendingDeliveryStockReportComponent
 
       // To City
       $(this.selectElem2.nativeElement).select2();
-      $(this.selectElem2.nativeElement).val('all').trigger('change'); // ✅
+      $(this.selectElem2.nativeElement).val('all').trigger('change'); // Ã¢Å“â€¦
       $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
         const selectedToCity = event.params.data.id;
         this.form.patchValue({ toCity: selectedToCity });
@@ -105,7 +107,7 @@ export class PendingDeliveryStockReportComponent
 
       // Drop Branch
       $(this.droupbranch.nativeElement).select2();
-      $(this.droupbranch.nativeElement).val('all').trigger('change'); // ✅
+      $(this.droupbranch.nativeElement).val('all').trigger('change'); // Ã¢Å“â€¦
       $(this.droupbranch.nativeElement).on('select2:select', (event: any) => {
         const selectedDropBranch = event.params.data.id;
         this.form.patchValue({ dropBranch: selectedDropBranch });
@@ -180,7 +182,7 @@ export class PendingDeliveryStockReportComponent
           };
           localStorage.setItem('pendingData', JSON.stringify(finalData));
           const baseUrl = window.location.origin;
-          const devliveryreportUrl = `${baseUrl}/cloud/devliveryreport`;
+          const devliveryreportUrl = `${baseUrl}/devliveryreport`;
           window.open(devliveryreportUrl, '_blank');
       },
       error: (err: any) => {

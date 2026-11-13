@@ -1,3 +1,5 @@
+import { NgZone } from '@angular/core';
+import { TokenService } from 'src/app/service/token.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -55,7 +57,7 @@ export class UnloadingComponent {
     today = new Date();
 
     constructor(
-      private api: BranchService,
+      private api: BranchService, private token:TokenService, private zone:NgZone,
       private fb: FormBuilder,
       private messageService: MessageService,
       private router: Router,
@@ -68,14 +70,14 @@ export class UnloadingComponent {
         fromCity: [''],
         toCity: [''],
         vehicalNumber: ['',],
-        branch: [''] // ✅
+        branch: [''] // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦
 
       });
       this.form1 = this.fb.group({
         fromBookingDate: ['', ],
         toBookingDate: ['', ],
         fromCity: this.fb.array([]),
-        toCity: ['', ], // ✅ Ensure toCity is a FormControl, NOT a FormArray
+        toCity: ['', ], // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ Ensure toCity is a FormControl, NOT a FormArray
         branch: ['', ],
         vehicalNumber: ['', ],
         grnNo: this.fb.array([],),
@@ -83,6 +85,10 @@ export class UnloadingComponent {
       });
     }
     ngOnInit() {
+ this.form.get('toCity')?.valueChanges.subscribe(city=>this.onFromcitySelect({target:{value:city}}));
+ this.form.get('branch')?.valueChanges.subscribe(()=>this.clearOriginParcels());
+ this.api.getData('branch').subscribe((rows:any)=>{this.branchdata=rows;this.originBranchesReady=true;this.applyLoadingOrigin();});
+ this.api.GetProfileData().subscribe((profile:any)=>{this.loadingProfile=profile;this.originProfileReady=true;this.applyLoadingOrigin();});
       this.searchTerm = this.activeroute.snapshot.params['grnNumber'];
       this.getCities();
       this.getvehicleData();
@@ -95,12 +101,12 @@ export class UnloadingComponent {
       const day = ('0' + today.getDate()).slice(-2);
       const month = ('0' + (today.getMonth() + 1)).slice(-2);
       const year = today.getFullYear();
-      return `${year}-${month}-${day}`; // ✔ HTML date input format
+      return `${year}-${month}-${day}`; // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â HTML date input format
     }
 
 
 
-    ngAfterViewInit(): void {
+    ngAfterViewInit(): void { this.initOriginSelectors();
       new SlimSelect({
         select: this.demoSelect.nativeElement
       });
@@ -111,14 +117,14 @@ export class UnloadingComponent {
         $(this.demoSelect.nativeElement).on('select2:select', (event: any) => {
           const selectedCity = event.params.data.id;
           this.form.get('fromCity')?.setValue(selectedCity);
-          this.onFromCityChange({ target: { value: selectedCity } });
+          
           console.log('Updated To City:', this.form.get('fromCity')?.value);
         });
 
         $(this.selectElem.nativeElement).select2();
         $(this.selectElem.nativeElement).on('select2:select', (event: any) => {
           const selectedCity = event.params.data.id;
-          this.form.get('toCity')?.setValue(selectedCity);
+          this.zone.run(()=>this.form.get('toCity')?.setValue(selectedCity));
           this.onTocitySelect({ target: { value: selectedCity } });
           console.log('Updated To City:', this.form.get('toCity')?.value);
         });
@@ -127,7 +133,7 @@ export class UnloadingComponent {
         $(this.branch.nativeElement).select2();
         $(this.branch.nativeElement).on('select2:select', (event: any) => {
           const selectedBranch = event.params.data.id;
-          this.form.get('branch')?.setValue(selectedBranch);
+          this.zone.run(()=>this.form.get('branch')?.setValue(selectedBranch));
           console.log('Updated Branch:', this.form.get('branch')?.value);
         });
 
@@ -146,65 +152,20 @@ export class UnloadingComponent {
 
 
   onLoad() {
-    if (this.form.invalid) {
-      this.toastr.error('Please fill all required fields', 'Validation Error');
-      return;
-    }
-    const formValues = this.form.value;
-    const payload = {
-      fromDate: formValues.fromDate,
-      toDate: formValues.toDate,
-      fromCity: formValues.fromCity.length ? formValues.fromCity : [],
-      toCity: formValues.toCity || '',
-      vehicalNumber: formValues.vehicalNumber || '',
-      branch: formValues.branch || '',
-    };
-  console.log("payload:",payload)
-    this.api.FilterParcelUnLoading(payload).subscribe({
-      next: (response: any) => {
-        console.log('dataload', response)
-        if (response?.data?.length) {
-          this.apiResponse = response.data || [];
-
-          // Combine all bookings into one array
-          this.bkdata = this.apiResponse.flatMap((item: any) => item.bookings);
-
-          // Prepare summary
-          this.summary = {};
-          this.apiResponse.forEach((item: any) => {
-            this.summary[item.bookingType] = {
-              totalQuantity: item.totalQuantity,
-              totalGrandTotal: item.totalGrandTotal,
-            };
-          });
-
-          this.LoadSuccess = true;
-          if (this.bkdata.length > 0) {
-            this.form1.patchValue({
-              branch: this.bkdata[0].branch,
-            });
-            this.setFormArray('bookingType', this.bkdata.map((d: any) => d.bookingType));
-            this.setFormArray('grnNo', this.bkdata.map((d: any) => d.grnNo));
-            this.setFormArray('lrNumber', this.bkdata.map((d: any) => d.lrNumber));
-          }
-          this.toastr.success('Parcel unloaded Successfully', 'Success');
-        } else {
-          this.apiResponse = [];
-          this.bkdata = [];
-          this.summary = {};
-          this.LoadSuccess = false;
-          this.toastr.error('No customer bookings found.', 'error');
-
-        }
-      },
-      error: (error: any) => {
-        console.error('Booking failed:', error);
-        this.toastr.error('Parcel unloaded Data Not Found', 'Error');
-      },
-    });
-  }
-
-  openScanner() {
+ if(this.form.invalid){this.form.markAllAsTouched();return;}
+ const value=this.form.getRawValue();
+ this.clearOriginParcels();
+ this.api.FilterParcelUnLoading({fromDate:value.fromDate,toDate:value.toDate,fromCity:value.fromCity||[],toCity:value.toCity||'',branch:value.branch||'',vehicalNumber:value.vehicalNumber||''}).subscribe({
+ next:(response:any)=>{
+  const rows=Array.isArray(response)?response:Array.isArray(response?.data)?response.data:[];
+  this.bkdata=rows.flatMap((row:any)=>Array.isArray(row?.bookings)?row.bookings:[row]);
+  this.apiResponse=rows;this.LoadSuccess=this.bkdata.length>0;this.summary={};
+  for(const row of this.bkdata){const type=row.bookingType;this.summary[type] ||= {totalQuantity:0,totalGrandTotal:0};this.summary[type].totalQuantity+=Number(row.totalQuantity)||0;this.summary[type].totalGrandTotal+=Number(row.grandTotal)||0;}
+  this.form1.patchValue({branch:value.branch,vehicalNumber:value.vehicalNumber});
+  if(!this.bkdata.length)this.toastr.info('No loaded parcels found for these filters.','No parcels');
+ },error:(error:any)=>this.toastr.error(error?.error?.message||'Unable to fetch loaded parcels.','Unloading filter')});
+}
+openScanner() {
     this.showScanner = true;
   }
 
@@ -253,30 +214,33 @@ export class UnloadingComponent {
 
 
 
-    onTocitySelect(event: any) {
-      console.log('Event triggered:', event);
-      console.log('Selected City:', event.target.value);
-      const cityName = event.target.value;
-      if (cityName) {
-        this.api.GetBranchbyCity(cityName).subscribe(
-          (res: any) => {
-            console.log('Branches for selected city:', res);
-            this.tbcdata = res;
-          },
-          (error: any) => {
-            console.error('Error fetching branches:', error);
-          }
-        );
-      } else {
-        this.tbcdata = [];
-      }
-    }
+    onTocitySelect(event:any){this.onFromcitySelect(event);}
+private loadingProfile:any;private originCitiesReady=false;private originBranchesReady=false;private originProfileReady=false;private originApplied=false;
+private get assignedLoadingBranch(){const ref=this.loadingProfile?.branchId;return (this.branchdata||[]).find((branch:any)=>String(branch._id)===String(ref?._id||ref)||branch.branchUniqueId===(ref?.branchUniqueId||ref));}
+get originCityChoices(){if(this.token.isAdmin())return this.cities||[];const city=String(this.assignedLoadingBranch?.city||'').trim().toLowerCase();return (this.cities||[]).filter((row:any)=>String(row.cityName).trim().toLowerCase()===city);}
+private syncLoadingSelectors(){setTimeout(()=>{for(const [ref,key] of [[this.selectElem,'toCity'],[this.branch,'branch']] as const)if(ref?.nativeElement)$(ref.nativeElement).val(this.form.get(key)?.value||'').trigger('change.select2');},0);}
+private initOriginSelectors(){for(const [ref,key] of [[this.selectElem,'toCity'],[this.branch,'branch']] as const){if(!ref?.nativeElement)continue;const element=$(ref.nativeElement);if(!element.hasClass('select2-hidden-accessible'))element.select2();element.off('select2:select.loadingOrigin').on('select2:select.loadingOrigin',(event:any)=>this.zone.run(()=>this.form.get(key)?.setValue(event.params.data.id)));}this.syncLoadingSelectors();}
+private applyLoadingOrigin(){
+  if(this.originApplied||!this.originCitiesReady||!this.originBranchesReady||!this.originProfileReady)return;
+  this.originApplied=true;if(this.form.get('toCity')?.value)return;
+  const assigned=this.assignedLoadingBranch;const candidates=this.token.isAdmin()?[...(this.branchdata||[])].sort((a,b)=>Number(b.branchType==='main')-Number(a.branchType==='main')||String(a._id).localeCompare(String(b._id))):[];
+  const branch=assigned||candidates[0];const city=this.originCityChoices.find((row:any)=>String(row.cityName).trim().toLowerCase()===String(branch?.city||'').trim().toLowerCase());
+  if(!city)return;this.form.patchValue({toCity:city.cityName});if(branch&&(this.tbcdata||[]).some((row:any)=>row.branchUniqueId===branch.branchUniqueId))this.form.patchValue({branch:branch.branchUniqueId});this.syncLoadingSelectors();
+}
+private clearOriginParcels(){this.data=null;this.LoadSuccess=false;this.bkdata=[];this.apiResponse=[];this.summary={};this.allSelected=false;(this.form1.get('grnNo') as FormArray)?.clear();}
+onFromcitySelect(event:any){
+  let city=String(event?.target?.value||'');const assigned=this.assignedLoadingBranch;
+  if(!this.token.isAdmin()&&assigned&&city.trim().toLowerCase()!==String(assigned.city).trim().toLowerCase())city=this.originCityChoices[0]?.cityName||'';
+  if(this.form.get('toCity')?.value!==city){this.form.patchValue({toCity:city});return;}
+  this.clearOriginParcels();this.tbcdata=(this.branchdata||[]).filter((branch:any)=>String(branch.city).trim().toLowerCase()===city.trim().toLowerCase()&&(this.token.isAdmin()||String(branch._id)===String(assigned?._id)));
+  if(!(this.tbcdata||[]).some((branch:any)=>branch.branchUniqueId===this.form.get('branch')?.value))this.form.patchValue({branch:''});this.syncLoadingSelectors();
+}
 
-    getCities() {
+getCities() {
       this.api.GetCities().subscribe({
         next: (response: any) => {
           console.log('Cities data:', response);
-          this.cities = response;
+          this.cities = response;this.originCitiesReady=true;this.applyLoadingOrigin();
           console.log(this.cities, 'cites');
         },
         error: (error: any) => {
@@ -289,18 +253,11 @@ export class UnloadingComponent {
       return this.form.get('fromCity') as FormArray;
     }
 
-    onFromCityChange(event: any) {
-      const selectedOptions = Array.from(event.target.selectedOptions).map(
-        (option: any) => option.value
-      );
-      const fromCityArray = this.form.get('fromCity') as FormArray;
-      fromCityArray.clear(); // Clear previous selections
+    onFromCityChange(event:any) {
+ const values=Array.from(event.target.selectedOptions||[]).map((option:any)=>option.value);
+ this.zone.run(()=>this.form.get('fromCity')?.setValue(values));
+}
 
-      selectedOptions.forEach((city) => {
-        fromCityArray.push(new FormControl(city));
-      });
-      console.log('Selected From Cities:', fromCityArray.value);
-    }
 
     setFormArray(controlName: string, values: any[]) {
       const formArray = this.form1.get(controlName) as FormArray;
@@ -325,7 +282,7 @@ export class UnloadingComponent {
         }
       }
 
-      // ✅ Update "Select All" status based on selected values
+      // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ Update "Select All" status based on selected values
       this.allSelected = this.bkdata.length === formArray.value.length;
       console.log('Selected GRN Numbers:', formArray.value);
     }
@@ -359,38 +316,23 @@ export class UnloadingComponent {
       });
     }
 
-    ParcelLoad() {
-      const payload = {
-        fromBookingDate: this.form1.value.fromBookingDate,
-        toBookingDate: this.form1.value.toBookingDate,
-        fromCity: this.form1.value.fromCity,
-        toCity: this.form1.value.toCity,
-        branch: this.form1.value.branch,
-        vehicalNumber: this.form1.value.vehicalNumber,
-        grnNo: this.form1.value.grnNo, // ✅ This must be an array!
-        bookingType: this.form1.value.bookingType,
-      };
+   isSavingUnloading=false;
+ ParcelLoad() {
+  if(this.isSavingUnloading)return;
+  const ids=new Set((this.form1.get('grnNo')?.value||[]).map((id:any)=>String(id)));
+  const rows=this.bkdata.filter((row:any)=>ids.has(String(row.grnNo)));
+  if(!rows.length){this.toastr.warning('Select at least one parcel to unload.','Select parcels');return;}
+  const branch=this.form.get('branch')?.value||rows[0].dropBranch;
+  const vehicle=this.form.get('vehicalNumber')?.value||rows[0].vehicalNumber;
+  if(rows.some((row:any)=>row.dropBranch!==branch||row.vehicalNumber!==vehicle||row.bookingType!==rows[0].bookingType)){
+   this.toastr.warning('Select parcels with the same drop branch, vehicle and booking type.','Check selected parcels');return;
+  }
+  if(!vehicle){this.toastr.warning('Select the vehicle used for these parcels.','Vehicle required');return;}
+  const payload:any={fromBookingDate:this.form.get('fromDate')?.value,toBookingDate:this.form.get('toDate')?.value,fromCity:[...new Set(rows.map((row:any)=>row.fromCity))],toCity:rows[0].toCity,branch,vehicalNumber:vehicle,grnNo:rows.map((row:any)=>row.grnNo),lrNumber:rows.map((row:any)=>row.lrNumber),bookingType:rows[0].bookingType};
+  this.isSavingUnloading=true;
+  this.api.ParcelUnLoading(payload).subscribe({next:()=>{this.isSavingUnloading=false;this.clearOriginParcels();this.toastr.success('Selected parcels unloaded successfully.','Success');},error:(error:any)=>{this.isSavingUnloading=false;this.toastr.error(error?.error?.message||'Unable to save parcel unloading.','Unloading failed');}});
+ }
 
-      console.log('Final Payload:', payload);
-      this.api.ParcelUnLoading(payload).subscribe({
-        next: (response: any) => {
-          console.log('Parcel unloaded successfully:', response);
-          this.toastr.success('Parcel unloaded successfully', ' successfully');
-
-          setTimeout(() => {
-            this.router
-              .navigateByUrl('/', { skipLocationChange: true })
-              .then(() => {
-                this.router.navigate(['/parcelunloading']);
-              });
-          }, 1000);
-        },
-        error: (error: any) => {
-          console.error('Parcel unloading failed:', error);
-          alert('Parcel Unloading Failed. Please try again.');
-        },
-      });
-    }
 
 
 

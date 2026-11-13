@@ -6,12 +6,12 @@
       <div class="row g-3">
         <div class="col-md-4 col-sm-12">
           <label class="form-label">From Date</label>
-          <input type="date" class="form-control form-control-sm" formControlName="fromDate">
+          <div class="unloading-date"><input type="date" lang="en-GB" aria-label="From date (DD-MM-YYYY)" class="form-control form-control-sm" formControlName="fromDate"><span aria-hidden="true">{{ form.get('fromDate')?.value ? (form.get('fromDate')?.value | date:'dd-MM-yyyy') : 'DD-MM-YYYY' }}</span></div>
           <!-- <span *ngIf="form.value.fromDate">From Date: {{ formatDateDisplay(form.value.fromDate) }}</span> -->
         </div>
         <div class="col-md-4 col-sm-12">
           <label class="form-label">From City</label>
-          <select #demoSelect multiple class="form-control" formControlName="fromCity">
+          <select #demoSelect multiple class="form-control" (change)="onFromCityChange($event)">
             <option *ngFor="let city of cities" [value]="city.cityName">{{ city.cityName }}</option>
           </select>
         </div>
@@ -19,8 +19,8 @@
         <div class="col-md-4 col-sm-12">
           <label class="form-label">To City</label>
           <select #selectElem class="form-select form-select-sm" formControlName="toCity">
-            <option value="" selected>Select City</option>
-            <option *ngFor="let city1 of cities" [value]="city1.cityName">
+            <option value="">Select City</option>
+            <option *ngFor="let city1 of originCityChoices" [value]="city1.cityName">
               {{ city1.cityName }}
             </option>
           </select>
@@ -28,14 +28,14 @@
 
         <div class="col-md-4 col-sm-12">
           <label class="form-label">To Date</label>
-          <input type="date" class="form-control form-control-sm" formControlName="toDate">
+          <div class="unloading-date"><input type="date" lang="en-GB" aria-label="To date (DD-MM-YYYY)" class="form-control form-control-sm" formControlName="toDate"><span aria-hidden="true">{{ form.get('toDate')?.value ? (form.get('toDate')?.value | date:'dd-MM-yyyy') : 'DD-MM-YYYY' }}</span></div>
         </div>
 
 
         <div class="col-md-4 col-sm-12">
-          <label class="form-label">Branch</label>
+          <label class="form-label">Drop Branch</label>
           <select #branch class="form-select form-select-sm" formControlName="branch">
-            <option value="" selected>Select Branch</option>
+            <option value="">Select Branch</option>
             <option *ngFor="let branch of tbcdata" [value]="branch.branchUniqueId">
               {{ branch.name }}
             </option>
@@ -115,10 +115,10 @@
       <div class="mt-4 d-flex justify-content-between" *ngIf="summary">
         <div>
           <strong>Summary:</strong>
-          <span *ngIf="summary.paid">Paid: {{ summary.paid.totalQuantity }} | ₹{{ summary.paid.totalGrandTotal }}</span>
-          <span *ngIf="summary.toPay" class="ms-3">ToPay: {{ summary.toPay.totalQuantity }} | ₹{{
+          <span *ngIf="summary.paid">Paid: {{ summary.paid.totalQuantity }} | ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹{{ summary.paid.totalGrandTotal }}</span>
+          <span *ngIf="summary.toPay" class="ms-3">ToPay: {{ summary.toPay.totalQuantity }} | ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹{{
             summary.toPay.totalGrandTotal }}</span>
-          <span *ngIf="summary.credit" class="ms-3">Credit: {{ summary.credit.totalQuantity }} | ₹{{
+          <span *ngIf="summary.credit" class="ms-3">Credit: {{ summary.credit.totalQuantity }} | ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹{{
             summary.credit.totalGrandTotal }}</span>
         </div>
       
@@ -179,7 +179,7 @@
       <div class="row">
         <div class="col-md-3 d-flex align-items-end">
           <button class="btn btn-primary btn-sm " type="button" style=" width: 10rem;"
-            (click)="ParcelLoad()">Save</button>
+            (click)="ParcelLoad()" [disabled]="isSavingUnloading || !form1.get('grnNo')?.value?.length">Save</button>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 <app-header></app-header>
+<main class="reports-shell">
 
 <div class="card container" style=" 
 border: 2px solid #ccc; 
@@ -27,13 +28,7 @@ background-color: #fff;">
             To Date is required
           </div>
         </div>
-        <!-- <div class="col-md-6">
-          <label class="form-label">From City</label>
-          <select #selectElem class="form-select form-select-sm" formControlName="fromCity">
-            <option value="" selected> Select City</option>
-            <option *ngFor="let row2 of citydata" [value]="row2.cityName">{{ row2.cityName }}</option>
-          </select>
-        </div> -->
+        
         <div class="col-md-6">
             <label class="form-label form-after">From City</label>
             <select #selectElem class="form-select form-select-sm" formControlName="fromCity" >
@@ -58,12 +53,12 @@ background-color: #fff;">
 
         <div class="col-md-6 mt-4">
           <div class="d-flex align-items-center flex-wrap gap-3">
-            <!-- Load Button -->
+            
             <button type="button" class="btn btn-success" (click)="DispatchReport()">
               Load
             </button>
         
-            <!-- Print Icon -->
+            
             <i *ngIf="reportData"
                class="fa fa-print"
                style="font-size: 30px; cursor: pointer; color: green;"
@@ -71,7 +66,7 @@ background-color: #fff;">
                title="Print Report">
             </i>
         
-            <!-- Excel Icon -->
+            
             <i *ngIf="reportData"
                class="fa fa-file-excel-o"
                style="font-size: 25px; cursor: pointer; color: green;"
@@ -94,7 +89,7 @@ background-color: #fff;">
   <div *ngIf="reportData" id="print-section">
     <div class="text-center mb-4 mt-5">
       <div class="container-fluid" *ngIf="pfdata">
-        <h4 class="text-center fw-bold">{{ pfdata.companyName }}</h4>
+        <h4 class="text-center fw-bold">{{ pfdata.companyId?.name || pfdata.companyName }}</h4>
         <p class="text-center fw-bold">
           Address: {{ pfdata.location }} - {{ pfdata.branchId?.name }} |
           Phone No: {{ pfdata.phone }}
@@ -104,7 +99,7 @@ background-color: #fff;">
       </h6>
     </div>
     <div class="table-responsive mb-1 ">
-      <table class="table table-bordered table-sm text-center align-middle">
+      <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
         <thead>
           <tr>
             <th>From : {{payload.fromDate | date: 'dd-MM-yyyy'}} To : {{payload.toDate | date: 'dd-MM-yyyy'}}</th>
@@ -113,12 +108,12 @@ background-color: #fff;">
           </tr>
         </thead>
 
-      </table>
+      </table></div>
     </div>
 
 
     <div class="table-responsive">
-      <table class="table table-bordered table-sm text-center align-middle">
+      <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
         <thead class="table-secondary">
           <tr>
             <th>No</th>
@@ -141,7 +136,7 @@ background-color: #fff;">
             <td>{{items.vehicalNumber}}</td>
           </tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
 
@@ -166,3 +161,5 @@ background-color: #fff;">
     </li>
   </ul>
 </nav>
+
+</main>

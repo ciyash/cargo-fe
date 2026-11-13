@@ -6,13 +6,13 @@
 
     <div class="right-side">
 <img src="assets/tittlelogo.svg" alt="CargoNest" class="tenant-logo">
-      <div class="welcome-text">Welcome</div>
+      <div class="welcome-text">Team login</div><p *ngIf="registered" role="status">Company registered. Use Company login to complete setup.</p>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <label class="form-label">User Id / Mobile Number</label>
+        <label class="form-label">Email / Username / Mobile number</label>
         <div class="input-group">
           <i class="fas fa-user"></i>
-          <input type="text" formControlName="identifier" autocomplete="username" placeholder="Username" />
+          <input type="text" formControlName="identifier" autocomplete="username" placeholder="Email, username or mobile" />
         </div>
 
         <label class="form-label mt-3">Password</label>
@@ -25,7 +25,7 @@
 
         <button type="submit" class="btn btn-login" [disabled]="form.invalid || isLoading">LOGIN</button>
       </form>
-<nav class="auth-links" aria-label="Company accounts"><p>New to our platform? <a routerLink="/signup">Register your company</a></p><a class="company-entry" routerLink="/clogin">Sign in as a company</a></nav>
+<nav class="auth-links" aria-label="Company accounts"><p>New to our platform? <a routerLink="/signup">Register your company</a></p><p>Company Admin · Branch Admin · Staff</p><a class="company-entry" routerLink="/clogin">Company login — setup &amp; subscription</a></nav>
     </div>
   </div>
 </div>

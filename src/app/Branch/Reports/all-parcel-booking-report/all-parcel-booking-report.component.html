@@ -1,11 +1,12 @@
-<app-header></app-header> 
+<app-header></app-header>
+<main class="reports-shell"> 
 <div class="text-center" style="">
   <i class="fa fa-print" aria-hidden="true" style="font-size: 40px; color: green;cursor: pointer;" (click)="printPage()"></i>
   <i class="fa fa-file-excel-o mx-2" aria-hidden="true" style="font-size: 30px; color: green;cursor: pointer;" (click)="ExpoetExcel()"></i>
 </div>
 <div class="container my-4 p-3 border rounded bg-light" id="print-section"  >
 <div class="container-fluid" *ngIf="pfdata">
-  <h4 class="text-center fw-bold">{{ pfdata.companyName }}</h4>
+  <h4 class="text-center fw-bold">{{ pfdata.companyId?.name || pfdata.companyName }}</h4>
   <p class="text-center fw-bold">
     Address: {{ pfdata.location }} - {{ pfdata.branchId?.name }} |
     Phone No: {{ pfdata.phone }}
@@ -20,7 +21,7 @@
   <ng-container *ngFor="let group of data1.data; let groupIndex = index">
     <p class="fw-bold" *ngIf="group.vehicalNumber">Vehicle Number: {{ group.vehicalNumber }}</p>
     <div class="table-responsive mt-4">
-    <table class="table table-bordered table-sm table-striped">
+    <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm table-striped">
       <thead class="table-secondary text-center">
         <tr>
           <th>No</th>
@@ -59,18 +60,20 @@
         </tr>
       </tbody>
 
-      <!-- Table footer with group totals -->
+      
       <tfoot class="fw-bold text-center">
         <tr>
-          <!-- <td colspan="10" class="text-end">Vehicle Number: {{ group.vehicalNumber || 'Unknown' }}</td> -->
+          
           <td  class="text-end" colspan="11">Total</td>
           <td>{{ group.totalQuantity }}</td>
-          <td>₹{{ group.totalGrandTotal | number: '1.2-2' }}</td>
-          <td>₹{{ group.totalHamaliCharge | number: '1.2-2' }}</td>
+          <td>Ã¢â€šÂ¹{{ group.totalGrandTotal | number: '1.2-2' }}</td>
+          <td>Ã¢â€šÂ¹{{ group.totalHamaliCharge | number: '1.2-2' }}</td>
         </tr>
       </tfoot>
-    </table>
+    </table></div>
   </div>
 </ng-container>
 
 </div>
+
+</main>

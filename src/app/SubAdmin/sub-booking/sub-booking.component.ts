@@ -1,9 +1,10 @@
+import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
 import { BillingComponent } from '../../shared/billing/billing.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SearchGrnNumberComponent } from '../../Branch/Widgets/search-grn-number/search-grn-number.component';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core'
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,12 +19,21 @@ import {  ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 
 @Component({
   standalone: true,
-  imports: [BillingComponent, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, SearchGrnNumberComponent, HeaderComponent],
+  imports: [DomesticPhoneDirective, BillingComponent, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, SearchGrnNumberComponent, HeaderComponent],
   selector: 'app-sub-booking',
   templateUrl: './sub-booking.component.html',
   styleUrls: ['./sub-booking.component.scss']
 })
 export class SubBookingComponent {
+  optionName=(_:number,option:any)=>option.name;
+  packageLoading=false;dispatchLoading=false;packageError='';dispatchError='';
+  @HostListener('window:focus')
+  loadBookingOptions(){
+    if(this.packageLoading||this.dispatchLoading)return;
+    this.packageLoading=true;this.dispatchLoading=true;this.packageError='';this.dispatchError='';
+    this.api.GetPAckagesType().subscribe({next:(res:any)=>{this.packdata=Array.isArray(res)?res:Array.isArray(res?.data)?res.data:[];this.packageLoading=false;if(!this.packdata.length)this.packageError='No package types added. Ask your Company Admin to add them.';},error:()=>{this.packageLoading=false;this.packageError='Package types could not load. Select Refresh lists to retry.';}});
+    this.admin.GetDispatchtypeData().subscribe({next:(res:any)=>{this.dptype=Array.isArray(res)?res:Array.isArray(res?.data)?res.data:[];this.dispatchLoading=false;if(!this.dptype.length)this.dispatchError='No dispatch types added. Ask your Company Admin to add them.';},error:()=>{this.dispatchLoading=false;this.dispatchError='Dispatch types could not load. Select Refresh lists to retry.';}});
+  }
   @ViewChild(BillingComponent) billing?: BillingComponent;
 
 
@@ -41,7 +51,7 @@ export class SubBookingComponent {
     pfdata:any;
     bookingSuccess: boolean = false;
     gdata:any;
-    packdata:any;
+    packdata:any[]=[];
     fbcdata:any;
     tbcdata:any;
     pdata:any;
@@ -55,7 +65,7 @@ export class SubBookingComponent {
     userList: any[] = [];
     showDropdown:boolean=true;
 
-    dptype:any;
+    dptype:any[]=[];
     @ViewChild('selectElem') selectElem!: ElementRef;
     @ViewChild('pickupbranch') pickupbranch!: ElementRef;
     @ViewChild('selectElem2') selectElem2!: ElementRef;
@@ -124,15 +134,9 @@ export class SubBookingComponent {
 
       });
       //get Packages
-      this.api.GetPAckagesType().subscribe((res:any)=>{
-        console.log(res);
-        this.packdata=res;
-      });
+      this.loadBookingOptions();
 
-      this.admin.GetDispatchtypeData().subscribe((res:any)=>{
-        console.log(res);
-        this.dptype=res;
-      });
+      
 
       this.getProfileData();
       this.addOrderItem()

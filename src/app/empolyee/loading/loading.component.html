@@ -18,7 +18,7 @@ word-wrap: break-word">Parcel Loading Offline</h4>
 
         <div class="col-md-4">
             <label class="form-label form-after">From City</label>
-            <input type="text" class="form-control" formControlName="fromCity" readonly />
+            <select #selectElem class="form-select form-select-sm" formControlName="fromCity"><option value="">Select City</option><option *ngFor="let city of originCityChoices" [value]="city.cityName">{{city.cityName}}</option></select>
           </div>
         
 
@@ -42,9 +42,8 @@ word-wrap: break-word">Parcel Loading Offline</h4>
         
           <!-- Book Branch -->
             <div class="col-md-4">
-                <label class="form-label form-after">Pickup Branch</label>
-                <input type="text" class="form-control" [value]="ffdata?.name || ''" readonly />
-                <input type="hidden" formControlName="pickUpBranch" />
+                <label class="form-label form-after">From Branch</label>
+                <select #branchselect class="form-select form-select-sm" formControlName="pickUpBranch"><option value="">Select Branch</option><option *ngFor="let branch of tbcdata" [value]="branch.branchUniqueId">{{branch.name}}</option></select>
               </div>
        
         
@@ -157,7 +156,7 @@ word-wrap: break-word">Parcel Loading Offline</h4>
         
         <div class="col-md-3 col-sm-12">
           <label class="form-label">Driver Number</label>
-          <input type="text" class="form-control form-select-sm" placeholder="Enter Conductor Number" formControlName="driverNo">
+          <input type="text" class="form-control form-select-sm" placeholder="Enter Conductor Number" domesticPhone maxlength="10" inputmode="numeric" formControlName="driverNo">
           <div class="text-danger" *ngIf="form1.get('driverNo')?.touched && form1.get('driverNo')?.invalid">
             <div *ngIf="form1.get('driverNo')?.errors?.['required']">Conductor Number is required.</div>
             <div *ngIf="form1.get('driverNo')?.errors?.['pattern']">Must be 10 digits.</div>
@@ -168,7 +167,7 @@ word-wrap: break-word">Parcel Loading Offline</h4>
 
         <div class="col-md-3 col-sm-12 " style="margin-top: 31px;">
           <button class="btn btn-primary btn-sm " type="button" style=" width: 10rem;"
-            (click)="ParcelLoad()">Save</button>
+            (click)="ParcelLoad()" [disabled]="isSavingParcel || !form1.get('grnNo')?.value?.length">Save</button>
 
         </div>
       </div>
@@ -178,10 +177,10 @@ word-wrap: break-word">Parcel Loading Offline</h4>
       <div class="row">
         <div class="col-md-3 d-flex align-items-end">
           <button class="btn btn-primary btn-sm " type="button" style=" width: 10rem;"
-            (click)="ParcelLoad()">Save</button>
+            (click)="ParcelLoad()" [disabled]="isSavingParcel || !form1.get('grnNo')?.value?.length">Save</button>
         </div>
       </div>
     </div> -->
   </form>
 </div>
-<app-loading-report></app-loading-report>
+<app-loading-report [embedded]="true"></app-loading-report>

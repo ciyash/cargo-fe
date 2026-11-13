@@ -11,6 +11,8 @@ declare var $: any;
 import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-sub-dispatched-stock',
@@ -238,7 +240,7 @@ export class SubDispatchedStockComponent {
       next: (res: any) => {
         // Check if API response contains a message
         if (res.message) {
-          this.toast.success(res.message); // ✅ show success toast
+          this.toast.success(res.message); // âœ… show success toast
         } else {
           this.toast.success("Report loaded successfully");
         }
@@ -252,7 +254,7 @@ export class SubDispatchedStockComponent {
 
         // Extract message from error
         const errorMessage = err?.error?.message || "Report loading failed. Please try again.";
-        this.toast.error(errorMessage); // ✅ show error toast
+        this.toast.error(errorMessage); // âœ… show error toast
       }
     });
   }

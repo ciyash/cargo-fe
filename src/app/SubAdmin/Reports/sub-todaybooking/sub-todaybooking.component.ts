@@ -11,6 +11,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { BranchService } from 'src/app/service/branch.service';
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent, PrintGrnNumberComponent, SearchGrnNumberComponent, TableModule, DialogModule],
   selector: 'app-sub-todaybooking',

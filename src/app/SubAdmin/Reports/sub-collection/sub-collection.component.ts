@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-sub-collection',

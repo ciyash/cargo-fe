@@ -11,6 +11,8 @@ import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 declare var $: any;
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-delivery-report',
@@ -56,7 +58,7 @@ export class DeliveryReportComponent {
         const day = ('0' + today.getDate()).slice(-2);
         const month = ('0' + (today.getMonth() + 1)).slice(-2);
         const year = today.getFullYear();
-        return `${year}-${month}-${day}`; // ✔ HTML date input format
+        return `${year}-${month}-${day}`; // âœ” HTML date input format
       }
 
 
@@ -96,7 +98,7 @@ export class DeliveryReportComponent {
 
         console.log("payload:", this.payload);
 
-        // 🧹 Clear previous data before making the API call
+        // ðŸ§¹ Clear previous data before making the API call
         this.reportData = [];
         this.Bdata = null;
 
@@ -152,7 +154,7 @@ export class DeliveryReportComponent {
         setTimeout(() => {
           // To City
           $(this.selectElem2.nativeElement).select2();
-          $(this.selectElem2.nativeElement).val('all').trigger('change'); // ✅
+          $(this.selectElem2.nativeElement).val('all').trigger('change'); // âœ…
           $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
             const selectedToCity = event.params.data.id;
             this.form.patchValue({ toCity: selectedToCity });
@@ -161,7 +163,7 @@ export class DeliveryReportComponent {
 
           // Drop Branch
           $(this.droupbranch.nativeElement).select2();
-          $(this.droupbranch.nativeElement).val('all').trigger('change'); // ✅
+          $(this.droupbranch.nativeElement).val('all').trigger('change'); // âœ…
           $(this.droupbranch.nativeElement).on('select2:select', (event: any) => {
             const selectedDropBranch = event.params.data.id;
             this.form.patchValue({ dropBranch: selectedDropBranch });

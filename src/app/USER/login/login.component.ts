@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   form!: FormGroup;
   form1: FormGroup;
   form2: FormGroup;
+  registered = false;
   otpFormVisible = false;
   errorMessage: string = '';
   isLoggedIn: boolean = false;
@@ -47,6 +48,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.registered = this.route.snapshot.queryParamMap.get('registered') === '1';
     this.form = this.fb.group({
       identifier: ['', Validators.required],
       password: ['', Validators.required],
@@ -63,12 +65,13 @@ export class LoginComponent implements OnInit {
 
     this.isLoading = true;
 
-    this.authService.login(identifier, password).subscribe({
+    this.authService.login(identifier, password, this.route.snapshot.queryParamMap.get('companyId') || undefined).subscribe({
       next: (response: any) => {
         this.token.saveToken(response.token);
 
         const user = {
           role: response.role,
+          permissions: response.permissions, accountType: response.accountType, company: response.company,
           location: response.location || null,
           branchName: response.branchName || null,
           branchLocation: response.branchLocation || null,
@@ -94,21 +97,7 @@ export class LoginComponent implements OnInit {
   // /
 
   private getNavigationPath(role: string): string {
-    switch (role) {
-      // case 'admin':
-      //   return '/booking';
-
-        case 'admin':
-          return '/createbranch';
-
-      case 'subadmin':
-        return '/sub-booking';
-
-      case 'employee':
-        return '/employee-booking';
-      default:
-        return '/login';
-    }
+    return ['company_admin','admin'].includes(this.token.getRole() || '') ? '/dashboard' : this.token.can('bookings') ? '/booking' : '/profile';
   }
 
   forgotpassword() {

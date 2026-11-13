@@ -18,6 +18,7 @@ import { DialogModule } from 'primeng/dialog';
 
 // @Component({
 
+
 //   selector: 'app-booking-report',
 //   templateUrl: './booking-report.component.html',
 //   styleUrls: ['./booking-report.component.scss']
@@ -91,6 +92,7 @@ import { Router } from '@angular/router';
 import { BranchService } from 'src/app/service/branch.service';
 
 @Component({
+  host: {'class':'reports-page'},
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent, PrintGrnNumberComponent, SearchGrnNumberComponent, TableModule, DialogModule],
   selector: 'app-booking-report',

@@ -25,6 +25,8 @@ declare var $: any;
 declare const SlimSelect: any;
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-consolidated',
@@ -95,7 +97,7 @@ export class ConsolidatedComponent {
     );
 
     const toCityArray = this.form.get('toCity') as FormArray;
-    toCityArray.clear(); // ✅ Clear old values before updating
+    toCityArray.clear(); // âœ… Clear old values before updating
 
     selectedOptions.forEach((city) => toCityArray.push(new FormControl(city)));
 

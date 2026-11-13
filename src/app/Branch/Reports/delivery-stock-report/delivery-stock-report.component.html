@@ -1,4 +1,5 @@
 <app-header></app-header>
+<main class="reports-shell">
 sljdna'dk'aismdpiajdpoijdpoqwdjpowdpodw
 <h5 class="text-center text-danger text-decoration-underline mb-3" style="">
 </h5>
@@ -26,7 +27,7 @@ sljdna'dk'aismdpiajdpoijdpoqwdjpowdpodw
 <div class="container card" id="print-section" style="border: 2px solid #DADCE0;">
   <div class="container " >
     <div class="container-fluid" *ngIf="pfdata">
-      <h4 class="text-center fw-bold">{{ pfdata.companyName }}</h4>
+      <h4 class="text-center fw-bold">{{ pfdata.companyId?.name || pfdata.companyName }}</h4>
       <p class="text-center fw-bold">
         Address: {{ pfdata.location }} - {{ pfdata.branchId?.name }} |
         Phone No: {{ pfdata.phone }}
@@ -35,14 +36,9 @@ sljdna'dk'aismdpiajdpoijdpoqwdjpowdpodw
       </h5>
     </div>
 
-    <!-- <div class="row text-center fw-bold my-3">
-      <div class="col-md-3">Origin SubRegion: ALL</div>
-      <div class="col-md-3">Origin Branch: ALL</div>
-      <div class="col-md-3">Destination SubRegion: ALL</div>
-      <div class="col-md-3">Destination Branch: ALL</div>
-    </div> -->
+    
   
-    <table class="table table-bordered text-center">
+    <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered text-center">
       <thead>
         <tr>
           <th>CATEGORY</th>
@@ -83,10 +79,10 @@ sljdna'dk'aismdpiajdpoijdpoqwdjpowdpodw
           <td>{{ reportData.total?.grandTotal }}</td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
   
     <div class="table-responsive mt-4">
-      <table class="table table-bordered table-sm text-center align-middle">
+      <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
         <thead class="table-secondary">
           <tr>
             <th>Sr. No</th>
@@ -124,7 +120,7 @@ sljdna'dk'aismdpiajdpoijdpoqwdjpowdpodw
             <td>{{ pdata['Days'] }}</td>
           </tr>
         </tbody>
-      </table>
+      </table></div>
   
       
     </div>
@@ -132,7 +128,7 @@ sljdna'dk'aismdpiajdpoijdpoqwdjpowdpodw
   
   </div>
 </div>
-<!-- Pagination Controls -->
+
 <nav *ngIf="totalPages > 1" class="mt-3">
   <ul class="pagination justify-content-center">
     <li class="page-item" [class.disabled]="currentPage === 1">
@@ -151,3 +147,5 @@ sljdna'dk'aismdpiajdpoijdpoqwdjpowdpodw
     </li>
   </ul>
 </nav>
+
+</main>

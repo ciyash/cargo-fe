@@ -3,8 +3,8 @@
 <div class="container mt-5 mb-2">
   <h4 class="text-center mb-4 "
     style="color: #eb2424;font-size: 20px;font-family: Poppins;font-weight: 500;text-decoration: underline;word-wrap: break-word; ">
-    Parcel Credit Master</h4>
-  <h5> <a routerLink="/addcfmaster" class="text-success">Add CF Master</a> </h5>
+    Credit Parties</h4>
+  <h5> <a routerLink="/addcfmaster" class="text-success">Add Credit Party</a> </h5>
   <div class="row">
     <div class="table-responsive">
       <div *ngIf="loading" class="text-center">
@@ -62,7 +62,7 @@
                           <th>Charge Name</th>
                           <th>Charge</th>
                           <th>Dispatch Type</th>
-                          <th>Form City</th>
+                          <th>From City</th>
                           <th>To City</th>
                           <th>Mode</th>
                           <th>Item Name</th>
@@ -173,7 +173,7 @@
                 </div>
                 <div class="col-md-4 col-sm-12">
                   <label class="form-label">City</label>
-                  <input type="text" class="form-control form-select-sm " [ngModel]="repd.city" formControlName="city">
+                  <select class="form-select form-select-sm" [ngModel]="repd.city" formControlName="city"><option value="">Select city</option><option *ngIf="repd.city && !hasCity(repd.city)" [value]="repd.city">{{repd.city}} (saved value)</option><option *ngFor="let city of citydata" [value]="city.cityName">{{city.cityName}}</option></select>
                 </div>
                 <div class="col-md-4 col-sm-12">
                   <label class="form-label">Code</label>
@@ -185,7 +185,7 @@
                 </div>
                 <div class="col-md-4 col-sm-12">
                   <label class="form-label">Phone</label>
-                  <input type="number" class="form-control form-select-sm " [ngModel]="repd.phone" formControlName="phone">
+                  <input type="number" class="form-control form-select-sm " [ngModel]="repd.phone" formControlName="phone" domesticPhone>
                 </div>
                 <div class="col-md-4 col-sm-12">
                   <label class="form-label">Email</label>
@@ -213,7 +213,7 @@
                 <div class="col-md-4 col-sm-12">
                   <label class="form-label">Sender Mobile No</label>
                   <input type="number" class="form-control form-select-sm " [ngModel]="repd.senderMobile"
-                    formControlName="senderMobile">
+                    formControlName="senderMobile" domesticPhone>
                 </div>
                 <div class="col-md-4 col-sm-12">
                   <label class="form-label">Credit Limit</label>

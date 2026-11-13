@@ -11,6 +11,7 @@ const AUTH_API = environment.baseUrl.replace(/\/+$/, '') + '/';
   providedIn: 'root'
 })
 export class BranchService {
+  editBookedParcel(grnNo:number,details:any){return this.http.patch<any>(AUTH_API+'booking/grnNo/'+encodeURIComponent(grnNo),details,{headers:new HttpHeaders({'Content-Type':'application/json','Authorization':'Bearer '+this.token.getToken()})});}
   private baseUrl = environment.baseUrl
   private storageKey = 'adminData';
   AUTH_API: any;
@@ -141,6 +142,7 @@ export class BranchService {
     adminUniqueId:string;
     packages: [];
     serviceCharges:number;
+    parcelGstAmount?:number;
     hamaliCharges:number;
     doorDeliveryCharges:number;
     doorPickupCharges:number;
@@ -174,10 +176,11 @@ export class BranchService {
       "receiverName": value.receiverName,
       "receiverMobile": value.receiverMobile,
       "receiverAddress": value.receiverAddress,
-      "reciverGst":value.receiverGst,
+      "receiverGst":value.receiverGst,
       "adminUniqueId": value.adminUniqueId,
       "packages":value.packages,
       "serviceCharges": value.serviceCharges,
+      "parcelGstAmount": value.parcelGstAmount ?? 0,
       "hamaliCharges": value.hamaliCharges,
       "doorDeliveryCharges": value.doorDeliveryCharges,
       "doorPickupCharges":value.doorPickupCharges,
@@ -277,8 +280,8 @@ GetGRNnumber(id:any){
 
 //   return this.http.post(
 //     AUTH_API + 'booking/grnNolrNo/',
-//     value,          // ✅ Body goes here
-//     httpOptions     // ✅ Headers go here
+//     value,          // âœ… Body goes here
+//     httpOptions     // âœ… Headers go here
 //   );
 // }
 
@@ -446,7 +449,7 @@ ParcelUnLoading(value:{
   toCity:string;
   branch:string;
   vehicalNumber:string;
-  grnNo: [];
+  grnNo: []; lrNumber:string[];
   bookingType:string;
 }){
   const token1 = this.token.getToken();
@@ -464,7 +467,7 @@ ParcelUnLoading(value:{
   "toCity": value.toCity,
   "branch": value.branch,
   "vehicalNumber": value.vehicalNumber,
-  "grnNo": value.grnNo,
+  "grnNo": value.grnNo, "lrNumber":value.lrNumber,
   "bookingType":value.bookingType,
     },
      httpOptions
@@ -776,6 +779,7 @@ ReceivedParcelUpdate(value: {
   grnNo: string;
   receiverName:string;
   receiverMobile:string;
+  toPayDeliveredAmount:number;
 
 }) {
   const token1 = this.token.getToken();
@@ -786,11 +790,12 @@ ReceivedParcelUpdate(value: {
     })
   };
   return this.http.post(
-    AUTH_API + 'booking/receivedBooking',
+    AUTH_API + 'booking/delivery-booking',
     {
       grnNo: value.grnNo,
       receiverName:value.receiverName,
       receiverMobile:value.receiverMobile,
+      toPayDeliveredAmount:value.toPayDeliveredAmount,
 
   },
     httpOptions
@@ -1366,7 +1371,7 @@ DispatchedReport(value:{
   );
 }
 
-//CF Master Apis
+//Credit Party Apis
 AddCfmaster(value:{
   gst: string;
   country: string;
@@ -1570,17 +1575,7 @@ LoadVouchers(value:{
   );
 }
 
-VoucherGenerate(value:{
-  fromDate: string;
-  toDate: string;
-  grnNo:string;
-  creditForAgent:string;
-  fromBranch:string;
-  toBranch:string;
-  consignor:string;
-  bookingStatus:string;
-  charge:string;
-}){
+VoucherGenerate(value:{ grnNo: number[] }){
   const token1 = this.token.getToken();
   const httpOptions = {
     headers: new HttpHeaders({
@@ -1589,17 +1584,7 @@ VoucherGenerate(value:{
     })
   };
   return this.http.post(
-    AUTH_API + 'voucher-generate',  {
-      "fromDate": value.fromDate,
-      "toDate": value.toDate,
-      "grnNo": value.grnNo,
-      "creditForAgent": value.creditForAgent,
-      "fromBranch": value.fromBranch,
-      "toBranch": value.toBranch,
-      "consignor": value.consignor,
-      "bookingStatus": value.bookingStatus,
-      "charge": value.charge,
-    },
+    AUTH_API + 'voucher-generate', { grnNo: value.grnNo },
      httpOptions
   );
 }
@@ -1764,7 +1749,7 @@ ParcelStatusdateReport(value:{
 //       receiverName: value.receiverName,
 //       receiverMobile: value.receiverMobile,
 //       receiverAddress: value.receiverAddress,
-//       receiverGst: value.receiverGst,  // ✅ fixed typo
+//       receiverGst: value.receiverGst,  // âœ… fixed typo
 //       adminUniqueId: value.adminUniqueId,
 //       packages: value.packages,
 //       serviceCharges: value.serviceCharges,

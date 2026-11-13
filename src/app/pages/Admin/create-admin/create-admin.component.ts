@@ -1,3 +1,4 @@
+import { DomesticPhoneDirective } from '../../../shared/domestic-phone.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -13,7 +14,7 @@ import { BranchService } from 'src/app/service/branch.service';
 import { ToastrService } from 'ngx-toastr';
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent, ToastModule],
+  imports: [DomesticPhoneDirective, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent, ToastModule],
   selector: 'app-create-admin',
   templateUrl: './create-admin.component.html',
   styleUrls: ['./create-admin.component.scss']
@@ -43,7 +44,7 @@ export class CreateAdminComponent {
             phone: ['', Validators.required],
             email: ['', Validators.required],
             documents: ['', Validators.required],
-            role: ['admin', Validators.required],
+            role: ['company_admin', Validators.required],
             // companyName:['', Validators.required],
               });
 
@@ -115,7 +116,6 @@ export class CreateAdminComponent {
           role: this.form.value.role,
           // companyName:this.form.value.companyName
         };
-        console.log('Final Payload:', payload);
         this.api.createAdmin(payload).subscribe({
           next: (response: any) => {
             console.log('Parcel loaded successfully:', response);

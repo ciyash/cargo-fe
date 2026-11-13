@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-incoming-report',
@@ -55,7 +57,7 @@ export class IncomingReportComponent {
         const day = ('0' + today.getDate()).slice(-2);
         const month = ('0' + (today.getMonth() + 1)).slice(-2);
         const year = today.getFullYear();
-        return `${year}-${month}-${day}`; // ✔ HTML date input format
+        return `${year}-${month}-${day}`; // Ã¢Å“â€ HTML date input format
       }
 
 
@@ -110,7 +112,7 @@ export class IncomingReportComponent {
             localStorage.setItem('incomingReportData', JSON.stringify(finalData));
 
             // Open new tab
-            window.open('/parcel-incoming-report', '_blank');
+            window.open('/parcelincomingreport', '_blank');
           },
           (error) => {
             console.error('API Error:', error);
@@ -143,7 +145,7 @@ export class IncomingReportComponent {
 
           // To City
           $(this.selectElem2.nativeElement).select2();
-          $(this.selectElem2.nativeElement).val('all').trigger('change'); // ✅
+          $(this.selectElem2.nativeElement).val('all').trigger('change'); // Ã¢Å“â€¦
           $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
             const selectedToCity = event.params.data.id;
             this.form.patchValue({ toCity: selectedToCity });
@@ -152,7 +154,7 @@ export class IncomingReportComponent {
 
           // Drop Branch
           $(this.droupbranch.nativeElement).select2();
-          $(this.droupbranch.nativeElement).val('all').trigger('change'); // ✅
+          $(this.droupbranch.nativeElement).val('all').trigger('change'); // Ã¢Å“â€¦
           $(this.droupbranch.nativeElement).on('select2:select', (event: any) => {
             const selectedDropBranch = event.params.data.id;
             this.form.patchValue({ dropBranch: selectedDropBranch });

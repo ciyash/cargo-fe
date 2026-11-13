@@ -1,22 +1,39 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { authGuard } from './service/auth.guard';
+import { authGuard, bookingEntryGuard, branchStaffEntryGuard } from './service/auth.guard';
 import { cauthGuardGuard } from './service/cauth-guard.guard';
 
 
 import { companyGuard } from './service/company.guard';
 
 const routes: Routes = [
+  {path:'courier-services',loadComponent:()=>import('./logistics/workspace.component').then(m=>m.LogisticsWorkspaceComponent),canActivate:[authGuard],data:{section:'services'}},
+  {path:'subscription',loadComponent:()=>import('./logistics/workspace.component').then(m=>m.LogisticsWorkspaceComponent),canActivate:[authGuard],data:{section:'subscription'}},
+  {path:'franchise-allowance',loadComponent:()=>import('./logistics/workspace.component').then(m=>m.LogisticsWorkspaceComponent),canActivate:[authGuard],data:{section:'allowance'}},
+  {path:'branch-staff',loadComponent:()=>import('./logistics/workspace.component').then(m=>m.LogisticsWorkspaceComponent),canActivate:[authGuard,branchStaffEntryGuard],data:{section:'team',roles:['admin']}},
+  {path:'workspace',redirectTo:'dashboard',pathMatch:'full'},
+  {path:'workspace-booking',redirectTo:'booking',pathMatch:'full'},
+  {path:'workspace/dashboard',redirectTo:'dashboard',pathMatch:'full'},
+  {path:'workspace/company',redirectTo:'adminprofile',pathMatch:'full'},
+  {path:'workspace/branches',redirectTo:'createbranch',pathMatch:'full'},
+  {path:'workspace/team',redirectTo:'branch-staff',pathMatch:'full'},
+  {path:'workspace/services',redirectTo:'courier-services',pathMatch:'full'},
+  {path:'workspace/subscription',redirectTo:'subscription',pathMatch:'full'},
+  {path:'workspace/allowance',redirectTo:'franchise-allowance',pathMatch:'full'},
+  {path:'workspace/bookings',redirectTo:'gnrnumberstatus',pathMatch:'full'},
+  {path:'workspace/operations',redirectTo:'parcelloading',pathMatch:'full'},
+  {path:'workspace/reports',redirectTo:'reportsdashboard',pathMatch:'full'},
+  {path:'workspace/:section',redirectTo:'profile',pathMatch:'full'},
   {path: 'company-register', redirectTo: 'signup', pathMatch: 'full'},
   {path:"login",loadComponent: () => import('./USER/login/login.component').then(m => m.LoginComponent) },
-   {path:"clogin",loadComponent: () => import('./USER/company-login/company-login.component').then(m => m.CompanyLoginComponent) },
+   {path:'clogin',loadComponent:()=>import('./USER/company-login/company-login.component').then(m=>m.CompanyLoginComponent)},
   {path:"",loadComponent: () => import('./USER/login/login.component').then(m => m.LoginComponent) },
   {path:"signup",loadComponent: () => import('./USER/signup/signup.component').then(m => m.SignupComponent) },
-  {path:"dashboard",loadComponent: () => import('./USER/dashboard/dashboard.component').then(m => m.DashboardComponent), canActivate: [authGuard], },
+  {path:"dashboard",loadComponent: () => import('./USER/dashboard/dashboard.component').then(m => m.DashboardComponent), canActivate: [authGuard], data: { roles: ['company_admin','admin'] } },
 
 
-  {path:"booking",loadComponent: () => import('./Branch/parcelbooking/parcelbooking.component').then(m => m.ParcelbookingComponent), canActivate: [authGuard] },
+  {path:'booking',loadComponent:()=>import('./Branch/parcelbooking/parcelbooking.component').then(m=>m.ParcelbookingComponent),canActivate:[authGuard,bookingEntryGuard]},
   {path:'parcelloading',loadComponent: () => import('./Branch/parcelloading/parcelloading.component').then(m => m.ParcelloadingComponent), canActivate: [authGuard]},
   {path:'bookingreport',loadComponent: () => import('./Branch/booking-report/booking-report.component').then(m => m.BookingReportComponent), canActivate: [authGuard]},
   { path: 'printgrn/:grnNo', loadComponent: () => import('./Branch/print-grn-number/print-grn-number.component').then(m => m.PrintGrnNumberComponent), canActivate: [authGuard] },
@@ -75,66 +92,66 @@ const routes: Routes = [
     { path: 'create-admin', loadComponent: () => import('./USER/company-workspace/company-workspace.component').then(m => m.CompanyWorkspaceComponent),canActivate: [companyGuard]},
 
 
-  { path: 'createemployee', loadComponent: () => import('./pages/Admin/create-employee/create-employee.component').then(m => m.CreateEmployeeComponent), canActivate: [authGuard],data: { roles: ['admin'] }},
+  { path: 'createemployee', loadComponent: () => import('./pages/Admin/create-employee/create-employee.component').then(m => m.CreateEmployeeComponent), canActivate: [authGuard],data: { roles: ['company_admin'] }},
 
-  { path: 'createbranch', loadComponent: () => import('./pages/Admin/create-branch/create-branch.component').then(m => m.CreateBranchComponent), canActivate: [cauthGuardGuard], data: { roles: ['admin'] }},
-  { path: 'adminprofile', loadComponent: () => import('./pages/Admin/admin-profile/admin-profile.component').then(m => m.AdminProfileComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
-  { path: 'createvehicle', loadComponent: () => import('./pages/Admin/create-vehicle/create-vehicle.component').then(m => m.CreateVehicleComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
-  { path: 'createcity', loadComponent: () => import('./pages/Admin/create-cityname/create-cityname.component').then(m => m.CreateCitynameComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
-  { path: 'adddispatchtype', loadComponent: () => import('./pages/Admin/add-dispatch-type/add-dispatch-type.component').then(m => m.AddDispatchTypeComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
-  { path: 'addextracharges', loadComponent: () => import('./pages/Admin/add-extra-charges/add-extra-charges.component').then(m => m.AddExtraChargesComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
-
-
-  { path: 'employee-dashboard', loadComponent: () => import('./empolyee/employee-dashboard/employee-dashboard.component').then(m => m.EmployeeDashboardComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
-  { path: 'employee-booking', loadComponent: () => import('./empolyee/booking/booking.component').then(m => m.BookingComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
-  { path: 'employee-loading', loadComponent: () => import('./empolyee/loading/loading.component').then(m => m.LoadingComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
-  { path: 'employee-unloading', loadComponent: () => import('./empolyee/unloading/unloading.component').then(m => m.UnloadingComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
-  { path: 'employee-branch-loading', loadComponent: () => import('./empolyee/branch-to-branch-loading/branch-to-branch-loading.component').then(m => m.BranchToBranchLoadingComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
-  { path: 'employee-parcel-devlivery', loadComponent: () => import('./Branch/parcel-delivery/parcel-delivery.component').then(m => m.ParcelDeliveryComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
-  { path: 'employee-parcel-cancel', loadComponent: () => import('./Branch/cancel-booking/cancel-booking.component').then(m => m.CancelBookingComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
-  { path: 'employee-status', loadComponent: () => import('./Branch/filter-grn/filter-grn.component').then(m => m.FilterGrnComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
-  { path: 'employee-branch-unloading', loadComponent: () => import('./empolyee/branch-to-branch-unloading/branch-to-branch-unloading.component').then(m => m.BranchToBranchUnloadingComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
-  { path: 'employee-voucherdetails', loadComponent: () => import('./empolyee/voucher-details-list/voucher-details-list.component').then(m => m.VoucherDetailsListComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
+  { path: 'createbranch', loadComponent: () => import('./pages/Admin/create-branch/create-branch.component').then(m => m.CreateBranchComponent), canActivate: [cauthGuardGuard], data: { roles: ['company_admin'] }},
+  { path: 'adminprofile', loadComponent: () => import('./pages/Admin/admin-profile/admin-profile.component').then(m => m.AdminProfileComponent), canActivate: [authGuard], data: { roles: ['company_admin'] }},
+  { path: 'createvehicle', loadComponent: () => import('./pages/Admin/create-vehicle/create-vehicle.component').then(m => m.CreateVehicleComponent), canActivate: [authGuard], data: { roles: ['company_admin'] }},
+  { path: 'createcity', loadComponent: () => import('./pages/Admin/create-cityname/create-cityname.component').then(m => m.CreateCitynameComponent), canActivate: [authGuard], data: { roles: ['company_admin'] }},
+  { path: 'adddispatchtype', loadComponent: () => import('./pages/Admin/add-dispatch-type/add-dispatch-type.component').then(m => m.AddDispatchTypeComponent), canActivate: [authGuard], data: { roles: ['company_admin'] }},
+  { path: 'addextracharges', loadComponent: () => import('./pages/Admin/add-extra-charges/add-extra-charges.component').then(m => m.AddExtraChargesComponent), canActivate: [authGuard], data: { roles: ['company_admin'] }},
 
 
-
-{ path: 'todaybooking', loadComponent: () => import('./empolyee/Reports/todaybooking/todaybooking.component').then(m => m.TodaybookingComponent), canActivate: [authGuard],data: { roles: ['employee'] }},
-{ path: 'employee-printgrn/:grnNo', loadComponent: () => import('./Branch/print-grn-number/print-grn-number.component').then(m => m.PrintGrnNumberComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'collection-report', loadComponent: () => import('./empolyee/Reports/collectionreport/collectionreport.component').then(m => m.CollectionreportComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'conslidated-report', loadComponent: () => import('./empolyee/Reports/conslidated-report/conslidated-report.component').then(m => m.ConslidatedReportComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'parcel-status', loadComponent: () => import('./empolyee/Reports/report-status-date/report-status-date.component').then(m => m.ReportStatusDateComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'pending-deliverystock', loadComponent: () => import('./empolyee/Reports/pendingdelivery-stock/pendingdelivery-stock.component').then(m => m.PendingdeliveryStockComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'pending-luggage', loadComponent: () => import('./empolyee/Reports/pendingdevlivery-luggagereport/pendingdevlivery-luggagereport.component').then(m => m.PendingdevliveryLuggagereportComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'dispacthedstock-report', loadComponent: () => import('./empolyee/dispatchedstock-report/dispatchedstock-report.component').then(m => m.DispatchedstockReportComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'received-stock', loadComponent: () => import('./empolyee/Reports/receivedstock-report/receivedstock-report.component').then(m => m.ReceivedstockReportComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'deliverystock-report', loadComponent: () => import('./empolyee/Reports/delivery-report/delivery-report.component').then(m => m.DeliveryReportComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'pendingdispached-stock-report', loadComponent: () => import('./empolyee/Reports/pendingdispacthedstock-report/pendingdispacthedstock-report.component').then(m => m.PendingdispacthedstockReportComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'memo-stock-report', loadComponent: () => import('./empolyee/Reports/disptched-memo-report/disptched-memo-report.component').then(m => m.DisptchedMemoReportComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'incomingreport', loadComponent: () => import('./empolyee/Reports/incoming-report/incoming-report.component').then(m => m.IncomingReportComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
-{ path: 'dashboard-report', loadComponent: () => import('./empolyee/Reports/dashboard-report/dashboard-report.component').then(m => m.DashboardReportComponent), canActivate: [authGuard],data: { roles: ['employee'] } },
+  { path: 'employee-dashboard', redirectTo: 'dashboard', pathMatch: 'full' },
+  {path:'employee-booking',loadComponent:()=>import('./empolyee/booking/booking.component').then(m=>m.BookingComponent),canActivate:[authGuard],data:{roles:['staff']}},
+  { path: 'employee-loading', loadComponent: () => import('./empolyee/loading/loading.component').then(m => m.LoadingComponent), canActivate: [authGuard],data: { roles: ['staff'] }},
+  { path: 'employee-unloading', loadComponent: () => import('./empolyee/unloading/unloading.component').then(m => m.UnloadingComponent), canActivate: [authGuard],data: { roles: ['staff'] }},
+  { path: 'employee-branch-loading', loadComponent: () => import('./empolyee/branch-to-branch-loading/branch-to-branch-loading.component').then(m => m.BranchToBranchLoadingComponent), canActivate: [authGuard],data: { roles: ['staff'] }},
+  { path: 'employee-parcel-devlivery', loadComponent: () => import('./Branch/parcel-delivery/parcel-delivery.component').then(m => m.ParcelDeliveryComponent), canActivate: [authGuard],data: { roles: ['staff'] }},
+  { path: 'employee-parcel-cancel', loadComponent: () => import('./Branch/cancel-booking/cancel-booking.component').then(m => m.CancelBookingComponent), canActivate: [authGuard],data: { roles: ['staff'] }},
+  { path: 'employee-status', loadComponent: () => import('./Branch/filter-grn/filter-grn.component').then(m => m.FilterGrnComponent), canActivate: [authGuard],data: { roles: ['staff'] }},
+  { path: 'employee-branch-unloading', loadComponent: () => import('./empolyee/branch-to-branch-unloading/branch-to-branch-unloading.component').then(m => m.BranchToBranchUnloadingComponent), canActivate: [authGuard],data: { roles: ['staff'] }},
+  { path: 'employee-voucherdetails', loadComponent: () => import('./empolyee/voucher-details-list/voucher-details-list.component').then(m => m.VoucherDetailsListComponent), canActivate: [authGuard],data: { roles: ['staff'] }},
 
 
-  {path:"sub-booking",loadComponent: () => import('./SubAdmin/sub-booking/sub-booking.component').then(m => m.SubBookingComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-loading",loadComponent: () => import('./SubAdmin/sub-loading/sub-loading.component').then(m => m.SubLoadingComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-unloading",loadComponent: () => import('./SubAdmin/sub-unloading/sub-unloading.component').then(m => m.SubUnloadingComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-branch-loading",loadComponent: () => import('./SubAdmin/sub-branch-to-branch-loading/sub-branch-to-branch-loading.component').then(m => m.SubBranchToBranchLoadingComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-branch-unloading",loadComponent: () => import('./SubAdmin/sub-branch-to-branch-unloading/sub-branch-to-branch-unloading.component').then(m => m.SubBranchToBranchUnloadingComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-parcelvoucher-details",loadComponent: () => import('./SubAdmin/parcel-voucher-details/parcel-voucher-details.component').then(m => m.ParcelVoucherDetailsComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
+
+{ path: 'todaybooking', loadComponent: () => import('./empolyee/Reports/todaybooking/todaybooking.component').then(m => m.TodaybookingComponent), canActivate: [authGuard],data: { roles: ['staff'] }},
+{ path: 'employee-printgrn/:grnNo', loadComponent: () => import('./Branch/print-grn-number/print-grn-number.component').then(m => m.PrintGrnNumberComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'collection-report', loadComponent: () => import('./empolyee/Reports/collectionreport/collectionreport.component').then(m => m.CollectionreportComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'conslidated-report', loadComponent: () => import('./empolyee/Reports/conslidated-report/conslidated-report.component').then(m => m.ConslidatedReportComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'parcel-status', loadComponent: () => import('./empolyee/Reports/report-status-date/report-status-date.component').then(m => m.ReportStatusDateComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'pending-deliverystock', loadComponent: () => import('./empolyee/Reports/pendingdelivery-stock/pendingdelivery-stock.component').then(m => m.PendingdeliveryStockComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'pending-luggage', loadComponent: () => import('./empolyee/Reports/pendingdevlivery-luggagereport/pendingdevlivery-luggagereport.component').then(m => m.PendingdevliveryLuggagereportComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'dispacthedstock-report', loadComponent: () => import('./empolyee/dispatchedstock-report/dispatchedstock-report.component').then(m => m.DispatchedstockReportComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'received-stock', loadComponent: () => import('./empolyee/Reports/receivedstock-report/receivedstock-report.component').then(m => m.ReceivedstockReportComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'deliverystock-report', loadComponent: () => import('./empolyee/Reports/delivery-report/delivery-report.component').then(m => m.DeliveryReportComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'pendingdispached-stock-report', loadComponent: () => import('./empolyee/Reports/pendingdispacthedstock-report/pendingdispacthedstock-report.component').then(m => m.PendingdispacthedstockReportComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'memo-stock-report', loadComponent: () => import('./empolyee/Reports/disptched-memo-report/disptched-memo-report.component').then(m => m.DisptchedMemoReportComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'incomingreport', loadComponent: () => import('./empolyee/Reports/incoming-report/incoming-report.component').then(m => m.IncomingReportComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
+{ path: 'dashboard-report', loadComponent: () => import('./empolyee/Reports/dashboard-report/dashboard-report.component').then(m => m.DashboardReportComponent), canActivate: [authGuard],data: { roles: ['staff'] } },
 
 
-  {path:"sub-todaybooking",loadComponent: () => import('./SubAdmin/Reports/sub-todaybooking/sub-todaybooking.component').then(m => m.SubTodaybookingComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-dashboard",loadComponent: () => import('./SubAdmin/Reports/sub-dashboard-booking/sub-dashboard-booking.component').then(m => m.SubDashboardBookingComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-collection",loadComponent: () => import('./SubAdmin/Reports/sub-collection/sub-collection.component').then(m => m.SubCollectionComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-consolidate",loadComponent: () => import('./SubAdmin/Reports/consolidate/consolidate.component').then(m => m.ConsolidateComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-datedifferent",loadComponent: () => import('./SubAdmin/Reports/sub-status-date-different/sub-status-date-different.component').then(m => m.SubStatusDateDifferentComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-pendingdelivery",loadComponent: () => import('./SubAdmin/Reports/sub-pending-delivery-stock/sub-pending-delivery-stock.component').then(m => m.SubPendingDeliveryStockComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-pendingluaggage",loadComponent: () => import('./SubAdmin/Reports/sub-pending-delivery-luggage/sub-pending-delivery-luggage.component').then(m => m.SubPendingDeliveryLuggageComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-dispatched",loadComponent: () => import('./SubAdmin/Reports/sub-dispatched-stock/sub-dispatched-stock.component').then(m => m.SubDispatchedStockComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-received",loadComponent: () => import('./SubAdmin/Reports/sub-received-stock/sub-received-stock.component').then(m => m.SubReceivedStockComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-deliverystock",loadComponent: () => import('./SubAdmin/Reports/sub-delivery-stock/sub-delivery-stock.component').then(m => m.SubDeliveryStockComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-pendingdispatch",loadComponent: () => import('./SubAdmin/Reports/sub-pending-dispatch-stock/sub-pending-dispatch-stock.component').then(m => m.SubPendingDispatchStockComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-memo-dispathed",loadComponent: () => import('./SubAdmin/Reports/sub-memo-dispatched/sub-memo-dispatched.component').then(m => m.SubMemoDispatchedComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
-  {path:"sub-incoming-luggage",loadComponent: () => import('./SubAdmin/Reports/sub-incoming-luggage/sub-incoming-luggage.component').then(m => m.SubIncomingLuggageComponent), canActivate: [authGuard], data: { roles: ['subadmin'] }},
+  {path:'sub-booking',loadComponent:()=>import('./SubAdmin/sub-booking/sub-booking.component').then(m=>m.SubBookingComponent),canActivate:[authGuard],data:{roles:['admin']}},
+  {path:"sub-loading",loadComponent: () => import('./SubAdmin/sub-loading/sub-loading.component').then(m => m.SubLoadingComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-unloading",loadComponent: () => import('./SubAdmin/sub-unloading/sub-unloading.component').then(m => m.SubUnloadingComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-branch-loading",loadComponent: () => import('./SubAdmin/sub-branch-to-branch-loading/sub-branch-to-branch-loading.component').then(m => m.SubBranchToBranchLoadingComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-branch-unloading",loadComponent: () => import('./SubAdmin/sub-branch-to-branch-unloading/sub-branch-to-branch-unloading.component').then(m => m.SubBranchToBranchUnloadingComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-parcelvoucher-details",loadComponent: () => import('./SubAdmin/parcel-voucher-details/parcel-voucher-details.component').then(m => m.ParcelVoucherDetailsComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+
+
+  {path:"sub-todaybooking",loadComponent: () => import('./SubAdmin/Reports/sub-todaybooking/sub-todaybooking.component').then(m => m.SubTodaybookingComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-dashboard",loadComponent: () => import('./SubAdmin/Reports/sub-dashboard-booking/sub-dashboard-booking.component').then(m => m.SubDashboardBookingComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-collection",loadComponent: () => import('./SubAdmin/Reports/sub-collection/sub-collection.component').then(m => m.SubCollectionComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-consolidate",loadComponent: () => import('./SubAdmin/Reports/consolidate/consolidate.component').then(m => m.ConsolidateComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-datedifferent",loadComponent: () => import('./SubAdmin/Reports/sub-status-date-different/sub-status-date-different.component').then(m => m.SubStatusDateDifferentComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-pendingdelivery",loadComponent: () => import('./SubAdmin/Reports/sub-pending-delivery-stock/sub-pending-delivery-stock.component').then(m => m.SubPendingDeliveryStockComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-pendingluaggage",loadComponent: () => import('./SubAdmin/Reports/sub-pending-delivery-luggage/sub-pending-delivery-luggage.component').then(m => m.SubPendingDeliveryLuggageComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-dispatched",loadComponent: () => import('./SubAdmin/Reports/sub-dispatched-stock/sub-dispatched-stock.component').then(m => m.SubDispatchedStockComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-received",loadComponent: () => import('./SubAdmin/Reports/sub-received-stock/sub-received-stock.component').then(m => m.SubReceivedStockComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-deliverystock",loadComponent: () => import('./SubAdmin/Reports/sub-delivery-stock/sub-delivery-stock.component').then(m => m.SubDeliveryStockComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-pendingdispatch",loadComponent: () => import('./SubAdmin/Reports/sub-pending-dispatch-stock/sub-pending-dispatch-stock.component').then(m => m.SubPendingDispatchStockComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-memo-dispathed",loadComponent: () => import('./SubAdmin/Reports/sub-memo-dispatched/sub-memo-dispatched.component').then(m => m.SubMemoDispatchedComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
+  {path:"sub-incoming-luggage",loadComponent: () => import('./SubAdmin/Reports/sub-incoming-luggage/sub-incoming-luggage.component').then(m => m.SubIncomingLuggageComponent), canActivate: [authGuard], data: { roles: ['admin'] }},
 
   { path: '**', redirectTo: 'login' },
 ];

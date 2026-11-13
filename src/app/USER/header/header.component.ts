@@ -17,18 +17,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   get homeRoute() {
-    if (this.token.isCompany()) return '/create-admin';
+    if(this.token.isCompany())return '/create-admin';
+    if (this.token.isAdmin()) return '/dashboard';
     switch (this.token.getRole()) {
+      case 'company_admin': return '/dashboard';
       case 'admin': return '/dashboard';
-      case 'subadmin': return '/sub-booking';
-      case 'employee': return '/employee-booking';
+      case 'staff': return '/booking';
       case 'accountant': return '/reports';
       case 'superviser': return '/tasks';
       case 'driver': return '/delivery';
       default: return '/login';
     }
   }
-  get profileRoute() { return this.token.isAdmin() ? '/adminprofile' : '/profile'; }
+  get profileRoute() { return this.token.isCompany() ? '/create-admin' : this.token.isAdmin() ? '/adminprofile' : '/profile'; }
   profileOpen = false;
   isCompanyAccount = false;
   openMenu: number | null = null;
@@ -48,7 +49,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private token: TokenService,
+    public token: TokenService,
     private api: BranchService,
     private activeroute: ActivatedRoute
   ) {}
@@ -60,19 +61,18 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.model = [];
     this.isCompanyAccount = this.token.isCompany();
-    if (this.isCompanyAccount) {
-      const company = this.token.getUser()?.company;
-      this.data = {companyId: company, name: company?.customerName || company?.name || 'Company owner', role: 'Company owner'};
-      this.model = [
-        {label:'Overview',icon:'pi pi-home',routerLink:['/create-admin']},
-        {label:'Team',icon:'pi pi-users',routerLink:['/create-admin'],fragment:'company-team'},
+    if(this.isCompanyAccount){
+      const company=this.token.getUser()?.company;
+      this.data={companyId:company,name:company?.customerName||company?.name||'Company account',role:'company_admin'};
+      this.model=[
+        {label:'Overview',icon:'pi pi-home',routerLink:['/create-admin'],fragment:'overview'},
+        {label:'Company logo',icon:'pi pi-palette',routerLink:['/create-admin'],fragment:'company-brand'},
+        {label:'Subscription & payments',icon:'pi pi-credit-card',routerLink:['/create-admin'],fragment:'company-billing'},
         {label:'Branches',icon:'pi pi-building',routerLink:['/create-admin'],fragment:'company-branches'},
-        {label:'Plan & Billing',icon:'pi pi-credit-card',routerLink:['/create-admin'],fragment:'company-billing'},
-        {label:'Company logo',icon:'pi pi-palette',routerLink:['/create-admin'],fragment:'company-brand'}
+        {label:'Admins & team',icon:'pi pi-users',routerLink:['/create-admin'],fragment:'company-team'},
       ];
       return;
     }
-
     if (this.token.isAdmin()) {
       this.model = [
         {
@@ -98,12 +98,12 @@ export class HeaderComponent implements OnInit {
         },
 
         {
-          label: 'Parcel Agent ▼',
+          label: 'Credit Accounts ▼',
           icon: 'pi pi-fw pi-file',
           items: [
-            { label: 'CF Master', routerLink: ['/getcfmasterdata'] },
-            { label: 'CF Voucher Generate', routerLink: ['/creditvouchergenerate'] },
-            { label: 'CF Voucher Details', routerLink: ['/voucherdetailscf'] },
+            { label: 'Credit Parties', routerLink: ['/getcfmasterdata'] },
+            { label: 'Generate Credit Statement', routerLink: ['/creditvouchergenerate'] },
+            { label: 'Credit Statements', routerLink: ['/voucherdetailscf'] },
           ],
         },
         {
@@ -149,7 +149,7 @@ export class HeaderComponent implements OnInit {
               routerLink: ['/createbranch'],
             },
             {
-              label: 'Add Employee',
+              label: 'Team & permissions',
               icon: 'pi pi-fw pi-user-edit',
               routerLink: ['/createemployee'],
             },
@@ -206,12 +206,12 @@ export class HeaderComponent implements OnInit {
           ]
         },
         {
-          label: 'Parcel Agent ▼',
+          label: 'Credit Accounts ▼',
           icon: 'pi pi-fw pi-file',
           items: [
-            { label: 'CF Master', routerLink: ['/getcfmasterdata'] },
-            { label: 'CF Voucher Generate', routerLink: ['/creditvouchergenerate'] },
-            { label: 'CF Voucher Details', routerLink: ['/voucherdetailscf'] },
+            { label: 'Credit Parties', routerLink: ['/getcfmasterdata'] },
+            { label: 'Generate Credit Statement', routerLink: ['/creditvouchergenerate'] },
+            { label: 'Credit Statements', routerLink: ['/voucherdetailscf'] },
           ],
         },
         {
@@ -246,6 +246,7 @@ export class HeaderComponent implements OnInit {
 
     if (this.token.isSubAdmin()) {
       this.model = [
+        { label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/dashboard'] },
         // {
         //   label: 'Dashboard',
         //   icon: 'pi pi-database',
@@ -268,12 +269,12 @@ export class HeaderComponent implements OnInit {
         },
 
         {
-          label: 'Parcel Agent ▼',
+          label: 'Credit Accounts ▼',
           icon: 'pi pi-fw pi-file',
           items: [
-            { label: 'CF Master', routerLink: ['/getcfmasterdata'] },
-            { label: 'CF Voucher Generate', routerLink: ['/creditvouchergenerate'] },
-            { label: 'CF Voucher Details', routerLink: ['/voucherdetailscf'] },
+            { label: 'Credit Parties', routerLink: ['/getcfmasterdata'] },
+            { label: 'Generate Credit Statement', routerLink: ['/creditvouchergenerate'] },
+            { label: 'Credit Statements', routerLink: ['/voucherdetailscf'] },
           ],
         },
         {
@@ -329,12 +330,12 @@ export class HeaderComponent implements OnInit {
       //   },
 
       //   {
-      //     label: 'Parcel Agent ▼',
+      //     label: 'Credit Accounts ▼',
       //     icon: 'pi pi-fw pi-file',
       //     items: [
-      //       { label: 'CF Master', routerLink: ['/getcfmasterdata'] },
-      //       { label: 'CF Voucher Generate', routerLink: ['/creditvouchergenerate'] },
-      //       { label: 'CF Voucher Details', routerLink: ['/voucherdetailscf'] },
+      //       { label: 'Credit Parties', routerLink: ['/getcfmasterdata'] },
+      //       { label: 'Generate Credit Statement', routerLink: ['/creditvouchergenerate'] },
+      //       { label: 'Credit Statements', routerLink: ['/voucherdetailscf'] },
       //     ],
       //   },
       //   {
@@ -401,6 +402,40 @@ export class HeaderComponent implements OnInit {
     this.model = this.model
       .filter(item => this.menuLabel(item.label).toLowerCase() !== 'profile')
       .map(item => item.items ? {...item, items: item.items.filter((child: any) => this.menuLabel(child.label).toLowerCase() !== 'profile')} : item);
+    // Keep the booking entry and tracking list together for every role.
+    this.model=this.model.map(item=>{
+      if(!item.items||this.menuLabel(item.label).toLowerCase()!=='bookings')return item;
+      const rest=item.items.filter((child:any)=>!['/booking','/sub-booking','/employee-booking','/workspace-booking','/workspace/bookings'].includes(child.routerLink?.[0]));
+      return {...item,items:[{label:'Parcel Booking',routerLink:[this.token.isSubAdmin()?'/sub-booking':this.token.isEmployee()?'/employee-booking':'/booking']},...rest]};
+    });
+    if(this.token.isAdmin())this.model.push({label:'Settings',items:[{label:'Courier services',routerLink:['/courier-services']},{label:'Subscription & quota',routerLink:['/subscription']},{label:'Franchise allowances',routerLink:['/franchise-allowance']},{label:'Booking allowance ledger',routerLink:['/franchise-allowance']}]});
+    else this.model.push({label:'Courier services',icon:'pi pi-truck',routerLink:['/courier-services']});
+    // Keep setup links together while retaining the current role's allowed routes.
+    const setupGroups = new Set(['create data', 'others', 'setting', 'settings']);
+    const setupItems: any[] = [];
+    this.model = this.model.filter(item => {
+      if (!setupGroups.has(this.menuLabel(item.label).toLowerCase())) return true;
+      setupItems.push(...(item.items || []));
+      return false;
+    });
+    if (setupItems.length) {
+      const seen = new Set<string>();
+      this.model.push({
+        label: 'Settings', icon: 'pi pi-cog',
+        items: setupItems.filter(item => {
+          const key = JSON.stringify(item.routerLink);
+          if (seen.has(key)) return false;
+          seen.add(key); return true;
+        }),
+      });
+    }
+    this.model = this.model.map(item => {
+      if(!item.items)return item;
+      const group=this.menuLabel(item.label).toLowerCase();
+      const permission=group.includes('report')?'reports':(group.includes('agent')||group==='credit accounts')?'accounts':null;
+      return {...item,items:item.items.filter((child:any)=>(!permission||this.token.can(permission))&&this.token.canAccessRoute(child.routerLink?.[0]||''))};
+    }).filter(item=>item.items?item.items.length:this.token.canAccessRoute(item.routerLink?.[0]||''));
+    if(this.token.isSubAdmin()&&this.token.can('team'))this.model.push({label:'Team',icon:'pi pi-users',routerLink:['/branch-staff']});
     // profile data
     this.id = this.activeroute.snapshot.params['id'];
     this.api.GetProfileData().subscribe((res: any) => {

@@ -17,7 +17,12 @@ import { BranchService } from 'src/app/service/branch.service';
 })
 export class CreditVoucherGenerateComponent {
   form:FormGroup;
-  vldata:any;
+  vldata:any[] = [];
+  selected = new Set<number>();
+  generating = false;
+  get selectedTotal(): number { return this.vldata.filter(row => this.selected.has(Number(row.grnNo))).reduce((sum, row) => sum + Number(row.grandTotal || 0), 0); }
+  toggleBooking(grn: number): void { const value = Number(grn); this.selected.has(value) ? this.selected.delete(value) : this.selected.add(value); }
+  selectAll(checked: boolean): void { this.selected = checked ? new Set(this.vldata.map(row => Number(row.grnNo))) : new Set(); }
   userList: any[] = [];
   showDropdown:boolean=true;
   searchTerm: string = '';
@@ -55,6 +60,9 @@ export class CreditVoucherGenerateComponent {
   }
 
   VoucherLoad() {
+    if (this.form.invalid || this.form.value.fromDate > this.form.value.toDate) { this.toast.warning('Select a valid date range'); return; }
+    this.selected.clear();
+    this.vldata = [];
     const payload = {
       fromDate: this.form.value.fromDate,
       toDate: this.form.value.toDate,
@@ -67,7 +75,7 @@ export class CreditVoucherGenerateComponent {
       next: (response: any) => {
         console.log('Parcel loaded successfully:', response);
         this.toast.success('Vouchers loaded successfully','Success');
-        this.vldata=response;
+        this.vldata=Array.isArray(response) ? response : (response?.data || []);
 
         if (this.vldata.length > 0) {
           this.form1.patchValue({
@@ -95,34 +103,20 @@ export class CreditVoucherGenerateComponent {
   }
 
   VoucherGenerate() {
-    const payload = {
-      fromDate: this.form1.value.fromDate,
-      toDate: this.form1.value.toDate,
-      grnNo: this.form1.value.grnNo,
-      creditForAgent: this.form1.value.creditForAgent,
-      fromBranch: this.form1.value.fromBranch,
-      toBranch: this.form1.value.toBranch,
-      consignor: this.form1.value.consignor,
-      bookingStatus: this.form1.value.bookingStatus,
-      charge: this.form1.value.charge,
-    };
-
-    console.log('Final Payload:', payload);
-    this.api.VoucherGenerate(payload).subscribe({
-      next: (response: any) => {
-        console.log('Parcel loaded successfully:', response);
-        this.toast.success('Credit Voucher Successfully Generated','Success')
-        setTimeout(() => {
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['/creditvouchergenerate']);
-          });
-        }, 1000);
+    if (this.generating || !this.selected.size) { if (!this.generating) this.toast.warning('Select bookings for the statement'); return; }
+    this.generating = true;
+    const grns = [...this.selected];
+    this.api.VoucherGenerate({grnNo: grns}).subscribe({
+      next: () => {
+        this.toast.success('Credit statement generated', 'Success');
+        this.vldata = this.vldata.filter(row => !this.selected.has(Number(row.grnNo)));
+        this.selected.clear();
+        this.generating = false;
       },
       error: (error: any) => {
-        console.error('Parcel loading failed:', error);
-        this.toast.error('Parcel Loading Failed. Please try again', 'Error')
-
-      },
+        this.generating = false;
+        this.toast.error(error?.error?.message || 'Statement could not be generated', 'Error');
+      }
     });
   }
 

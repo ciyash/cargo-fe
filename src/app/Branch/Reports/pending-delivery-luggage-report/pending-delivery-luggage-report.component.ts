@@ -11,6 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 
 declare var $: any;
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-pending-delivery-luggage-report',
@@ -53,7 +55,7 @@ export class PendingDeliveryLuggageReportComponent {
     const day = ('0' + today.getDate()).slice(-2);
     const month = ('0' + (today.getMonth() + 1)).slice(-2);
     const year = today.getFullYear();
-    return `${year}-${month}-${day}`; // ✔ HTML date input format
+    return `${year}-${month}-${day}`; // âœ” HTML date input format
   }
 
 
@@ -205,7 +207,7 @@ ngAfterViewInit(): void {
   setTimeout(() => {
     // From City
     $(this.selectElem.nativeElement).select2();
-    $(this.selectElem.nativeElement).val('').trigger('change'); // ✅ Corrected
+    $(this.selectElem.nativeElement).val('').trigger('change'); // âœ… Corrected
     $(this.selectElem.nativeElement).on('select2:select', (event: any) => {
       const selectedCity = event.params.data.id;
       this.form.patchValue({ fromCity: selectedCity });
@@ -214,7 +216,7 @@ ngAfterViewInit(): void {
 
     // Pickup Branch
     $(this.pickupbranch.nativeElement).select2();
-    $(this.pickupbranch.nativeElement).val('').trigger('change'); // ✅ Corrected
+    $(this.pickupbranch.nativeElement).val('').trigger('change'); // âœ… Corrected
     $(this.pickupbranch.nativeElement).on('select2:select', (event: any) => {
       const selectedBranch = event.params.data.id;
       this.form.patchValue({ pickUpBranch: selectedBranch });
@@ -223,7 +225,7 @@ ngAfterViewInit(): void {
 
     // To City
     $(this.selectElem2.nativeElement).select2();
-    $(this.selectElem2.nativeElement).val('').trigger('change'); // ✅ Corrected
+    $(this.selectElem2.nativeElement).val('').trigger('change'); // âœ… Corrected
     $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
       const selectedToCity = event.params.data.id;
       this.form.patchValue({ toCity: selectedToCity });
@@ -232,7 +234,7 @@ ngAfterViewInit(): void {
 
     // Drop Branch
     $(this.droupbranch.nativeElement).select2();
-    $(this.droupbranch.nativeElement).val('').trigger('change'); // ✅ Corrected
+    $(this.droupbranch.nativeElement).val('').trigger('change'); // âœ… Corrected
     $(this.droupbranch.nativeElement).on('select2:select', (event: any) => {
       const selectedDropBranch = event.params.data.id;
       this.form.patchValue({ dropBranch: selectedDropBranch });

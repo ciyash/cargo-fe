@@ -1,3 +1,4 @@
+import { DomesticPhoneDirective } from '../../../shared/domestic-phone.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -13,7 +14,7 @@ import { BranchService } from 'src/app/service/branch.service';
 declare var bootstrap: any;
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent, ButtonModule],
+  imports: [DomesticPhoneDirective, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent, ButtonModule],
   selector: 'app-get-cfmaster-data',
   templateUrl: './get-cfmaster-data.component.html',
   styleUrls: ['./get-cfmaster-data.component.scss']
@@ -38,7 +39,8 @@ export class GetCfmasterDataComponent {
       this.repd1=row;
   }
   form1:FormGroup;
-  citydata:any;
+  citydata:any[]=[];
+    hasCity(name:string){return this.citydata.some(city=>city.cityName===name);}
   scdata: any[] = []; // store response
   selectedRow: any;
   constructor(private fb:FormBuilder, private api:BranchService, private messageService:MessageService, private router:Router, private bapi:BranchService, private activeroute:ActivatedRoute, private toastr:ToastrService){
@@ -151,7 +153,7 @@ export class GetCfmasterDataComponent {
       (a: any) => {
         if (a) {
           console.log('deletedid',a);
-          this.messageService.add({ severity: 'success', summary: 'success', detail: 'Delete CF Master Type Successfully' });
+          this.messageService.add({ severity: 'success', summary: 'success', detail: 'Credit party deleted' });
           setTimeout(() => {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
               this.router.navigate(['/getcfmasterdata']);
@@ -160,11 +162,11 @@ export class GetCfmasterDataComponent {
         } else {
           console.log(a);
           // this.errorMessage = a.msg.message;
-          this.msg = 'CF Master Successfully Delete !!!';
+          this.msg = 'Credit party deleted';
         }
       },
       (err: any) => {
-        this.messageService.add({ severity: 'error', summary: 'error', detail: 'Delete CF Master Type Somthing wrong' });
+        this.messageService.add({ severity: 'error', summary: 'error', detail: 'Could not delete credit party' });
       },
     );
   return false;

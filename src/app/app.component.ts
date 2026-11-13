@@ -11,5 +11,6 @@ export class AppComponent {
   title = 'CargoNest';
   constructor(private router: Router) {}
   get isPrintView() { return /(?:^|\/)[^/]*print[^/]*(?:\/|$)/i.test(this.router.url.split('?')[0]); }
-  get isWorkspace() { const route = this.router.url.split('?')[0].replace(/\/+$/,''); return !this.isPrintView && !['','/login','/clogin','/signup','/company-register'].includes(route); }
+  get isLogistics() { const path=this.router.url.split(/[?#]/)[0].replace(/\/+$/, ""); return path !== "/workspace/bookings" && /^\/workspace(?:[\/-]|$)/.test(path); }
+  get isWorkspace() { const route = this.router.url.split('?')[0].replace(/\/+$/,''); return !this.isPrintView && !this.isLogistics && !['','/login','/clogin','/signup','/company-register'].includes(route); }
 }

@@ -3,7 +3,7 @@
 
 
 <h4 class="text-center  " style="color: #3C3C3C;font-size: 20px;font-family: Poppins;
-font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create Employee</h4>
+font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create account</h4>
 <p-toast></p-toast>
   
 <form [formGroup]="form"  >
@@ -13,13 +13,7 @@ font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create Emplo
                     <label class="form-label form-after">Name</label>
                     <input type="text" class="form-control form-select-sm " formControlName="name">
                 </div>
-                <div class="col-md-3 col-sm-12">
-                <label class="form-label form-after">Select Branch</label>
-                <select class="form-select form-select-sm" formControlName="branchId">
-                    <option value="" selected>Select Branch</option>
-                  <option *ngFor="let branch of branchdata" [value]="branch._id">{{ branch.name }}</option>
-                </select>
-                </div>
+                <ng-container *ngIf="form.value.role !== 'company_admin'"><div class="col-md-3 col-sm-12"><label class="form-label form-after">City</label><select class="form-select form-select-sm" formControlName="branchCity"><option value="">Select city first</option><option *ngFor="let city of cityChoices" [value]="city">{{city}}</option></select></div><div class="col-md-3 col-sm-12"><label class="form-label form-after">Assigned branch</label><select class="form-select form-select-sm" formControlName="branchId"><option value="">Select branch in this city</option><option *ngFor="let branch of accountBranches(form); trackBy:branchTrack" [value]="branch._id">{{branch.name}}</option></select></div></ng-container>
                 <div class="col-md-3 col-sm-12 ">
                     <label class="form-label form-after">Username</label>
                     <input type="text" class="form-control form-select-sm " formControlName="username">
@@ -34,11 +28,11 @@ font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create Emplo
                 </div>
                 <!-- <div class="col-md-3 col-sm-12">
                     <label class="form-label">Phone</label>
-                    <input type="text" class="form-control form-select-sm " formControlName="phone">
+                    <input type="text" class="form-control form-select-sm " formControlName="phone" domesticPhone>
                 </div> -->
                 <div class="col-md-3 col-sm-12">
                     <label class="form-label form-after" >Phone</label>
-                    <input type="text" class="form-control form-select-sm" formControlName="phone">
+                    <input type="text" class="form-control form-select-sm" formControlName="phone" domesticPhone>
                     
                     <!-- Error message when input is invalid -->
                     <div *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched" class="text-danger">
@@ -63,15 +57,7 @@ font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create Emplo
 
                 <div class="col-md-3 col-sm-12">
                     <label class="form-label form-after " >Role</label> 
-                    <select class="form-select form-select-sm" formControlName="role">
-                        <option value="" selected>Select Role</option>
-                        <!-- <option value="admin">Admin</option> -->
-                      <option value="subadmin">Sub-Admin</option>
-                      <option value="employee">Employee</option>
-                      <option value="accountant">Accountant</option>
-                      <option value="superviser">Superviser</option>
-                      <option value="driver">Driver</option>
-                    </select>
+                    <select class="form-select form-select-sm" formControlName="role"><option *ngFor="let role of roleOptions" [value]="role.value">{{role.label}}</option></select>
                 </div>
                 
             </div>
@@ -85,7 +71,7 @@ font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create Emplo
                     </div>
                 </div>
             </div>
-</form>
+<div class="col-12" *ngIf="form.value.role === 'staff'"><p class="text-muted small">Staff can use bookings, loading, unloading, delivery, Credit Accounts and reports in their assigned branch. Admin creation and company setup are restricted.</p></div></form>
 
 
 <div class="container mt-5 mb-2">
@@ -112,14 +98,14 @@ font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create Emplo
 
                     <tbody>
                         <ng-container *ngFor="let row of edata; let i = index">
-                          <tr *ngIf="row.role !== 'admin'">
+                          <tr >
                             <td>{{ i + 1 }}</td>
                             <td>{{ row.name }}</td>
                             <td>{{ row.companyId?.name }}</td>
                             <td>{{ row.phone }}</td>
                             <td>{{ row.email }}</td>
                             <td>{{ row.location }}</td>
-                            <td>{{ row.role }}</td>
+                            <td>{{ roleLabel(row.role) }}</td>
                             <td>{{ row.username }}</td>
                             <td>
                               {{ row.showPassword ? row.password : '******' }}
@@ -153,13 +139,7 @@ font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create Emplo
                                 <label class="form-label">Name</label>
                                 <input type="text" class="form-control form-select-sm " [(ngModel)]="repd.name" formControlName="name">
                             </div>
-                            <div class="col-md-3 col-sm-12">
-                            <label class="form-label">Select Branch</label>
-                            <select class="form-select form-select-sm" formControlName="branchId">
-                                <option selected> {{repd.branchId?.name}} </option>
-                              <option *ngFor="let branch of branchdata" [value]="branch._id">{{ branch.name }}</option>
-                            </select>
-                            </div>
+                            <ng-container *ngIf="form1.value.role !== 'company_admin'"><div class="col-md-3 col-sm-12"><label class="form-label form-after">City</label><select class="form-select form-select-sm" formControlName="branchCity"><option value="">Select city first</option><option *ngFor="let city of cityChoices" [value]="city">{{city}}</option></select></div><div class="col-md-3 col-sm-12"><label class="form-label form-after">Assigned branch</label><select class="form-select form-select-sm" formControlName="branchId"><option value="">Select branch in this city</option><option *ngFor="let branch of accountBranches(form1); trackBy:branchTrack" [value]="branch._id">{{branch.name}}</option></select></div></ng-container>
                             <div class="col-md-3 col-sm-12">
                                 <label class="form-label">Username</label>
                                 <input type="text" class="form-control form-select-sm " [(ngModel)]="repd.username" formControlName="username">
@@ -174,11 +154,11 @@ font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create Emplo
                             </div>
                             <!-- <div class="col-md-3 col-sm-12">
                                 <label class="form-label">Phone</label>
-                                <input type="text" class="form-control form-select-sm " formControlName="phone">
+                                <input type="text" class="form-control form-select-sm " formControlName="phone" domesticPhone>
                             </div> -->
                             <!-- <div class="col-md-3 col-sm-12">
                                 <label class="form-label">Phone</label>
-                                <input type="text" class="form-control form-select-sm" [(ngModel)]="repd.phone" formControlName="phone">
+                                <input type="text" class="form-control form-select-sm" [(ngModel)]="repd.phone" formControlName="phone" domesticPhone>
                                 
                             </div> -->
                             
@@ -198,14 +178,7 @@ font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create Emplo
                               
                             <div class="col-md-3 col-sm-12">
                                 <label class="form-label">Role</label> 
-                                <select class="form-select form-select-sm" formControlName="role">
-                                    <option> {{repd.role}} </option>
-                                  <option value="subadmin">Sub Branch</option>
-                                  <option value="employee">Employee</option>
-                                  <option value="accountant">Accountant</option>
-                                  <option value="superviser">Superviser</option>
-                                  <option value="driver">Driver</option>
-                                </select>
+                                <select class="form-select form-select-sm" formControlName="role"><option *ngFor="let role of roleOptions" [value]="role.value">{{role.label}}</option></select>
                             </div>
                             
                         </div>
@@ -219,6 +192,6 @@ font-weight: 500;text-decoration: underline;word-wrap: break-word;">Create Emplo
                                 </div>
                             </div>
                         </div>
-            </form>
+            <div class="col-12" *ngIf="form1.value.role === 'staff'"><p class="text-muted small">Staff can use bookings, loading, unloading, delivery, Credit Accounts and reports in their assigned branch. Admin creation and company setup are restricted.</p></div></form>
         </div>
 </p-dialog>

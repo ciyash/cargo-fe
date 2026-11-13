@@ -1,4 +1,5 @@
 <app-header></app-header>
+<main class="reports-shell">
 <div class="container mt-5 pt-5">
   <h5 class="text-center fw-bold text-danger mt-4"><u>Dispatched Memo report</u></h5>
   <div class="border p-3" style="margin-top: 2rem;">
@@ -71,7 +72,7 @@
       </div>
     </form>
 
-    <!-- Print        -->
+    
     <div class="container-fluid">
       <div id="print-section">
         <div class="hr" style="  border: 1px solid #ccc; /* light gray border */
@@ -90,43 +91,40 @@
               <h6 class="text-decoration-underline">Dispatched Memo Report</h6>
             </div>
             <div class="d-flex justify-content-between">
-              <!-- <h6>Generated For : 08-05-2025 To 08-05-2025 </h6> -->
+              
               <h6> <strong> Generated For:</strong>
                 {{ fromDate | date: 'dd-MM-yyyy' }} To {{ toDate | date: 'dd-MM-yyyy' }}
               </h6>
               <h6>  <strong>Date :</strong>  {{ today | date: 'dd-MM-yyyy hh:mm a' }}</h6>
 
               
-              <!-- <h6> Vehicle : All Vehicle</h6> -->
+              
             </div>
       
             <div class="d-flex justify-content-between">
-              <!-- <h6>
-                By Branch : VIJAYAWADA-Head Office</h6> -->
+              
               </div>
             <div class="d-flex justify-content-between">
-              <!-- <h6>
-                Route Name : All Route</h6>
-              <h6> Destination City : All Cities</h6> -->
+              
             </div>
-            <!-- <h6>Type : All Booking Type</h6> -->
+            
           </div>
     
     
-        <!-- Dispatched Paid Details -->
+        
     
         <div *ngIf="DispatchedData?.data">
           <div class="table-responsive mb-1 ">
-            <table class="table table-bordered table-sm text-center align-middle">
+            <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
               <thead>
                 <tr class="fw-bold">
                   Dispatched Paid Details
                 </tr>
               </thead>
-            </table>
+            </table></div>
           </div>
           <div class="table-responsive">
-            <table class="table table-bordered table-sm text-center align-middle">
+            <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
               <thead class="table-secondary">
                 <tr>
                   <th>No</th>
@@ -165,25 +163,25 @@
                   <td></td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
         </div>
     
     
-        <!-- Dispatched credit Details -->
+        
     
         <div *ngIf="DispatchedData?.data">
           <div class="table-responsive mb-1 ">
-            <table class="table table-bordered table-sm text-center align-middle">
+            <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
               <thead>
                 <tr class="fw-bold">
                   Dispatched credit Details
                 </tr>
               </thead>
-            </table>
+            </table></div>
           </div>
           <div class="table-responsive">
-            <table class="table table-bordered table-sm text-center align-middle">
+            <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
               <thead class="table-secondary">
                 <tr>
                   <th>No</th>
@@ -223,23 +221,23 @@
                 </tr>
     
               </tbody>
-            </table>
+            </table></div>
           </div>
         </div>
     
-        <!-- Dispatched Topay Details -->
+        
         <div *ngIf="DispatchedData?.data">
           <div class="table-responsive mb-1">
-            <table class="table table-bordered table-sm text-center align-middle">
+            <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
               <thead>
                 <tr class="fw-bold">
                   <td colspan="14">Dispatched Topay Details</td>
                 </tr>
               </thead>
-            </table>
+            </table></div>
           </div>
           <div class="table-responsive">
-            <table class="table table-bordered table-sm text-center align-middle">
+            <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
               <thead class="table-secondary">
                 <tr>
                   <th>No</th>
@@ -272,7 +270,7 @@
                   <td>{{ item.packages?.[0]?.packageType || '-' }}</td>
                   <td>{{ item.serviceCharge || 0 }}</td>
                   <td>{{ item.hamaliCharge || 0 }}</td>
-                  <td>{{ item.grandTotal || 0 }}</td> <!-- Display grandTotal -->
+                  <td>{{ item.grandTotal || 0 }}</td> 
                   <td></td>
                 </tr>
               </tbody>
@@ -287,24 +285,24 @@
                   <td></td>
                 </tr>
               </tfoot>
-            </table>
+            </table></div>
           </div>
         </div>
     
     
-        <!-- cityWiseDetails -->
+        
     
         <div class="table-responsive mb-1" *ngIf="DispatchedData?.cityWiseDetails">
-          <table class="table table-bordered table-sm text-center align-middle">
+          <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
             <thead>
               <tr class="fw-bold">
                 cityWiseDetails
               </tr>
             </thead>
-          </table>
+          </table></div>
     
         <div class="table-responsive">
-          <table class="table table-bordered table-sm text-center align-middle">
+          <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
             <thead class="table-secondary">
               <tr>
                 <th>No</th>
@@ -332,7 +330,7 @@
               </tr>
     
             </tbody>
-          </table>
+          </table></div>
         </div>
         </div>
     
@@ -344,3 +342,5 @@
 </div>
 
 
+
+</main>

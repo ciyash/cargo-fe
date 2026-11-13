@@ -1,9 +1,10 @@
 <app-header></app-header>
+<main class="reports-shell">
 
 <div   class="container  p-4 border rounded bg-light" id="print-section">
     <div class="text-center mb-4" style="">
         <div class="container-fluid" *ngIf="pfdata">
-            <!-- <h4 class="text-center fw-bold">{{ pfdata.companyName }}</h4> -->
+            
             <h4 class="text-center fw-bold">{{ pfdata.companyId?.name }}</h4>
             <p class="text-center fw-bold">
                 Address: {{ pfdata.location }} - {{ pfdata.branchId?.name }} |
@@ -43,7 +44,7 @@
 
 
     <div class="table-responsive">
-      <table class="table table-bordered table-sm text-center align-middle">
+      <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
         
         <thead class="table-secondary">
           <tr>
@@ -71,7 +72,7 @@
             <td>{{ item.receiverName }}</td>
             <td>
               <div *ngFor="let pkg of item.packages">
-                {{ pkg.packageType }} (Qty: {{ pkg.quantity }}, ₹{{ pkg.totalPrice }})
+                {{ pkg.packageType }} (Qty: {{ pkg.quantity }}, â‚¹{{ pkg.totalPrice }})
               </div>
             </td>
             <td>{{ item.bookingType }}</td>
@@ -88,14 +89,15 @@
             <td colspan="6" class="text-end">Total Quantity:</td>
             <td colspan="2" class="text-start">{{ totalQuantity }}</td>
             <td colspan="2" class="text-end">Total Amount:</td>
-            <td colspan="2" class="text-start">₹{{ totalGrand }}</td>
+            <td colspan="2" class="text-start">â‚¹{{ totalGrand }}</td>
           </tr>
         </tfoot>
     
-      </table>
+      </table></div>
     </div>
     
     
       
       
 </div>
+</main>

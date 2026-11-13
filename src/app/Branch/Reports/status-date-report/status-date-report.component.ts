@@ -12,6 +12,7 @@ import { HeaderComponent } from '../../../USER/header/header.component';
 
 // @Component({
 
+
 //   selector: 'app-status-date-report',
 //   templateUrl: './status-date-report.component.html',
 //   styleUrls: ['./status-date-report.component.scss']
@@ -188,6 +189,7 @@ import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 
 @Component({
+  host: {'class':'reports-page'},
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-status-date-report',

@@ -1,9 +1,10 @@
+import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
 import { BillingComponent } from '../../shared/billing/billing.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SearchGrnNumberComponent } from '../Widgets/search-grn-number/search-grn-number.component';
-import { Component,OnInit } from '@angular/core';
+import { Component,OnInit,HostListener,NgZone } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core'
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,29 +19,38 @@ import {  ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 
 @Component({
   standalone: true,
-  imports: [BillingComponent, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, SearchGrnNumberComponent, HeaderComponent],
+  imports: [DomesticPhoneDirective, BillingComponent, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, SearchGrnNumberComponent, HeaderComponent],
   selector: 'app-parcelbooking',
   templateUrl: './parcelbooking.component.html',
   styleUrls: ['./parcelbooking.component.scss'],
 })
 export class ParcelbookingComponent {
+  optionName=(_:number,option:any)=>option.name;
+  packageLoading=false;dispatchLoading=false;packageError='';dispatchError='';
+  @HostListener('window:focus')
+  loadBookingOptions(){
+    if(this.packageLoading||this.dispatchLoading)return;
+    this.packageLoading=true;this.dispatchLoading=true;this.packageError='';this.dispatchError='';
+    this.api.GetPAckagesType().subscribe({next:(res:any)=>{this.packdata=Array.isArray(res)?res:Array.isArray(res?.data)?res.data:[];this.packageLoading=false;if(!this.packdata.length)this.packageError='No package types added. Ask your Company Admin to add them.';},error:()=>{this.packageLoading=false;this.packageError='Package types could not load. Select Refresh lists to retry.';}});
+    this.admin.GetDispatchtypeData().subscribe({next:(res:any)=>{this.dptype=Array.isArray(res)?res:Array.isArray(res?.data)?res.data:[];this.dispatchLoading=false;if(!this.dptype.length)this.dispatchError='No dispatch types added. Ask your Company Admin to add them.';},error:()=>{this.dispatchLoading=false;this.dispatchError='Dispatch types could not load. Select Refresh lists to retry.';}});
+  }
   @ViewChild(BillingComponent) billing?: BillingComponent;
   adminData: any;
   form!:FormGroup;
   showTable: boolean = false;
   id:any;
-  citydata:any;
-  branchdata:any;
+  citydata:any[]=[];
+  branchdata:any[]=[];
   bdata: any[] = [];
   totalPrice:any;
   total1:any;
   pfdata:any;
   bookingSuccess: boolean = false;
   gdata:any;
-  packdata:any;
+  packdata:any[]=[];
   fbcdata:any;
   tbcdata:any;
-  pdata:any;
+  pdata:any[]=[];
   form1:FormGroup;
   sdata: number = 0;
   searchTerm: string = '';       // For binding with input field
@@ -51,7 +61,7 @@ export class ParcelbookingComponent {
   userList: any[] = [];
   showDropdown:boolean=true;
 
-  dptype:any;
+  dptype:any[]=[];
   @ViewChild('selectElem') selectElem!: ElementRef;
   @ViewChild('pickupbranch') pickupbranch!: ElementRef;
   @ViewChild('selectElem2') selectElem2!: ElementRef;
@@ -60,15 +70,15 @@ export class ParcelbookingComponent {
   cdata: any;
   grnNo: any;
   grnnumber: any;
-  onPickupBranchSelect: any;
-  onDropBranchSelect: any;
+
+
   modelData: any;
   showModal: boolean = false;
   companyList:any;
 
   constructor(private fb: FormBuilder, private api: BranchService, private token:TokenService,
      private cdr: ChangeDetectorRef,  private route: ActivatedRoute,private toastr:ToastrService,
-     private router:Router, private admin:AdminService) {
+     private router:Router, private admin:AdminService, private zone:NgZone) {
     this.form = this.fb.group({
       fromCity:  ['', Validators.required],
       toCity: ['', Validators.required],
@@ -85,6 +95,7 @@ export class ParcelbookingComponent {
       receiverAddress: [''],
       receiverGst: [''],
       serviceCharges: [0],  // ₹10 per item
+      parcelGstAmount: [0, Validators.min(0)],
       hamaliCharges: [0],
       doorDeliveryCharges: [0],
       doorPickupCharges: [0],
@@ -103,29 +114,23 @@ export class ParcelbookingComponent {
    }
 
   ngOnInit() {
+    this.form.get('fromCity')?.valueChanges.subscribe(city=>this.onFromcitySelect({target:{value:city}}));
     this.getAllCompany();
     // const id = this.activate.snapshot.paramMap.get('id');
     this.api.GetCities().subscribe((res:any)=>{
       console.log('citys',res);
-      this.citydata=res;
+      this.citydata=res;this.pickupCitiesLoaded=true;this.applyLoginPickup();
     });
     //get branches
     this.api.GetBranch().subscribe((res:any)=>{
       console.log(res);
-      this.branchdata=res;
+      this.branchdata=res;this.pickupBranchesLoaded=true;this.onFromcitySelect({target:{value:this.form.value.fromCity}});this.applyLoginPickup();
 
     });
     //get Packages
-    this.api.GetPAckagesType().subscribe((res:any)=>{
-      console.log(res);
-      this.packdata=res;
-      console.log("packageData:",this.packdata)
-    });
+    this.loadBookingOptions();
 
-    this.admin.GetDispatchtypeData().subscribe((res:any)=>{
-      console.log(res);
-      this.dptype=res;
-    });
+    
 
     this.getProfileData();
     this.addOrderItem()
@@ -134,14 +139,11 @@ export class ParcelbookingComponent {
       console.log("Booking type changed to:", value);
       if (value !== 'credit') {
         this.form.patchValue({
-          agent: '',           // Clear selected company
-          senderName: '',
-          senderMobile: '',
-          senderAddress: '',
-          senderGST: ''
+          agent: ''
         });
         console.log("Sender info and company selection cleared.");
       }
+      this.calculateGrandTotal();
     });
   }
 
@@ -150,50 +152,50 @@ export class ParcelbookingComponent {
   ngAfterViewInit(): void {
     setTimeout(() => {
       $(this.selectElem.nativeElement).select2();
-      $(this.selectElem.nativeElement).on('select2:select', (event: any) => {
+      $(this.selectElem.nativeElement).on('select2:select', (event: any) => this.zone.run(() => {
         const selectedCity = event.params.data.id;
         console.log('Selected City:', selectedCity);
         this.form.patchValue({ fromCity: selectedCity });
         console.log('Updated form value:', this.form.value);
-        this.onFromcitySelect({ target: { value: selectedCity } });
-      });
+
+      }));
 
       // Initialize Select2 for Pickup Branch
       $(this.pickupbranch.nativeElement).select2();
-      $(this.pickupbranch.nativeElement).on('select2:select', (event: any) => {
+      $(this.pickupbranch.nativeElement).on('select2:select', (event: any) => this.zone.run(() => {
         const selectedBranch = event.params.data.id;
         console.log('Selected Pickup Branch:', selectedBranch);
         this.form.patchValue({ pickUpBranch: selectedBranch });
         console.log('Updated form value:', this.form.value);
         this.onPickupBranchSelect({ target: { value: selectedBranch } });
-      });
+      }));
 
       // Initialize Select2 for To City
       $(this.selectElem2.nativeElement).select2();
-      $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
+      $(this.selectElem2.nativeElement).on('select2:select', (event: any) => this.zone.run(() => {
         const selectedToCity = event.params.data.id;
         console.log('Selected To City:', selectedToCity);
         this.form.patchValue({ toCity: selectedToCity });
         console.log('Updated form value:', this.form.value);
         this.onTocitySelect({ target: { value: selectedToCity } });
-      });
+      }));
 
       // Initialize Select2 for Drop Branch
       $(this.droupbranch.nativeElement).select2();
-      $(this.droupbranch.nativeElement).on('select2:select', (event: any) => {
+      $(this.droupbranch.nativeElement).on('select2:select', (event: any) => this.zone.run(() => {
         const selectedDropBranch = event.params.data.id;
         console.log('Selected Drop Branch:', selectedDropBranch);
         this.form.patchValue({ dropBranch: selectedDropBranch });
         console.log('Updated form value:', this.form.value);
         this.onDropBranchSelect({ target: { value: selectedDropBranch } });
-      });
+      }));
 
     }, 0);
   }
 getProfileData(){
   this.api.GetProfileData().subscribe((res:any)=>{
     console.log('profile',res);
-    this.pfdata=res.branchId;
+    this.pfdata=res.branchId;this.loginPickupProfile=res;this.pickupProfileLoaded=true;this.applyLoginPickup();
     console.log(this.pfdata,"branchid")
   });
 }
@@ -229,25 +231,48 @@ fetchServiceCharges() {
   }
 }
 
-onFromcitySelect(event: any) {
-  const cityName = event.target.value;
-  if (cityName) {
-    this.api.GetBranchbyCity(cityName).subscribe(
-      (res: any) => {
-        console.log('Branches for selected city:', res);
-        this.pdata = res;
-        this.fetchServiceCharges();
-      },
-      (error: any) => {
-        console.error('Error fetching branches:', error);
-      }
-    );
-  } else {
-    this.pdata = [];
-  }
+private pickupCitiesLoaded=false;private pickupBranchesLoaded=false;private pickupProfileLoaded=false;private pickupDefaultApplied=false;
+private loginPickupProfile:any;
+private syncPickupSelectors(){
+  setTimeout(()=>{
+    if(this.selectElem?.nativeElement)$(this.selectElem.nativeElement).val(this.form.value.fromCity||'').trigger('change.select2');
+    if(this.pickupbranch?.nativeElement)$(this.pickupbranch.nativeElement).val(this.form.value.pickUpBranch||'').trigger('change.select2');
+  },0);
 }
-
-
+private applyLoginPickup(){
+  if(this.pickupDefaultApplied||!this.pickupCitiesLoaded||!this.pickupBranchesLoaded||!this.pickupProfileLoaded)return;
+  this.pickupDefaultApplied=true;
+  // A city selected while requests were loading takes precedence over the default.
+  if(this.form.value.fromCity)return;
+  const profile=this.loginPickupProfile,reference=profile?.branchId;
+  let assigned=this.branchdata.find(branch=>String(branch._id)===String(reference?._id||reference)||branch.branchUniqueId===(reference?.branchUniqueId||reference));
+  const profileCity=String(profile?.branchCity||profile?.city||'').trim().toLowerCase();
+  if(!assigned){
+    const candidates=this.branchdata.filter(branch=>!profileCity||String(branch.city).trim().toLowerCase()===profileCity);
+    assigned=[...candidates].sort((a,b)=>Number(b.branchType==='main')-Number(a.branchType==='main')||String(a._id).localeCompare(String(b._id)))[0];
+  }
+  const name=String(assigned?.city||profileCity).trim().toLowerCase();
+  const city=this.citydata.find(row=>String(row.cityName).trim().toLowerCase()===name);
+  if(!city)return;
+  this.form.patchValue({fromCity:city.cityName});
+  if(assigned&&this.pdata.some(branch=>branch.branchUniqueId===assigned.branchUniqueId))this.form.patchValue({pickUpBranch:assigned.branchUniqueId});
+  this.syncPickupSelectors();
+}
+onFromcitySelect(event:any){
+  const city=String(event?.target?.value||'');
+  if(this.form.get('fromCity')?.value!==city){this.form.patchValue({fromCity:city});return;}
+  this.pdata=this.branchdata.filter(branch=>String(branch.city).trim().toLowerCase()===city.trim().toLowerCase());
+  if(!this.pdata.some(branch=>branch.branchUniqueId===this.form.value.pickUpBranch))this.form.patchValue({pickUpBranch:''});
+  this.syncPickupSelectors();this.fetchServiceCharges();
+}
+onPickupBranchSelect(event:any){
+  const branch=this.pdata.find(row=>row.branchUniqueId===event?.target?.value);
+  this.form.patchValue({pickUpBranch:branch?.branchUniqueId||''});
+}
+onDropBranchSelect(event:any){
+  const branch=(this.tbcdata||[]).find((row:any)=>row.branchUniqueId===event?.target?.value);
+  this.form.patchValue({dropBranch:branch?.branchUniqueId||''});
+}
 onTocitySelect(event: any) {
   console.log('Event triggered:', event);
   console.log('Selected City:', event.target.value);
@@ -296,14 +321,16 @@ onTocitySelect(event: any) {
     this.calculateGrandTotal();
   }
 
+  roundMoney(value: any): number { return Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100; }
+
   calculateTotal(index: number) {
     const packageArray = this.form.get('packages') as FormArray;
     const packageForm = packageArray.at(index);
 
     const quantity = packageForm.get('quantity')?.value || 0;
-    const unitPrice = packageForm.get('unitPrice')?.value || 0;
+    const unitPrice = this.roundMoney(packageForm.get('unitPrice')?.value);
 
-    const totalPrice = quantity * unitPrice;
+    const totalPrice = this.roundMoney(Number(quantity) * Number(unitPrice));
     packageForm.get('totalPrice')?.setValue(totalPrice);
 
     this.calculateGrandTotal();
@@ -315,17 +342,18 @@ onTocitySelect(event: any) {
     // Calculate total price from all packages
     let totalValue = 0;
     packageArray.controls.forEach((pkg) => {
-      totalValue += pkg.get('totalPrice')?.value || 0;
+      totalValue += Number(pkg.get('totalPrice')?.value || 0);
     });
 
     // Get charges from form inputs
-    const serviceCharges = this.form.get('serviceCharges')?.value || 0;
-    const hamaliCharges = this.form.get('hamaliCharges')?.value || 0;
-    const doorDeliveryCharges = this.form.get('doorDeliveryCharges')?.value || 0;
-    const doorPickupCharges = this.form.get('doorPickupCharges')?.value || 0;
+    const serviceCharges = this.roundMoney(this.form.get('serviceCharges')?.value);
+    const hamaliCharges = this.roundMoney(this.form.get('hamaliCharges')?.value);
+    const doorDeliveryCharges = this.roundMoney(this.form.get('doorDeliveryCharges')?.value);
+    const doorPickupCharges = this.roundMoney(this.form.get('doorPickupCharges')?.value);
 
     // Calculate Grand Total
-    const grandTotal = totalValue + serviceCharges + hamaliCharges + doorDeliveryCharges + doorPickupCharges;
+    const gst = this.roundMoney(this.form.get('parcelGstAmount')?.value);
+    const grandTotal = this.form.value.bookingType === 'FOC' ? 0 : Math.round((totalValue + serviceCharges + hamaliCharges + doorDeliveryCharges + doorPickupCharges + gst) * 100) / 100;
 
     // Update Grand Total without triggering another event
     this.form.get('grandTotal')?.setValue(grandTotal, { emitEvent: false });
@@ -375,9 +403,10 @@ onTocitySelect(event: any) {
         receiverName: this.form.value.receiverName,
         receiverMobile: this.form.value.receiverMobile,
         receiverAddress: this.form.value.receiverAddress,
-        receiverGst: this.form.value.receiverGST || "",
+        receiverGst: this.form.value.receiverGst || "",
         packages: orderDataToSend,
         serviceCharges: this.form.value.serviceCharges,
+        parcelGstAmount: this.form.value.parcelGstAmount,
         hamaliCharges: this.form.value.hamaliCharges,
         doorDeliveryCharges: this.form.value.doorDeliveryCharges,
         doorPickupCharges: this.form.value.doorPickupCharges,
@@ -432,9 +461,10 @@ onTocitySelect(event: any) {
         receiverName: this.form.value.receiverName,
         receiverMobile: this.form.value.receiverMobile,
         receiverAddress: this.form.value.receiverAddress,
-        receiverGst: this.form.value.receiverGST || "",  // Default empty string
+        receiverGst: this.form.value.receiverGst || "",  // Default empty string
         packages: orderDataToSend,
         serviceCharges: this.form.value.serviceCharges,
+        parcelGstAmount: this.form.value.parcelGstAmount,
         hamaliCharges: this.form.value.hamaliCharges,
         doorDeliveryCharges: this.form.value.doorDeliveryCharges,
         doorPickupCharges: this.form.value.doorPickupCharges,
@@ -527,14 +557,14 @@ onTocitySelect(event: any) {
         receiverName: this.form.value.senderName,
         receiverMobile: this.form.value.senderMobile,
         receiverAddress: this.form.value.senderAddress,
-        receiverGST: this.form.value.senderGST,
+        receiverGst: this.form.value.senderGST,
       });
     } else {
       this.form.patchValue({
         receiverName: '',
         receiverMobile: '',
         receiverAddress: '',
-        receiverGST: '',
+        receiverGst: '',
       });
     }
   }

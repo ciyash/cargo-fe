@@ -5,6 +5,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   selector: 'app-gst-data',

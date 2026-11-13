@@ -16,6 +16,8 @@ declare const SlimSelect: any;
 
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-collection-data',

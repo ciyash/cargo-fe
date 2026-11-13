@@ -11,6 +11,8 @@ declare var $: any;
 import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-disptched-memo-report',
@@ -93,7 +95,7 @@ export class DisptchedMemoReportComponent {
       const year = today.getFullYear();
       const month = ('0' + (today.getMonth() + 1)).slice(-2);
       const day = ('0' + today.getDate()).slice(-2);
-      return `${year}-${month}-${day}`; // ✅ returns 'yyyy-MM-dd' format
+      return `${year}-${month}-${day}`; // âœ… returns 'yyyy-MM-dd' format
     }
 
 
@@ -102,7 +104,7 @@ export class DisptchedMemoReportComponent {
       setTimeout(() => {
         // To City
         $(this.selectElem2.nativeElement).select2();
-        $(this.selectElem2.nativeElement).val('all').trigger('change'); // ✅
+        $(this.selectElem2.nativeElement).val('all').trigger('change'); // âœ…
         $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
           const selectedToCity = event.params.data.id;
           this.form.patchValue({ toCity: selectedToCity });
@@ -111,7 +113,7 @@ export class DisptchedMemoReportComponent {
 
         // Drop Branch
         $(this.droupbranch.nativeElement).select2();
-        $(this.droupbranch.nativeElement).val('all').trigger('change'); // ✅
+        $(this.droupbranch.nativeElement).val('all').trigger('change'); // âœ…
         $(this.droupbranch.nativeElement).on('select2:select', (event: any) => {
           const selectedDropBranch = event.params.data.id;
           this.form.patchValue({ dropBranch: selectedDropBranch });

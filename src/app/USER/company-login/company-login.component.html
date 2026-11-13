@@ -1,6 +1,6 @@
 <div class="login-container">
   <img src="assets/dashboard/loginback.jpg" alt="" class="background-image">
-  <div class="loginBox"><img src="assets/tittlelogo.svg" alt="CargoNest" class="tenant-logo"><h2>Company login</h2><p class="intro">100 free bookings per company. Then INR 1,000/month for unlimited bookings.</p><p class="intro">Sign in to manage your team and branches.</p>
+  <div class="loginBox"><img src="assets/tittlelogo.svg" alt="CargoNest" class="tenant-logo"><h2>Company login</h2><p class="intro">Manage your company subscription, logo, branches and admin accounts.</p><p class="intro">Use the email and password you registered your company with.</p>
     <p *ngIf="successMessage" role="status">{{successMessage}}</p>
     <p *ngIf="errorMessage" role="alert" class="text-danger">{{errorMessage}}</p>
     <form [formGroup]="loginForm" (ngSubmit)="CompanyLogin()">
@@ -8,6 +8,6 @@
       <label for="company-password">Password</label><input id="company-password" type="password" formControlName="password" autocomplete="current-password">
       <button type="submit" [disabled]="loginForm.invalid || submitting">{{submitting ? 'Signing in…' : 'Sign in'}}</button>
     </form>
-    <p><a routerLink="/signup">Register your company</a></p><a routerLink="/login">Staff login</a>
+    <p><a routerLink="/signup">Register your company</a></p><a routerLink="/login">Admin / Staff login</a>
   </div>
 </div>

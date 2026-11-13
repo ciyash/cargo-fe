@@ -1,3 +1,4 @@
+import { DomesticPhoneDirective } from '../../../shared/domestic-phone.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -10,8 +11,10 @@ import { BranchService } from 'src/app/service/branch.service';
 import { ToastrService } from 'ngx-toastr';
 import { ChangeDetectorRef, NgZone } from '@angular/core';
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
+  imports: [DomesticPhoneDirective, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-dashboard-report',
   templateUrl: './dashboard-report.component.html',
   styleUrls: ['./dashboard-report.component.scss']
@@ -416,16 +419,16 @@ export class DashboardReportComponent {
               // Save data to localStorage
               localStorage.setItem('cancelReportData', JSON.stringify(finalData));
 
-              // ✅ Show success toast
+              // Ã¢Å“â€¦ Show success toast
               this.toast.success('Cancel Report generated successfully!');
 
               // Open new tab
-              window.open('/cancel-report', '_blank');
+              window.open('/cancelreport', '_blank');
             },
             error: (error: any) => {
               console.error('Cancel Report Loading Failed:', error);
 
-              // ❌ Show error toast
+              // Ã¢ÂÅ’ Show error toast
               this.toast.error('Cancel Report loading failed. Please try again.');
             },
           });
@@ -457,10 +460,10 @@ export class DashboardReportComponent {
               toDate: this.form6.value.toDate,
             };
 
-            // ✅ Store in localStorage
+            // Ã¢Å“â€¦ Store in localStorage
             localStorage.setItem('bookingSummaryData', JSON.stringify(finalData9));
 
-            // ✅ Open new tab
+            // Ã¢Å“â€¦ Open new tab
             window.open('/bookingsummary', '_blank');
           },
           error: (error: any) => {
@@ -505,10 +508,10 @@ export class DashboardReportComponent {
               toDate: this.form4.value.toDate,
             };
 
-            // ✅ Store the data temporarily in localStorage
+            // Ã¢Å“â€¦ Store the data temporarily in localStorage
             localStorage.setItem('mobileBookingData', JSON.stringify(finalData5));
 
-            // ✅ Open new tab with route
+            // Ã¢Å“â€¦ Open new tab with route
             window.open('/bookingmobile', '_blank');
           },
           error: (error: any) => {

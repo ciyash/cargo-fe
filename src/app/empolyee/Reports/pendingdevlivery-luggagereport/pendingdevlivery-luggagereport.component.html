@@ -1,4 +1,5 @@
 <app-header></app-header>
+<main class="reports-shell">
 
 <div class="card container" style=" 
 border: 2px solid #ccc; 
@@ -27,13 +28,7 @@ background-color: #fff;">
               To Date is required
             </div>
           </div>
-          <!-- <div class="col-md-6">
-            <label class="form-label">From City</label>
-            <select #selectElem class="form-select form-select-sm" formControlName="fromCity">
-              <option value="" selected> Select City</option>
-              <option *ngFor="let row2 of citydata" [value]="row2.cityName">{{ row2.cityName }}</option>
-            </select>
-          </div> -->
+          
           <div class="col-md-6">
             <label class="form-label form-after">From City</label>
             <input type="text" class="form-control" formControlName="fromCity" readonly />
@@ -46,13 +41,7 @@ background-color: #fff;">
               <option *ngFor="let row of citydata" [value]="row.cityName">{{ row.cityName }}</option>
             </select>
           </div>
-          <!-- <div class="col-md-6">
-            <label class="form-label">PickUpBranch</label>
-            <select #pickupbranch class="form-select form-select-sm" formControlName="pickUpBranch">
-              <option value="" selected> Select Branch</option>
-              <option *ngFor="let row4 of pdata" [value]="row4.branchUniqueId"> {{ row4.name }} </option>
-            </select>
-          </div> -->
+          
           <div class="col-md-6">
             <label class="form-label form-after">Pickup Branch</label>
             <input type="text" class="form-control" [value]="ffdata?.name || ''" readonly />
@@ -115,7 +104,7 @@ background-color: #fff;">
         <h6 class="text-decoration-underline">Pending Delivery Luggage Report</h6>
       </div>
       <div class="table-responsive mb-1 " >
-        <table class="table table-bordered table-sm text-center align-middle">
+        <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
           <thead>
             <tr >
               <th>From : {{payload.fromDate | date: 'dd-MM-yyyy'}} To : {{payload.toDate | date: 'dd-MM-yyyy'}}</th>
@@ -124,12 +113,12 @@ background-color: #fff;">
             </tr>
           </thead>
     
-        </table>
+        </table></div>
       </div>
       
   
       <div class="table-responsive">
-        <table class="table table-bordered table-sm text-center align-middle">
+        <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
             <thead class="table-secondary">
                 <tr>
                     <th>No</th>
@@ -166,7 +155,7 @@ background-color: #fff;">
               </tr>
             </tbody>
             
-        </table>
+        </table></div>
       
         
   
@@ -203,3 +192,5 @@ background-color: #fff;">
 
 
 
+
+</main>

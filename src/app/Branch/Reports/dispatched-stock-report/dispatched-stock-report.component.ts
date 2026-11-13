@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   selector: 'app-dispatched-stock-report',
@@ -53,7 +55,7 @@ export class DispatchedStockReportComponent {
       const day = ('0' + today.getDate()).slice(-2);
       const month = ('0' + (today.getMonth() + 1)).slice(-2);
       const year = today.getFullYear();
-      return `${year}-${month}-${day}`; // ✔ HTML date input format
+      return `${year}-${month}-${day}`; // Ã¢Å“â€ HTML date input format
     }
 
 
@@ -108,7 +110,7 @@ export class DispatchedStockReportComponent {
           localStorage.setItem('incomingReportData', JSON.stringify(finalData));
 
           // Open new tab
-          window.open('/parcel-incoming-report', '_blank');
+          window.open('/parcelincomingreport', '_blank');
         },
         (error) => {
           console.error('API Error:', error);
@@ -129,7 +131,7 @@ export class DispatchedStockReportComponent {
       setTimeout(() => {
         // From City
         $(this.selectElem.nativeElement).select2();
-        $(this.selectElem.nativeElement).val('all').trigger('change'); // ✅ force default
+        $(this.selectElem.nativeElement).val('all').trigger('change'); // Ã¢Å“â€¦ force default
         $(this.selectElem.nativeElement).on('select2:select', (event: any) => {
           const selectedCity = event.params.data.id;
           this.form.patchValue({ fromCity: selectedCity });
@@ -138,7 +140,7 @@ export class DispatchedStockReportComponent {
 
         // Pickup Branch
         $(this.pickupbranch.nativeElement).select2();
-        $(this.pickupbranch.nativeElement).val('all').trigger('change'); // ✅
+        $(this.pickupbranch.nativeElement).val('all').trigger('change'); // Ã¢Å“â€¦
         $(this.pickupbranch.nativeElement).on('select2:select', (event: any) => {
           const selectedBranch = event.params.data.id;
           this.form.patchValue({ pickUpBranch: selectedBranch });
@@ -148,7 +150,7 @@ export class DispatchedStockReportComponent {
 
         // To City
         $(this.selectElem2.nativeElement).select2();
-        $(this.selectElem2.nativeElement).val('all').trigger('change'); // ✅
+        $(this.selectElem2.nativeElement).val('all').trigger('change'); // Ã¢Å“â€¦
         $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
           const selectedToCity = event.params.data.id;
           this.form.patchValue({ toCity: selectedToCity });
@@ -157,7 +159,7 @@ export class DispatchedStockReportComponent {
 
         // Drop Branch
         $(this.droupbranch.nativeElement).select2();
-        $(this.droupbranch.nativeElement).val('all').trigger('change'); // ✅
+        $(this.droupbranch.nativeElement).val('all').trigger('change'); // Ã¢Å“â€¦
         $(this.droupbranch.nativeElement).on('select2:select', (event: any) => {
           const selectedDropBranch = event.params.data.id;
           this.form.patchValue({ dropBranch: selectedDropBranch });

@@ -1,23 +1,14 @@
 <app-header></app-header>
-<!--  -->
+<main class="reports-shell">
+
 
 <div class="container  p-4 border rounded bg-light" id="print-section" style="">
-    <!-- <div class="text-center">
-      <i class="fa fa-print"
-      style="font-size: 40px; cursor: pointer;color: green;"
-      aria-hidden="true"
-      (click)="printReport()"></i>
-   
-      <i class="fa fa-file-excel-o mx-2"
-      style="font-size: 30px; cursor: pointer; color: green;"
-      aria-hidden="true"
-      (click)="exportToExcel()"></i>
-       </div> -->
+    
     <div class="text-center mb-4">
         <div class="container-fluid" *ngIf="pfdata">
-            <h4 class="text-center fw-bold text-decoration-underline">Invoice</h4>
+            <h4 class="text-center fw-bold text-decoration-underline">Credit Statement</h4>
 
-            <h4 class="text-center fw-bold">{{ pfdata.companyName }}</h4>
+            <h4 class="text-center fw-bold">{{ pfdata.companyId?.name || pfdata.companyName }}</h4>
             <p class="text-center fw-bold">
                 Address: {{ pfdata.location }} - {{ pfdata.branchId?.name }} |
                 Phone No: {{ pfdata.phone }}
@@ -52,7 +43,7 @@
 
 
     <div class="table-responsive">
-        <table class="table table-bordered table-sm text-center align-middle">
+        <div class="report-table-scroll" tabindex="0" aria-label="Report table, scroll horizontally for more columns"><table class="table table-bordered table-sm text-center align-middle">
             <thead class="table-secondary">
                 <tr>
                     <th>S No</th>
@@ -62,7 +53,7 @@
                     <th>Destination</th>
                     <th>Detail</th>
                     <th>Packages</th>
-                    <!-- <th>Freight</th> -->
+                    
                     <th>GST Amt</th>
                     <th>Weight</th>
                     <th>Amount</th>
@@ -86,7 +77,7 @@
                         </div>
                     </td>
 
-                    <!-- <td>{{ items.grandTotal }}</td> -->
+                    
                     <td>{{ items.parcelGstAmount }}</td>
                     <td>{{ items.totalWeight }}</td>
                     <td>{{ items.grandTotal }}</td>
@@ -96,10 +87,10 @@
             <tfoot class="table-light fw-bold">
                 <tr *ngIf=" vocherReport">
                     <td colspan="9">Total :</td>
-                    <td colspan="5">₹{{vocherReport.allGrandTotal }}</td>
+                    <td colspan="5">Ã¢â€šÂ¹{{vocherReport.allGrandTotal }}</td>
                 </tr>
             </tfoot>
-        </table>
+        </table></div>
     </div>
 
 
@@ -109,3 +100,4 @@
 
 
 </div>
+</main>

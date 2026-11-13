@@ -12,6 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-parcel-booking-summary',
@@ -31,14 +33,14 @@ export class ParcelBookingSummaryComponent {
   //   if (storedData) {
   //     const parsedData = JSON.parse(storedData);
 
-  //     this.summaryData = parsedData.data || []; // ← FIXED ✅
+  //     this.summaryData = parsedData.data || []; // Ã¢â€ Â FIXED Ã¢Å“â€¦
   //     this.fromDate = parsedData.fromDate;
   //     this.toDate = parsedData.toDate;
 
   //     console.log('Parsed Summary Data from LocalStorage:', this.summaryData);
   //   } else {
   //     this.toast.error('No summary data found. Please generate the report again.');
-  //     this.router.navigate(['/home']);
+  //     this.router.navigate(['/reportsdashboard']);
   //   }
 
   //   this.getProfileData();
@@ -57,11 +59,11 @@ export class ParcelBookingSummaryComponent {
         console.log('Parsed Summary Data from LocalStorage:', this.summaryData);
       } catch (err) {
         this.toast.error('Invalid report data format. Please try again.');
-        this.router.navigate(['/home']);
+        this.router.navigate(['/reportsdashboard']);
       }
     } else {
       this.toast.error('No summary data found. Please generate the report again.');
-      this.router.navigate(['/home']);
+      this.router.navigate(['/reportsdashboard']);
     }
 
     this.getProfileData();

@@ -1,3 +1,5 @@
+import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
+import { NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -19,7 +21,7 @@ declare var $: any;
 declare const SlimSelect: any;
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent, ParcelLoadingDataComponent, RippleModule, ZXingScannerModule],
+  imports: [DomesticPhoneDirective, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent, ParcelLoadingDataComponent, RippleModule, ZXingScannerModule],
   selector: 'app-parcelloading',
   templateUrl: './parcelloading.component.html',
   styleUrls: ['./parcelloading.component.scss'],
@@ -54,7 +56,7 @@ export class ParcelloadingComponent implements OnInit {
 
   constructor(private api: BranchService, private token:TokenService,
      private fb: FormBuilder, private messageService:MessageService,
-      private router:Router, private activeroute:ActivatedRoute,private toast:ToastrService) {
+      private router:Router, private activeroute:ActivatedRoute,private toast:ToastrService, private zone:NgZone) {
       this.form = this.fb.group({
         startDate: [this.getTodayDateString(), Validators.required],
         endDate: [this.getTodayDateString(), Validators.required],
@@ -83,9 +85,11 @@ export class ParcelloadingComponent implements OnInit {
 
   }
   ngOnInit() {
+    this.form.get('fromCity')?.valueChanges.subscribe(city=>this.onFromcitySelect({target:{value:city}}));
+    this.form.get('pickUpBranch')?.valueChanges.subscribe(()=>this.clearOriginParcels());
     this.searchTerm = this.activeroute.snapshot.params['grnNo'];
     this.adminData = this.token.getToken();
-    console.log('Admin Data:', this.adminData);
+    
     this.getCities();
     this. getVehicleData();
     this.branchData();
@@ -104,7 +108,7 @@ export class ParcelloadingComponent implements OnInit {
     this.api.GetCities().subscribe({
       next: (response: any) => {
         console.log('Cities data:', response);
-        this.cities = response;
+        this.cities = response;this.originCitiesReady=true;this.applyLoadingOrigin();
       },
       error: (error: any) => {
         console.error('Error fetching cities:', error);
@@ -119,7 +123,7 @@ export class ParcelloadingComponent implements OnInit {
   const selectedOptions = Array.from(event.target.selectedOptions).map((option: any) => option.value);
 
   const toCityArray = this.form.get('toCity') as FormArray;
-  toCityArray.clear(); // ✅ Clear old values before updating
+  toCityArray.clear(); // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Clear old values before updating
 
   selectedOptions.forEach(city => toCityArray.push(new FormControl(city)));
 
@@ -137,7 +141,7 @@ onLoad() {
 
   const payload: any = {
     startDate: formValues.startDate || today,
-    endDate: formValues.startDate || today
+    endDate: formValues.endDate || today
   };
 
   if (formValues.fromCity) {
@@ -158,7 +162,7 @@ onLoad() {
     next: (response: any) => {
       this.toast.success('Parcel Load successful', 'Success');
       console.log("data:", response);
-      this.data = response || [];
+      this.data = Array.isArray(response) ? response : Array.isArray(response?.data) ? response.data : [];
 
       this.LoadSuccess = true;
 
@@ -191,7 +195,7 @@ onLoad() {
 }
   setFormArray(controlName: string, values: any[]) {
     const formArray = this.form1.get(controlName) as FormArray;
-    formArray.clear(); // ✅ Clear previous values
+    formArray.clear(); // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Clear previous values
     values.forEach(value => {
       formArray.push(this.fb.control(value));
     });
@@ -212,26 +216,26 @@ onLoad() {
       }
     }
 
-    // ✅ Update "Select All" status based on selected values
+    // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Update "Select All" status based on selected values
     this.allSelected = this.data.length === formArray.value.length;
     console.log('Selected GRN Numbers:', formArray.value);
   }
 
-  // ✅ Handle "Select All" checkbox
+  // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Handle "Select All" checkbox
   onSelectAllChange(event: any) {
     const formArray = this.form1.get('grnNo') as FormArray;
     if (event.target.checked) {
-      // ✅ Select all if checked
+      // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Select all if checked
       this.data.forEach((row:any) => {
         if (!formArray.value.includes(row.grnNo)) {
           formArray.push(this.fb.control(row.grnNo));
         }
       });
     } else {
-      // ✅ Deselect all if unchecked
+      // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Deselect all if unchecked
       formArray.clear();
     }
-    // ✅ Update "Select All" status
+    // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Update "Select All" status
     this.allSelected = event.target.checked;
     console.log('All GRN Numbers Selected:', formArray.value);
   }
@@ -245,40 +249,7 @@ onLoad() {
     });
 
     setTimeout(() => {
-      // Initialize select2 for From City
-      $(this.selectElem.nativeElement).select2();
-
-      $(this.selectElem.nativeElement).on('select2:select', (event: any) => {
-        const selectedCity = event.params.data.id;  // Get selected value from select2 event
-        console.log('Selected City:', selectedCity);
-
-        // Manually update the reactive form control value
-        this.form.get('fromCity')?.setValue(selectedCity);
-        this.form.get('fromCity')?.markAsTouched();
-        this.form.get('fromCity')?.updateValueAndValidity();
-
-        console.log('Updated form value:', this.form.value);
-
-        // Call your existing handler if you want to trigger API or other logic
-        this.onFromcitySelect({ target: { value: selectedCity } });
-      });
-
-
-      $(this.branchselect.nativeElement).on('select2:select', (event: any) => {
-        const selectedDropBranch = event.params.data.id;
-        console.log('Selected Drop Branch:', selectedDropBranch);
-
-        this.form.get('pickUpBranch')?.setValue(selectedDropBranch);
-        this.form.get('pickUpBranch')?.markAsTouched();
-        this.form.get('pickUpBranch')?.updateValueAndValidity();
-
-        console.log('Updated form value:', this.form.value);
-
-        // Now this will work because of arrow function preserving `this`
-        this.BranchSelect({ target: { value: selectedDropBranch } });
-      });
-
-
+      this.initOriginSelectors();
       // Initialize select2 for Vehicle Number
       $(this.SelectVechicle.nativeElement).select2();
       $(this.SelectVechicle.nativeElement).on('select2:select', (event: any) => {
@@ -324,7 +295,7 @@ onLoad() {
 
   //     // Merge data to the table
   //     if (newData.length > 0) {
-  //       this.data = [...this.data || [], ...newData];
+  //       this.data = [...new Map([...(Array.isArray(this.data) ? this.data : []), ...newData].filter((row:any)=>Number(row.bookingStatus) === 0).map((row:any)=>[String(row.grnNo), row])).values()];
   //       this.form1.patchValue({
   //         senderName: this.data[0]?.senderName || ''
   //       });
@@ -357,7 +328,7 @@ onLoad() {
       }
 
       if (newData.length > 0) {
-        this.data = [...this.data || [], ...newData];
+        this.data = [...new Map([...(Array.isArray(this.data) ? this.data : []), ...newData].filter((row:any)=>Number(row.bookingStatus) === 0).map((row:any)=>[String(row.grnNo), row])).values()];
 
         const qr = this.data[0];
 
@@ -388,23 +359,39 @@ onLoad() {
 
 
   // jkasdbksabd
-  onFromcitySelect(event: any) {
-    const cityName = event.target.value;
-    if (cityName) {
-      this.api.GetBranchbyCity(cityName).subscribe(
-        (res: any) => {
-          console.log('Branches for selected city:', res);
-          this.tbcdata = res;
-        },
-        (error: any) => {
-          console.error('Error fetching branches:', error);
-        }
-      );
-    } else {
-      this.tbcdata = [];
+  private loadingProfile:any;private originCitiesReady=false;private originBranchesReady=false;private originProfileReady=false;private originApplied=false;
+private get assignedLoadingBranch(){const ref=this.loadingProfile?.branchId;return (this.branchdata||[]).find((branch:any)=>String(branch._id)===String(ref?._id||ref)||branch.branchUniqueId===(ref?.branchUniqueId||ref));}
+get originCityChoices(){if(this.token.isAdmin())return this.cities||[];const city=String(this.assignedLoadingBranch?.city||'').trim().toLowerCase();return (this.cities||[]).filter((row:any)=>String(row.cityName).trim().toLowerCase()===city);}
+private syncLoadingSelectors(){setTimeout(()=>{for(const [ref,key] of [[this.selectElem,'fromCity'],[this.branchselect,'pickUpBranch']] as const)if(ref?.nativeElement)$(ref.nativeElement).val(this.form.get(key)?.value||'').trigger('change.select2');},0);}
+private initOriginSelectors(){for(const [ref,key] of [[this.selectElem,'fromCity'],[this.branchselect,'pickUpBranch']] as const){if(!ref?.nativeElement)continue;const element=$(ref.nativeElement);if(!element.hasClass('select2-hidden-accessible'))element.select2();element.off('select2:select.loadingOrigin').on('select2:select.loadingOrigin',(event:any)=>this.zone.run(()=>this.form.get(key)?.setValue(event.params.data.id)));}this.syncLoadingSelectors();}
+private applyLoadingOrigin(){
+  if(this.originApplied||!this.originCitiesReady||!this.originBranchesReady||!this.originProfileReady)return;
+  this.originApplied=true;if(this.form.get('fromCity')?.value)return;
+  const assigned=this.assignedLoadingBranch;const candidates=this.token.isAdmin()?[...(this.branchdata||[])].sort((a,b)=>Number(b.branchType==='main')-Number(a.branchType==='main')||String(a._id).localeCompare(String(b._id))):[];
+  const branch=assigned||candidates[0];const city=this.originCityChoices.find((row:any)=>String(row.cityName).trim().toLowerCase()===String(branch?.city||'').trim().toLowerCase());
+  if(!city)return;this.form.patchValue({fromCity:city.cityName});if(branch&&(this.tbcdata||[]).some((row:any)=>row.branchUniqueId===branch.branchUniqueId))this.form.patchValue({pickUpBranch:branch.branchUniqueId});this.syncLoadingSelectors();
+}
+private clearOriginParcels(){this.data=null;this.LoadSuccess=false;this.form1.patchValue({fromCity:'',fromBranch:'',toBranch:''});for(const key of ['grnNo','lrNumber','toCity'])(this.form1.get(key) as FormArray)?.clear();}
+onFromcitySelect(event:any){
+  let city=String(event?.target?.value||'');const assigned=this.assignedLoadingBranch;
+  if(!this.token.isAdmin()&&assigned&&city.trim().toLowerCase()!==String(assigned.city).trim().toLowerCase())city=this.originCityChoices[0]?.cityName||'';
+  if(this.form.get('fromCity')?.value!==city){this.form.patchValue({fromCity:city});return;}
+  this.clearOriginParcels();this.tbcdata=(this.branchdata||[]).filter((branch:any)=>String(branch.city).trim().toLowerCase()===city.trim().toLowerCase()&&(this.token.isAdmin()||String(branch._id)===String(assigned?._id)));
+  if(!(this.tbcdata||[]).some((branch:any)=>branch.branchUniqueId===this.form.get('pickUpBranch')?.value))this.form.patchValue({pickUpBranch:''});this.syncLoadingSelectors();
+}
+isSavingParcel = false;
+ParcelLoad() {
+    if (this.isSavingParcel) return;
+    const selectedIds = new Set((this.form1.get('grnNo')?.value || []).map((id:any)=>String(id)));
+    const selectedRows = (Array.isArray(this.data) ? this.data : []).filter((row:any)=>selectedIds.has(String(row.grnNo)));
+    if (!selectedRows.length) {
+      this.toast.warning('Load parcels and select at least one parcel before saving.', 'Select parcels');
+      return;
     }
-  }
-  ParcelLoad() {
+    this.setFormArray('grnNo', selectedRows.map((row:any)=>row.grnNo));
+    this.setFormArray('lrNumber', selectedRows.map((row:any)=>row.lrNumber));
+    this.setFormArray('toCity', [...new Set(selectedRows.map((row:any)=>row.toCity))]);
+    this.form1.patchValue({fromCity:this.form.get('fromCity')?.value,fromBranch:this.form.get('pickUpBranch')?.value});
     if (this.form1.invalid) {
       this.form1.markAllAsTouched(); // show errors
       this.toast.warning('Please fill required fields correctly.', 'Validation');
@@ -429,9 +416,11 @@ onLoad() {
 
     console.log('Final Payload:', payload);
 
+    this.isSavingParcel = true;
     this.api.ParcelLoading(payload).subscribe({
       next: (response: any) => {
-        console.log('Parcel loaded successfully:', response);
+        this.clearOriginParcels();
+        this.isSavingParcel = false;
         this.toast.success('Parcel loaded successfully', 'Success');
         setTimeout(() => {
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -440,8 +429,9 @@ onLoad() {
         }, 1000);
       },
       error: (error: any) => {
+        this.isSavingParcel = false;
         console.error('Parcel loading failed:', error);
-        this.toast.error('Parcel Loading Failed. Please try again', 'Error');
+        this.toast.error(error?.error?.message || 'Parcel Loading Failed. Please try again', 'Error');
       },
     });
   }
@@ -463,7 +453,7 @@ onLoad() {
     this.api.getData('branch').subscribe({
       next: (response: any) => {
         console.log('Branch Datakajdkjanfjandfnaf:', response);
-        this.branchdata = response; // Ensure response contains an array of branches
+        this.branchdata = response;this.originBranchesReady=true;this.onFromcitySelect({target:{value:this.form.get('fromCity')?.value}});this.applyLoadingOrigin(); // Ensure response contains an array of branches
       },
       error: (error: any) => {
         console.error('Error fetching branch data:', error);
@@ -507,12 +497,7 @@ onLoad() {
       }
     }
 
-    getProfileData() {
-      this.api.GetProfileData().subscribe((res: any) => {
-        this.pfdata = res;
-        console.log( 'profiledata:',this.pfdata);
-      });
-    }
+    getProfileData(){this.api.GetProfileData().subscribe((res:any)=>{this.loadingProfile=res;this.originProfileReady=true;this.pfdata=res;this.applyLoadingOrigin();});}
 
 
 

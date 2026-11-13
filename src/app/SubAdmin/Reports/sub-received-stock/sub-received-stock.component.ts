@@ -11,6 +11,8 @@ declare var $: any;
 import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 @Component({
+  host: {'class':'reports-page'},
+
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
   selector: 'app-sub-received-stock',
