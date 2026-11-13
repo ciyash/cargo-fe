@@ -1,3 +1,4 @@
+import { readStoredReport } from '../../../shared/stored-report';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -29,33 +30,16 @@ export class ParcelLoadingOfflineReportComponent implements OnInit {
   ngOnInit() {
     this.getProfileData();
 
-    const localData = localStorage.getItem('parcelReportData');
-    if (localData) {
-      const stateData = JSON.parse(localData);
-      console.log("Loaded from localStorage:", stateData);
-      this.data2 = stateData?.data || [];
-      this.fromDate = stateData.fromDate;
-      this.toDate = stateData.toDate;
-
-      // Optional: Clear the storage if it's one-time use
-
-      if (stateData) {
-        this.data2 = stateData.data || [];
-        this.fromDate = stateData.fromDate;
-        this.toDate = stateData.toDate;
-
-        // Don't remove here to persist after refresh
-        // localStorage.removeItem('parcelReportData');
-      }
-          } else {
-      console.warn("No report data found in localStorage.");
-    }
+    const stateData = readStoredReport('parcelReportData');
+    this.data2 = stateData?.data || [];
+    this.fromDate = stateData?.fromDate;
+    this.toDate = stateData?.toDate;
   }
 
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log('profiledata:', this.pfdata);
+
     });
   }
 
@@ -114,8 +98,6 @@ export class ParcelLoadingOfflineReportComponent implements OnInit {
       popupWin!.document.close();
     }
   }
-
-
 
 async ExportEXcel(): Promise<void> {
     const XLSX = await import('xlsx');

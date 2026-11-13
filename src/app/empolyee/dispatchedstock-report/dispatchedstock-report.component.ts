@@ -1,15 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../USER/header/header.component';
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { BranchService } from 'src/app/service/branch.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
-declare var $: any;
-import type * as XLSX from 'xlsx';
+import { Component,ElementRef,ViewChild } from '@angular/core';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
 import * as FileSaver from 'file-saver';
+import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
+import type * as XLSX from 'xlsx';
+import { HeaderComponent } from '../../USER/header/header.component';
+declare var $: any;
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
@@ -133,13 +131,13 @@ export class DispatchedstockReportComponent {
   }
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
-      console.log('profile', res);
+
       this.ffdata = res.branchId;
       this.pfdata = res.branchId.city;
       this.profileData = res;
       this.pffffdata = res;
 
-      console.log('profileData:', this.profileData);
+
 
       // Update form controls with profile data
       this.form.patchValue({

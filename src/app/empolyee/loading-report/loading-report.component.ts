@@ -54,7 +54,7 @@ export class LoadingReportComponent {
       this.getCities();
       this.api.GetBranch().subscribe((res: any) => {
         this.branchdata = res;
-        console.log('branchdata:', this.branchdata);
+
       });
     }
 
@@ -137,12 +137,12 @@ export class LoadingReportComponent {
       const toCityArray = this.form1.get('toCity') as FormArray;
       toCityArray.clear();
       selectedOptions.forEach(city => toCityArray.push(new FormControl(city)));
-      console.log('Selected To Cities:', toCityArray.value);
+
     }
 
     ParcelLoad() {
-      console.log('ParcelLoad() triggered');
-      console.log('form1 value:', this.form1.value);
+
+
 
       const payload = {
         fromDate: this.form1.value.fromDate,
@@ -153,11 +153,11 @@ export class LoadingReportComponent {
         dropBranch: this.form1.value.dropBranch,
       };
 
-      console.log("payload:", payload);
+
 
       this.api.ParcelOfflineReport(payload).subscribe({
         next: (response: any) => {
-          console.log("After Load: Response received", response);
+
           const finalData8 = {
             ...response,
             fromDate: this.form1.value.fromDate,
@@ -179,11 +179,11 @@ export class LoadingReportComponent {
 
     getProfileData() {
       this.api.GetProfileData().subscribe((res: any) => {
-        console.log('profile', res);
+
         this.ffdata = res.branchId;
         this.pfdata = res.branchId.city;
         this.profileData = res;
-        console.log("profileData:", this.profileData);
+
 
         // Update form controls with profile data
         this.form1.patchValue({

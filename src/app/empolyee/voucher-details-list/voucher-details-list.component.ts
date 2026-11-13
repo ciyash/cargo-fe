@@ -48,16 +48,16 @@ export class VoucherDetailsListComponent {
           this.api.GetBranch().subscribe({
             next: (res: any) => {
               this.branchData = res;
-              console.log('Branch data fetched successfully:', this.citydata);
+
             },
             error: (err) => console.error('Error fetching branch data:', err)
           });
           this.api.VehicleData().subscribe((res:any)=>{
-              console.log('vdata',res);
+
               this.vdata=res;
           });
           this.api.GetCities().subscribe((res:any)=>{
-            console.log('citydata',res);
+
             this.citydata=res;
         });
 
@@ -71,9 +71,9 @@ export class VoucherDetailsListComponent {
             $(this.selectElem2.nativeElement).select2();
             $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
               const selectedToCity = event.params.data.id;
-              console.log('Selected To City:', selectedToCity);
+
               this.form.patchValue({ toCity: selectedToCity });
-              console.log('Updated form value:', this.form.value);
+
               this.onTocitySelect({ target: { value: selectedToCity } });
             });
           }, 0);
@@ -118,7 +118,7 @@ export class VoucherDetailsListComponent {
 
             // ✅ Update "Select All" status based on selected values
             this.allSelected = this.data1.length === formArray.value.length;
-            console.log('Selected GRN Numbers:', formArray.value);
+
           }
 
 
@@ -132,11 +132,11 @@ export class VoucherDetailsListComponent {
               fromBranch: this.form.value.fromBranch,
             };
 
-            console.log('Final Payload:', payload);
+
 
             this.api.ParcelVouchersDetails(payload).subscribe({
               next: (response: any) => {
-                console.log('Parcel loaded successfully:', response);
+
                 // alert('Parcel Loaded Successfully!');
                 this.data1=response;
 
@@ -150,9 +150,9 @@ export class VoucherDetailsListComponent {
 
             getvouchersdata(id:any){
           this.api.GetVouchersListData(id).subscribe((res)=>{
-              console.log('vouchersdata',res);
+
               this.vldata=res;
-              console.log("thisvladata:",this.vldata)
+
           })
         }
 
@@ -161,11 +161,11 @@ export class VoucherDetailsListComponent {
           }
           getProfileData() {
             this.api.GetProfileData().subscribe((res: any) => {
-              console.log('profile', res);
+
               this.ffdata = res.branchId;
               this.pfdata = res.branchId.city;
               this.profileData = res;
-              console.log("profileData:", this.profileData);
+
 
               // Update form controls with profile data
               this.form.patchValue({
@@ -182,7 +182,7 @@ export class VoucherDetailsListComponent {
             if (cityName) {
               this.api.GetBranchbyCity(cityName).subscribe(
                 (res: any) => {
-                  console.log('Branches for selected city:', res);
+
                   this.pdata = res;
                 },
                 (error: any) => {
@@ -196,13 +196,13 @@ export class VoucherDetailsListComponent {
 
 
           onTocitySelect(event: any) {
-            console.log('Event triggered:', event);
-            console.log('Selected City:', event.target.value);
+
+
             const cityName = event.target.value;
             if (cityName) {
               this.api.GetBranchbyCity(cityName).subscribe(
                 (res: any) => {
-                  console.log('Branches for selected city:', res);
+
 
                   this.tbcdata = res;
 

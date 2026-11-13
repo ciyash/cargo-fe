@@ -1,25 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
 import {
-  Component,
-  ElementRef,
-  OnInit,
-  AfterViewInit,
-  ViewChild,
+Component
 } from '@angular/core';
 import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
+FormArray,
+FormBuilder,
+FormControl,
+FormGroup,FormsModule,ReactiveFormsModule,Validators
 } from '@angular/forms';
-import { BranchService } from 'src/app/service/branch.service';
-import type * as XLSX from 'xlsx';
+import { RouterModule } from '@angular/router';
 import * as FileSaver from 'file-saver';
 import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
+import type * as XLSX from 'xlsx';
+import { HeaderComponent } from '../../../USER/header/header.component';
 declare module 'file-saver';
 declare var $: any;
 declare const SlimSelect: any;
@@ -77,7 +71,7 @@ export class ConslidatedReportComponent {
     getCities() {
       this.api.GetCities().subscribe({
         next: (response: any) => {
-          console.log('Cities data:', response);
+
           this.cities = response;
         },
         error: (error: any) => {
@@ -104,7 +98,7 @@ export class ConslidatedReportComponent {
 
       selectedOptions.forEach((city) => toCityArray.push(new FormControl(city)));
 
-      console.log('Selected To Cities:', toCityArray.value);
+
     }
 
 
@@ -124,7 +118,7 @@ export class ConslidatedReportComponent {
     // }
     getProfileData() {
       this.api.GetProfileData().subscribe((res: any) => {
-        console.log('profile', res);
+
 
 
         if (res && res.username && res.branchId) {
@@ -142,7 +136,7 @@ export class ConslidatedReportComponent {
             pickUpBranch: res.branchId.branchUniqueId || ''
           });
 
-          console.log("profileData:", this.profileData);
+
 
         }
       });
@@ -160,22 +154,22 @@ export class ConslidatedReportComponent {
         bookedBy: this.form.value.bookedBy,
       };
 
-      console.log('payload:', payload);
+
       this.bdata = payload;
       this.fromDate = this.form.value.fromDate;
       this.toDate = this.form.value.toDate;
 
       this.api.ConsolidatedReport(payload).subscribe({
         next: (res: any) => {
-          console.log('ConsolidatedReport:', res);
+
 
           this.Cdata = res;
           this.Tdata=res
-          console.log("tdata:",this.Tdata)
+
 
 
             this.deliveryData=res.data
-          console.log("devliveryData:",this.deliveryData);
+
 
           // Assuming the data you expect is in res.data or similar field
           // if (res.data && res.data.length > 0) {

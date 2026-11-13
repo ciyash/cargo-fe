@@ -1,15 +1,13 @@
-import { DomesticPhoneDirective } from '../../../shared/domestic-phone.directive';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { ActivatedRoute,Router,RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'primeng/api';
 import { AdminService } from 'src/app/service/admin.service';
 import { BranchService } from 'src/app/service/branch.service';
+import { HeaderComponent } from '../../../USER/header/header.component';
+import { DomesticPhoneDirective } from '../../../shared/domestic-phone.directive';
 
 
 @Component({
@@ -65,11 +63,11 @@ export class CreateBranchComponent {
   ngOnInit(){
     this.id = this.activeroute.snapshot.params['name'];
     this.bapi.GetBranch().subscribe((res:any)=>{
-      console.log('branch',res);
+
       this.data=res;
     });
     this.bapi.GetCities().subscribe((res:any)=>{
-      console.log('city',res);
+
       this.citydata=res;
     })
 
@@ -91,13 +89,13 @@ export class CreateBranchComponent {
       alternateMobile: row.alternateMobile,
     });
 
-    console.log('Editing row:', row);
+
   }
 
 
 getbranchemployees(id:any){
   this.api.GetUnderBranchEmployees(id).subscribe((res:any)=>{
-    console.log('underbranch',res);
+
     this.ubdata=res;
   });
 }
@@ -116,11 +114,11 @@ getbranchemployees(id:any){
       alternateMobile: this.form.value.alternateMobile,
     };
 
-    console.log('Final Payload:', payload);
+
 
     this.api.createBranch(payload).subscribe({
       next: (response: any) => {
-        console.log('Parcel loaded dat:', response);
+
         this.toast.success("Branch created successfully", "Success");
         setTimeout(() => {
          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -139,7 +137,7 @@ getbranchemployees(id:any){
 
 
   edit(id:any) {
-    console.log(this.form1.value);
+
     if (this.form1.valid) {
       const val = {
         name: this.form1.value.name,
@@ -156,10 +154,10 @@ getbranchemployees(id:any){
       this.api.UpdateBranch(id, val).subscribe(
         (a: any) => {
           if (a?.data) {
-            console.log(a);
+
 
           } else {
-            console.log(a);
+
             this.msg = 'Branch Successfully Updated !!!';
             setTimeout(() => {
               this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -181,7 +179,7 @@ getbranchemployees(id:any){
     this.api.DeleteBranch(id).subscribe(
       (a: any) => {
         if (a) {
-          console.log('deletedid',a);
+
           // this.messageService.add({ severity: 'success', summary: 'success', detail: 'Delete Branch Type Successfully' });
           setTimeout(() => {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -189,7 +187,7 @@ getbranchemployees(id:any){
             });
             }, 1000);
         } else {
-          console.log(a);
+
           // this.errorMessage = a.msg.message;
           this.msg = 'Branch Successfully Updated !!!';
         }

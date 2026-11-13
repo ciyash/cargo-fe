@@ -1,21 +1,17 @@
-import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
-import { BillingComponent } from '../../shared/billing/billing.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { SearchGrnNumberComponent } from '../../Branch/Widgets/search-grn-number/search-grn-number.component';
-import { Component, HostListener } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core'
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeDetectorRef,Component,ElementRef,HostListener,ViewChild } from '@angular/core';
+import { FormArray,FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { ActivatedRoute,Router,RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AdminService } from 'src/app/service/admin.service';
 import { BranchService } from 'src/app/service/branch.service';
 import { TokenService } from 'src/app/service/token.service';
+import { SearchGrnNumberComponent } from '../../Branch/Widgets/search-grn-number/search-grn-number.component';
 import { HeaderComponent } from "../../USER/header/header.component";
-import { AdminService } from 'src/app/service/admin.service';
-import { ToastrService } from 'ngx-toastr';
+import { BillingComponent } from '../../shared/billing/billing.component';
+import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
 declare var $: any;
 declare const SlimSelect: any;
-import {  ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 
 @Component({
   standalone: true,
@@ -124,25 +120,25 @@ export class SubBookingComponent {
       this.getAllCompany();
       // const id = this.activate.snapshot.paramMap.get('id');
       this.api.GetCities().subscribe((res:any)=>{
-        console.log('citys',res);
+
         this.citydata=res;
       });
       //get branches
       this.api.GetBranch().subscribe((res:any)=>{
-        console.log(res);
+
         this.branchdata=res;
 
       });
       //get Packages
       this.loadBookingOptions();
 
-      
+
 
       this.getProfileData();
       this.addOrderItem()
 
       this.form.get('bookingType')?.valueChanges.subscribe((value) => {
-        console.log("Booking type changed to:", value);
+
         if (value !== 'credit') {
           this.form.patchValue({
             agent: '',           // Clear selected company
@@ -151,7 +147,7 @@ export class SubBookingComponent {
             senderAddress: '',
             senderGST: ''
           });
-          console.log("Sender info and company selection cleared.");
+
         }
       });
     }
@@ -163,9 +159,9 @@ export class SubBookingComponent {
         $(this.selectElem.nativeElement).select2();
         $(this.selectElem.nativeElement).on('select2:select', (event: any) => {
           const selectedCity = event.params.data.id;
-          console.log('Selected City:', selectedCity);
+
           this.form.patchValue({ fromCity: selectedCity });
-          console.log('Updated form value:', this.form.value);
+
           this.onFromcitySelect({ target: { value: selectedCity } });
         });
 
@@ -173,9 +169,9 @@ export class SubBookingComponent {
         $(this.pickupbranch.nativeElement).select2();
         $(this.pickupbranch.nativeElement).on('select2:select', (event: any) => {
           const selectedBranch = event.params.data.id;
-          console.log('Selected Pickup Branch:', selectedBranch);
+
           this.form.patchValue({ pickUpBranch: selectedBranch });
-          console.log('Updated form value:', this.form.value);
+
           this.onPickupBranchSelect({ target: { value: selectedBranch } });
         });
 
@@ -183,9 +179,9 @@ export class SubBookingComponent {
         $(this.selectElem2.nativeElement).select2();
         $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
           const selectedToCity = event.params.data.id;
-          console.log('Selected To City:', selectedToCity);
+
           this.form.patchValue({ toCity: selectedToCity });
-          console.log('Updated form value:', this.form.value);
+
           this.onTocitySelect({ target: { value: selectedToCity } });
         });
 
@@ -193,9 +189,9 @@ export class SubBookingComponent {
         $(this.droupbranch.nativeElement).select2();
         $(this.droupbranch.nativeElement).on('select2:select', (event: any) => {
           const selectedDropBranch = event.params.data.id;
-          console.log('Selected Drop Branch:', selectedDropBranch);
+
           this.form.patchValue({ dropBranch: selectedDropBranch });
-          console.log('Updated form value:', this.form.value);
+
           this.onDropBranchSelect({ target: { value: selectedDropBranch } });
         });
 
@@ -234,7 +230,7 @@ export class SubBookingComponent {
     if (fromCity && toCity) {
       this.api.FilterBookingServiceCharges({ fromCity, toCity }).subscribe(
         (res: any) => {
-          console.log('Service Charges:', res);
+
 
           if (res && res.length > 0) {
             const chargeData = res[0]; // First item in the array
@@ -263,7 +259,7 @@ export class SubBookingComponent {
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
           this.pdata = res;
           this.fetchServiceCharges();
         },
@@ -278,13 +274,13 @@ export class SubBookingComponent {
 
 
   onTocitySelect(event: any) {
-    console.log('Event triggered:', event);
-    console.log('Selected City:', event.target.value);
+
+
     const cityName = event.target.value;
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
 
           this.tbcdata = res;
           this.fetchServiceCharges(); // Fetch service charges
@@ -416,7 +412,7 @@ export class SubBookingComponent {
         };
 
         // Then open modal using Bootstrap JS if needed (or it's already bound by button trigger)
-        console.log("Preview Data:", this.modelData);
+
       } else {
         this.toastr.warning("Please fill all required fields before previewing.", "Form Incomplete");
       }
@@ -425,7 +421,7 @@ export class SubBookingComponent {
 
     confirmBooking() {
       try {
-        console.log("Form Data Before Submission:", this.form.value);
+
 
         if (this.form.valid) {
           const orderDataToSend = this.packages.value.map((item: any) => ({
@@ -473,16 +469,16 @@ export class SubBookingComponent {
             agent: this.form.value.agent
           };
 
-          console.log("Final Data to Submit:", val);
+
           this.modelData = val;
 
           this.api.createBooking(val).subscribe(
             (response: any) => {
-              console.log("Parcel saved successfully:", response);
+
 
               this.gdata = response.data;
               this.billing?.load();
-              console.log("GRN Number:", this.gdata.grnNo);
+
               this.toastr.success("Parcel Booked Successfully", "Success");
 
               // Reload profile data and reset form
@@ -518,7 +514,7 @@ export class SubBookingComponent {
       if (searchTerm) {
         this.api.searchUser(searchTerm).subscribe(
           (res: any) => {
-            console.log('API Response:', res);
+
             this.userList = res.length ? res : [];
             this.showDropdown = !!this.userList.length;
           },
@@ -579,7 +575,7 @@ export class SubBookingComponent {
       this.api.GetcfmasterData().subscribe(
         (res: any) => {
           this.companyList = res.data
-          console.log("comapany:",this.companyList)
+
         },
         (err: any) => {
           console.error('Error fetching company data:', err);
@@ -589,11 +585,11 @@ export class SubBookingComponent {
 
     onCompanySelect(event: any): void {
       const selectedCompanyName = event.target.value;
-      console.log("Selected company name:", selectedCompanyName);
+
       const selectedCompany = this.companyList.find(
         (company: { name: string }) => company.name === selectedCompanyName
       );
-      console.log("Selected company object:", selectedCompany);
+
       if (selectedCompany) {
         this.form.patchValue({
           senderName: selectedCompany.senderName || '',
@@ -602,7 +598,7 @@ export class SubBookingComponent {
           senderGST: selectedCompany.gst || ''
 
         });
-        console.log("Auto-filled address:", selectedCompany.address);
+
       }
     }
 

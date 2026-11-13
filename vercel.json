@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "angular",
+  "installCommand": "npm ci --legacy-peer-deps",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/crm16",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

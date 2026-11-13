@@ -53,12 +53,12 @@ export class ParcelStatusDateDifferentComponent implements OnInit, AfterViewInit
   ngOnInit() {
     this.api.GetCities().subscribe((res: any) => {
       this.citydata = res;
-      console.log('citydata:', this.citydata);
+
     });
 
     this.api.GetBranch().subscribe((res: any) => {
       this.branchdata = res;
-      console.log('branchdata:', this.branchdata);
+
     });
   }
 
@@ -117,11 +117,11 @@ export class ParcelStatusDateDifferentComponent implements OnInit, AfterViewInit
   // }
   StatusDate() {
     const payload = this.form.value;
-    console.log('payload:', payload);
+
 
     this.api.ParcelStatusdateReport(payload).subscribe({
       next: (res: any) => {
-        console.log('data:', res);
+
 
         const successMessage = res?.message || 'Report fetched successfully';
         this.toast.success(successMessage);

@@ -79,7 +79,7 @@ export class CfmasterDataComponent {
 
     ngOnInit(){
       this.api.GetcfmasterData().subscribe((res:any)=>{
-        console.log('cfdata',res);
+
         this.data=res.data;
         this.loading=false;
       });
@@ -88,7 +88,7 @@ export class CfmasterDataComponent {
 
     GetCities(){
       this.api.GetCities().subscribe((res:any)=>{
-        console.log('citys',res);
+
         this.citydata=res;
       });
     }
@@ -97,7 +97,7 @@ export class CfmasterDataComponent {
 
     getsetcharges(id: any) {
       this.api.GetCFMasterChargesID(id).subscribe((res: any) => {
-        console.log(res, 'charges');
+
         this.scdata = res;
         const modal: any = new bootstrap.Modal(document.getElementById('chargesModal'));
         modal.show();
@@ -106,7 +106,7 @@ export class CfmasterDataComponent {
 
     edit(id:any){
 
-      console.log(this.form.value);
+
       if (this.form.valid) {
         const val = {
           gst: this.form.value.gst,
@@ -127,11 +127,11 @@ export class CfmasterDataComponent {
         this.api.UpdateCfmaster(id, val).subscribe(
           (a: any) => {
             if (a?.data) {
-              console.log(a);
+
               this.messageService.add({ severity: 'success', summary: 'success', detail: 'Packages Type Update Successfully' });
 
             } else {
-              console.log(a);
+
 
               this.msg = 'Packages Type Successfully Updated !!!';
               setTimeout(() => {
@@ -155,7 +155,7 @@ export class CfmasterDataComponent {
       this.api.DeleteCfmaster(id).subscribe(
         (a: any) => {
           if (a) {
-            console.log('deletedid',a);
+
             this.messageService.add({ severity: 'success', summary: 'success', detail: 'Credit party deleted' });
             setTimeout(() => {
               this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -163,7 +163,7 @@ export class CfmasterDataComponent {
               });
               }, 1000);
           } else {
-            console.log(a);
+
             // this.errorMessage = a.msg.message;
             this.msg = 'Credit party deleted';
           }
@@ -187,10 +187,10 @@ export class CfmasterDataComponent {
       dispatchType: this.form1.value.dispatchType,
       isActive: this.form1.value.isActive,
     };
-    console.log('Final Payload:', payload);
+
     this.api.AddCfmasterCharges(payload).subscribe({
       next: (response: any) => {
-        console.log('Master successfully:', response);
+
 
         setTimeout(() => {
          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

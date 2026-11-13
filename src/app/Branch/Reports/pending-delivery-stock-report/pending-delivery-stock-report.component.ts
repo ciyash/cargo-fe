@@ -60,12 +60,12 @@ export class PendingDeliveryStockReportComponent
   ngOnInit() {
     this.api.GetCities().subscribe((res: any) => {
       this.citydata = res;
-      console.log('citydata:', this.citydata);
+
     });
 
     this.api.GetBranch().subscribe((res: any) => {
       this.branchdata = res;
-      console.log('branchdata:', this.branchdata);
+
     });
   }
 
@@ -121,7 +121,7 @@ export class PendingDeliveryStockReportComponent
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
           this.pdata = res;
         },
         (error: any) => {
@@ -134,13 +134,13 @@ export class PendingDeliveryStockReportComponent
   }
 
   onTocitySelect(event: any) {
-    console.log('Event triggered:', event);
-    console.log('Selected City:', event.target.value);
+
+
     const cityName = event.target.value;
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
 
           this.tbcdata = res;
         },
@@ -157,16 +157,16 @@ export class PendingDeliveryStockReportComponent
 
   DeliveryStockReport() {
     const payload = this.form.value;
-    console.log('payload:', payload);
+
     this.api.PendingDeliveryStockReport(payload).subscribe({
       next: (res: any) => {
-        console.log('pending delivery:', res);
+
 
         const message = res?.message || 'Report fetched successfully';
         this.toast.success(message);
 
         this.gstdata = res;
-        console.log('gstdata:', this.gstdata);
+
         // localStorage.setItem('gstData', JSON.stringify(this.gstdata));
         //   window.open('/devliveryreport', '_blank');
 

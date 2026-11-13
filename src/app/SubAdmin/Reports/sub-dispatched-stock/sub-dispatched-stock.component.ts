@@ -1,15 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { BranchService } from 'src/app/service/branch.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
-declare var $: any;
-import type * as XLSX from 'xlsx';
+import { Component,ElementRef,ViewChild } from '@angular/core';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
 import * as FileSaver from 'file-saver';
+import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
+import type * as XLSX from 'xlsx';
+import { HeaderComponent } from '../../../USER/header/header.component';
+declare var $: any;
 @Component({
   host: {'class':'reports-page'},
 
@@ -234,7 +232,7 @@ export class SubDispatchedStockComponent {
   // }
   DispatchReport() {
     this.payload = this.form.value;
-    console.log("payload:",this.payload)
+
 
     this.api.DispatchedReport(this.payload).subscribe({
       next: (res: any) => {

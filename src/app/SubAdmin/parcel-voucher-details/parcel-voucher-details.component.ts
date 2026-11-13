@@ -1,15 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../USER/header/header.component';
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component,ElementRef,ViewChild } from '@angular/core';
+import { FormArray,FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
 import { BranchService } from 'src/app/service/branch.service';
-import { ToastrService } from 'ngx-toastr';
+import { HeaderComponent } from '../../USER/header/header.component';
 declare var $: any;
 
-import * as FileSaver from 'file-saver';
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HeaderComponent],
@@ -57,12 +53,12 @@ export class ParcelVoucherDetailsComponent {
   ngOnInit() {
 
     this.api.GetCities().subscribe((res: any) => {
-      console.log('citydata', res);
+
       this.citydata = res;
       this.getProfileData()
     });
     this.api.VehicleData().subscribe((res: any) => {
-      console.log('allvechicle:', res);
+
       this.allgetvechicle = res;
     });
   }
@@ -153,7 +149,7 @@ export class ParcelVoucherDetailsComponent {
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
           this.pdata = res;
         },
         (error: any) => {
@@ -192,7 +188,7 @@ export class ParcelVoucherDetailsComponent {
 
     // ✅ Update "Select All" status based on selected values
     this.allSelected = this.data1.length === formArray.value.length;
-    console.log('Selected GRN Numbers:', formArray.value);
+
   }
 
   VoucherLoad() {
@@ -205,11 +201,11 @@ export class ParcelVoucherDetailsComponent {
       fromBranch: this.form.value.fromBranch,
     };
 
-    console.log('Final Payload:', payload);
+
 
     this.api.ParcelVouchersDetails(payload).subscribe({
       next: (response: any) => {
-        console.log('Parcel loaded successfully:', response);
+
         // alert('Parcel Loaded Successfully!');
         this.data1 = response;
       },
@@ -222,9 +218,9 @@ export class ParcelVoucherDetailsComponent {
 
   getvouchersdata(id: any) {
     this.api.GetVouchersListData(id).subscribe((res) => {
-      console.log('vouchersdata', res);
+
       this.vldata = res;
-      console.log('thisvladata:', this.vldata);
+
     });
   }
 

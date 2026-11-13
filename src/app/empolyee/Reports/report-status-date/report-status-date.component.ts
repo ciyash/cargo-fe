@@ -1,18 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
 import {
-  Component,
-  ElementRef,
-  OnInit,
-  AfterViewInit,
-  ViewChild,
+Component,
+ElementRef,
+ViewChild
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BranchService } from 'src/app/service/branch.service';
+import { HeaderComponent } from '../../../USER/header/header.component';
 declare var $: any;
 
 @Component({
@@ -58,12 +54,12 @@ export class ReportStatusDateComponent {
       this.getProfileData();
       this.api.GetCities().subscribe((res: any) => {
         this.citydata = res;
-        console.log('citydata:', this.citydata);
+
       });
 
       this.api.GetBranch().subscribe((res: any) => {
         this.branchdata = res;
-        console.log('branchdata:', this.branchdata);
+
       });
     }
 
@@ -117,11 +113,11 @@ export class ReportStatusDateComponent {
     // }
     StatusDate() {
       const payload = this.form.value;
-      console.log('payload:', payload);
+
 
       this.api.ParcelStatusdateReport(payload).subscribe({
         next: (res: any) => {
-          console.log('data:', res);
+
 
           const successMessage = res?.message || 'Report fetched successfully';
           this.toast.success(successMessage);
@@ -151,11 +147,11 @@ export class ReportStatusDateComponent {
 
     getProfileData() {
       this.api.GetProfileData().subscribe((res: any) => {
-        console.log('profile', res);
+
         this.ffdata = res.branchId;
         this.pfdata = res.branchId.city;
         this.profileData = res;
-        console.log("profileData:", this.profileData);
+
 
         // Update form controls with profile data
         this.form.patchValue({

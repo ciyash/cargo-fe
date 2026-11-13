@@ -1,17 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
+import { Component } from '@angular/core';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
-import { ButtonModule } from 'primeng/button';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { MessageService } from 'primeng/api';
 import { AdminService } from 'src/app/service/admin.service';
 import { BranchService } from 'src/app/service/branch.service';
+import { HeaderComponent } from '../../../USER/header/header.component';
 
 @Component({
   standalone: true,
@@ -64,7 +61,7 @@ export class CreateVehicleComponent {
       ngOnInit(){
         this.branchData();
         this.bapi.VehicleData().subscribe((res:any)=>{
-          console.log('vdata',res);
+
           this.vdata=res;
           this.loading=false;
         })
@@ -73,7 +70,7 @@ export class CreateVehicleComponent {
       branchData() {
         this.bapi.getData('branch').subscribe({
           next: (response: any) => {
-            console.log('Branch Data:', response);
+
             this.branchdata = response; // Ensure response contains an array of branches
           },
           error: (error: any) => {
@@ -95,7 +92,7 @@ export class CreateVehicleComponent {
           vehicleStatus: this.form.value.vehicleStatus,
         };
 
-        console.log('Final Payload:', payload);
+
 
         this.api.createVehicle(payload).subscribe({
           next: (response: any) => {
@@ -120,9 +117,9 @@ export class CreateVehicleComponent {
 
 
       edit(id:any) {
-        console.log("id:",id);
 
-        console.log(this.form1.value);
+
+
         if (this.form1.valid) {
           const val = {
             vehicleNo: this.form1.value.vehicleNo,
@@ -138,10 +135,10 @@ export class CreateVehicleComponent {
           this.api.UpdateVehicle(id, val).subscribe(
             (a: any) => {
               if (a?.data) {
-                console.log(a);
+
 
               } else {
-                console.log(a);
+
                 // this.errorMessage = a.msg.message;
                 this.msg = 'Vehicle Successfully Updated !!!';
                 setTimeout(() => {
@@ -164,14 +161,14 @@ export class CreateVehicleComponent {
         this.api.DeleteVehicleData(id).subscribe(
           (a: any) => {
             if (a) {
-              console.log('deletedid',a);
+
               setTimeout(() => {
                 this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
                   this.router.navigate(['/createvehicle']);
                 });
                 }, 1000);
             } else {
-              console.log(a);
+
               // this.errorMessage = a.msg.message;
               this.msg = 'Vehicle Successfully Updated !!!';
             }

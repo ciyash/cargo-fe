@@ -56,7 +56,7 @@ export class ParcelBookingSummaryComponent {
         this.fromDate = parsedData.fromDate || '';
         this.toDate = parsedData.toDate || '';
 
-        console.log('Parsed Summary Data from LocalStorage:', this.summaryData);
+
       } catch (err) {
         this.toast.error('Invalid report data format. Please try again.');
         this.router.navigate(['/reportsdashboard']);
@@ -73,7 +73,7 @@ export class ParcelBookingSummaryComponent {
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log('profiledata:', this.pfdata);
+
     });
   }
 

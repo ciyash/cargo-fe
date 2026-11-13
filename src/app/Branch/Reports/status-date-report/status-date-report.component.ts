@@ -215,7 +215,7 @@ export class StatusDateReportComponent implements OnInit {
     if (data) {
       try {
         const parsedData = JSON.parse(data);
-        console.log('Received data:', parsedData);
+
 
         this.fromDate = parsedData.fromDate ? new Date(parsedData.fromDate) : null;
         this.toDate = parsedData.toDate ? new Date(parsedData.toDate) : null;
@@ -253,7 +253,7 @@ export class StatusDateReportComponent implements OnInit {
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log('Profile data:', this.pfdata);
+
     });
   }
 

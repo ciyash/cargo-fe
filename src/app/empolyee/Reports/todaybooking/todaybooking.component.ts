@@ -80,6 +80,6 @@ export class TodaybookingComponent {
   showDialog(row: string) {
     this.visible = true;
     this.repd = row;
-    console.log(this.repd);
+
   }
 }

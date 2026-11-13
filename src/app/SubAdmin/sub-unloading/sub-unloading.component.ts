@@ -1,19 +1,16 @@
-import { NgZone } from '@angular/core';
-import { TokenService } from 'src/app/service/token.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../USER/header/header.component';
-import { RippleModule } from 'primeng/ripple';
+import { ChangeDetectorRef,Component,ElementRef,NgZone,ViewChild } from '@angular/core';
+import { FormArray,FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { ActivatedRoute,Router,RouterModule } from '@angular/router';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { ChangeDetectorRef, Component,ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import {  FormArray,  FormBuilder,  FormControl,  FormGroup,  Validators,} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { BranchService } from 'src/app/service/branch.service';
-import { ToastrService } from 'ngx-toastr';
-import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'primeng/api';
+import { RippleModule } from 'primeng/ripple';
+import { BranchService } from 'src/app/service/branch.service';
+import { TokenService } from 'src/app/service/token.service';
+import type * as XLSX from 'xlsx';
+import { HeaderComponent } from '../../USER/header/header.component';
 
 declare var $: any;
 declare const SlimSelect: any;
@@ -119,7 +116,7 @@ export class SubUnloadingComponent {
           $(this.demoSelect.nativeElement).on('select2:select', (event: any) => {
             const selectedCity = event.params.data.id;
             this.form.get('fromCity')?.setValue(selectedCity);
-            
+
             console.log('Updated To City:', this.form.get('fromCity')?.value);
           });
 
@@ -186,7 +183,7 @@ openScanner() {
     getQRdata(id: string) {
       this.api.GetQrUnloadGRNnumber(id).subscribe(
         (res: any) => {
-          console.log('Scanned QR data:', res);
+
 
           let newData: any[] = [];
 
@@ -241,9 +238,9 @@ onFromcitySelect(event:any){
 getCities() {
         this.api.GetCities().subscribe({
           next: (response: any) => {
-            console.log('Cities data:', response);
+
             this.cities = response;this.originCitiesReady=true;this.applyLoadingOrigin();
-            console.log(this.cities, 'cites');
+
           },
           error: (error: any) => {
             console.error('Error fetching cities:', error);
@@ -286,7 +283,7 @@ getCities() {
 
         // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ Update "Select All" status based on selected values
         this.allSelected = this.bkdata.length === formArray.value.length;
-        console.log('Selected GRN Numbers:', formArray.value);
+
       }
 
       onSelectAllChange(event: any) {
@@ -303,13 +300,13 @@ getCities() {
         }
 
         this.allSelected = event.target.checked;
-        console.log('All selected GRNs:', formArray.value);
+
       }
 
       getvehicleData() {
         this.api.VehicleData().subscribe({
           next: (response: any) => {
-            console.log('Vehicle:', response);
+
             this.vehicle = response;
           },
           error: (error: any) => {

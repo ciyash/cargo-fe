@@ -1,3 +1,4 @@
+import { readStoredReport } from '../../../shared/stored-report';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -30,10 +31,10 @@ export class ParcelbookingSerialnoComponent implements OnInit {
   constructor(private router: Router, private api: BranchService) {}
 
   ngOnInit(): void {
-    const dataString = localStorage.getItem('serialData'); // âœ… Correct key
-    if (dataString) {
-      this.data2 = JSON.parse(dataString);
-      console.log("Data received from localStorage:", this.data2);
+    const cachedReport = readStoredReport('serialData');
+    if (cachedReport) {
+      this.data2 = cachedReport;
+
       const data = this.data2.data || {};
       this.paidBookings = data.paid?.bookings || [];
       this.creditBookings = data.credit?.bookings || [];
@@ -51,7 +52,7 @@ export class ParcelbookingSerialnoComponent implements OnInit {
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log('Profile data:', this.pfdata);
+
     });
   }
 

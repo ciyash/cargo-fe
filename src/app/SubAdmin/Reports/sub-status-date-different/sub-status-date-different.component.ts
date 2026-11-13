@@ -58,12 +58,12 @@ export class SubStatusDateDifferentComponent implements OnInit, AfterViewInit  {
         this.citydata = res;
         this.getProfileData();
 
-        console.log('citydata:', this.citydata);
+
       });
 
       this.api.GetBranch().subscribe((res: any) => {
         this.branchdata = res;
-        console.log('branchdata:', this.branchdata);
+
       });
     }
     getProfileData() {
@@ -91,7 +91,7 @@ export class SubStatusDateDifferentComponent implements OnInit, AfterViewInit  {
       if (cityName) {
         this.api.GetBranchbyCity(cityName).subscribe(
           (res: any) => {
-            console.log('Branches for selected city:', res);
+
             this.pdata = res;
           },
           (error: any) => {
@@ -131,11 +131,11 @@ export class SubStatusDateDifferentComponent implements OnInit, AfterViewInit  {
 
     StatusDate() {
       const payload = this.form.value;
-      console.log('payload:', payload);
+
 
       this.api.ParcelStatusdateReport(payload).subscribe({
         next: (res: any) => {
-          console.log('data:', res);
+
 
           const successMessage = res?.message || 'Report fetched successfully';
           this.toast.success(successMessage);

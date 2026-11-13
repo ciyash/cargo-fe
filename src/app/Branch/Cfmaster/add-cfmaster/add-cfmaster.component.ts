@@ -71,10 +71,10 @@ export class AddCfmasterComponent {
           creditDaysLimit: this.form.value.creditDaysLimit,
           exDate : this.form.value.exDate,
         };
-        console.log('Final Payload:', payload);
+
         this.api.AddCfmaster(payload).subscribe({
           next: (response: any) => {
-            console.log('Master successfully:', response);
+
             this.messageService.add({ severity: 'success', summary: 'success', detail: 'Credit party created' });
 
             setTimeout(() => {

@@ -4,10 +4,10 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HTTP_INTERCEPTORS
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenService } from './token.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class InterInterceptor implements HttpInterceptor {
@@ -17,20 +17,12 @@ export class InterInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let authReq = req;
-    const token1 = this.token.getToken();
-    if (token1) {
-      req = req.clone({
-        setHeaders: {
-          'User-Agent': 'nithyasri2023',
-          'Authorization': 'Bearer ' + token1,
-          'Content-Type': 'application/json', 
-        }
-      });
-    }
-    return next.handle(authReq);
+    const base = environment.baseUrl.replace(/\/+$/, '');
+    const isApiRequest = req.url === base || req.url.startsWith(base + '/') || req.url.startsWith(base + '?');
+    const token = this.token.getToken();
+    const authenticated = isApiRequest && token && !req.headers.has('Authorization')
+      ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+      : req;
+    return next.handle(authenticated);
   }
 }
-export const apiInterceptorProviders = [
-  { provide: HTTP_INTERCEPTORS, useClass: InterInterceptor, multi: true },
-];

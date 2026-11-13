@@ -1,17 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { FooterComponent } from '../../../USER/footer/footer.component';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { AdminService } from 'src/app/service/admin.service';
 import { BranchService } from 'src/app/service/branch.service';
-import { ToastrService } from 'ngx-toastr';
+import { FooterComponent } from '../../../USER/footer/footer.component';
+import { HeaderComponent } from '../../../USER/header/header.component';
 
 @Component({
   standalone: true,
@@ -47,7 +45,7 @@ export class CreateCitynameComponent {
 
         ngOnInit(){
           this.bapi.GetCities().subscribe((res:any)=>{
-            console.log('cities', res);
+
             this.bdata=res;
             this.loading=false;
           })
@@ -59,11 +57,11 @@ export class CreateCitynameComponent {
             state: this.form.value.state,
           };
 
-          console.log('Final Payload:', payload);
+
 
           this.api.createCityname(payload).subscribe({
             next: (response: any) => {
-              console.log('Parcel loaded successfully:', response);
+
 
               this.messageService.add({ severity: 'success', summary: 'success', detail: 'Create City successfully' });
               this.toastr.success('Create City successfully', 'Success');
@@ -84,7 +82,7 @@ export class CreateCitynameComponent {
         }
 
         edit(id:any) {
-          console.log(this.form1.value);
+
           if (this.form1.valid) {
             const val = {
               cityName: this.form1.value.cityName,
@@ -93,11 +91,11 @@ export class CreateCitynameComponent {
             this.api.UpdateCityname(id, val).subscribe(
               (a: any) => {
                 if (a?.data) {
-                  console.log(a);
+
                   this.messageService.add({ severity: 'success', summary: 'success', detail: 'Vehicle Update Successfully' });
 
                 } else {
-                  console.log(a);
+
                   // this.errorMessage = a.msg.message;
                   this.msg = 'Vehicle Successfully Updated !!!';
                   // setTimeout(() => {
@@ -124,12 +122,12 @@ export class CreateCitynameComponent {
         }
 
         Delete(id:any) {
-          console.log("id:",id);
+
 
           this.api.DeleteCityname(id).subscribe(
             (a: any) => {
               if (a) {
-                console.log('deletedid',a);
+
                 this.messageService.add({ severity: 'success', summary: 'success', detail: 'Delete Cityname Type Successfully' });
                 setTimeout(() => {
                   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -137,7 +135,7 @@ export class CreateCitynameComponent {
                   });
                   }, 1000);
               } else {
-                console.log(a);
+
                 // this.errorMessage = a.msg.message;
                 this.msg = 'Cityname Successfully Updated !!!';
               }

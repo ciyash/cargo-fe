@@ -1,21 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { Component,OnInit } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core'
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeDetectorRef,Component,ElementRef,ViewChild } from '@angular/core';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { ActivatedRoute,Router,RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AdminService } from 'src/app/service/admin.service';
 import { BranchService } from 'src/app/service/branch.service';
 import { TokenService } from 'src/app/service/token.service';
-import { AdminService } from 'src/app/service/admin.service';
-import { ToastrService } from 'ngx-toastr';
+import { HeaderComponent } from '../../../USER/header/header.component';
 declare var $: any;
 declare const SlimSelect: any;
-import {  ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 
-import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import type * as XLSX from 'xlsx';
 @Component({
   host: {'class':'reports-page'},
 
@@ -77,7 +73,7 @@ export class SubPendingDispatchStockComponent {
       ngOnInit() {
         // const id = this.activate.snapshot.paramMap.get('id');
         this.api.GetCities().subscribe((res:any)=>{
-          console.log('citys',res);
+
           this.citydata=res;
           this.getProfileData()
 
@@ -112,9 +108,9 @@ export class SubPendingDispatchStockComponent {
           $(this.selectElem.nativeElement).select2();
           $(this.selectElem.nativeElement).on('select2:select', (event: any) => {
             const selectedCity = event.params.data.id;
-            console.log('Selected City:', selectedCity);
+
             this.form.patchValue({ fromCity: selectedCity });
-            console.log('Updated form value:', this.form.value);
+
             this.onFromcitySelect({ target: { value: selectedCity } });
           });
 
@@ -122,9 +118,9 @@ export class SubPendingDispatchStockComponent {
           $(this.pickupbranch.nativeElement).select2();
           $(this.pickupbranch.nativeElement).on('select2:select', (event: any) => {
             const selectedBranch = event.params.data.id;
-            console.log('Selected Pickup Branch:', selectedBranch);
+
             this.form.patchValue({ pickUpBranch: selectedBranch });
-            console.log('Updated form value:', this.form.value);
+
             this.onPickupBranchSelect({ target: { value: selectedBranch } });
           });
 
@@ -132,9 +128,9 @@ export class SubPendingDispatchStockComponent {
           $(this.selectElem2.nativeElement).select2();
           $(this.selectElem2.nativeElement).on('select2:select', (event: any) => {
             const selectedToCity = event.params.data.id;
-            console.log('Selected To City:', selectedToCity);
+
             this.form.patchValue({ toCity: selectedToCity });
-            console.log('Updated form value:', this.form.value);
+
             this.onTocitySelect({ target: { value: selectedToCity } });
           });
         }, 0);
@@ -169,7 +165,7 @@ export class SubPendingDispatchStockComponent {
       if (cityName) {
         this.api.GetBranchbyCity(cityName).subscribe(
           (res: any) => {
-            console.log('Branches for selected city:', res);
+
             this.pdata = res;
           },
           (error: any) => {
@@ -183,13 +179,13 @@ export class SubPendingDispatchStockComponent {
 
 
     onTocitySelect(event: any) {
-      console.log('Event triggered:', event);
-      console.log('Selected City:', event.target.value);
+
+
       const cityName = event.target.value;
       if (cityName) {
         this.api.GetBranchbyCity(cityName).subscribe(
           (res: any) => {
-            console.log('Branches for selected city:', res);
+
 
             this.tbcdata = res;
 
@@ -206,13 +202,13 @@ export class SubPendingDispatchStockComponent {
 
     DispatchedStockReport() {
       const payload = this.form.value;
-      console.log("payload:", payload);
+
 
       this.api.PendingDispatchedStockReport(payload).subscribe({
         next: (res: any) => {
           this.reportData = res;
           this.calculateTotalAmount();
-          console.log("report:", this.reportData);
+
         },
         error: (err: any) => {
           console.error("API Error:", err);

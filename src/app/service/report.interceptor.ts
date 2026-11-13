@@ -13,7 +13,10 @@ export class ReportInterceptor implements HttpInterceptor {
     // Explicitly paginated consumers (including the dashboard) keep the API envelope.
     const explicit = req.params.has('page') || req.params.has('limit') || /[?&](page|limit)=/.test(req.url) || req.body?.page !== undefined || req.body?.limit !== undefined;
     if (!config || explicit || !['GET','POST'].includes(req.method)) return next.handle(req);
-    const fetchPage = (page: number) => next.handle(req.clone({setParams:{page:String(page),limit:'100'}})).pipe(filter((event): event is HttpResponse<any> => event instanceof HttpResponse));
+    const fetchPage = (page: number) => next.handle(req.clone({setParams:{page:String(page),limit:'100'}})).pipe(
+      filter((event): event is HttpResponse<any> => event instanceof HttpResponse),
+      map(response => { nextReportPage(response.body, page); return response; }),
+    );
     const paths = endpoint === 'booking/consolidated-report-branch' ? [...config.paths,'deliverToPayDetails'] : config.paths;
     return fetchPage(1).pipe(expand(response => {
       const page = nextReportPage(response.body);
@@ -21,7 +24,7 @@ export class ReportInterceptor implements HttpInterceptor {
       return page === null ? EMPTY : fetchPage(page);
     }), reduce((previous: HttpResponse<any> | null, response: HttpResponse<any>) => response.clone({body: mergeReportPages(previous?.body,response.body,paths)}), null), map(response => {
       if (!response) throw new Error('Empty report response');
-      return config.raw ? response.clone({body:response.body?.data || []}) : response;
+      return config.raw ? response.clone({body:Array.isArray(response.body) ? response.body : response.body?.data || []}) : response;
     }));
   }
 }

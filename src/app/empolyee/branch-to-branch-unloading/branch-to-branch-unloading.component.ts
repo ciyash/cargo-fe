@@ -56,12 +56,12 @@ export class BranchToBranchUnloadingComponent {
         this.api.GetBranch().subscribe({
           next: (res: any) => {
             this.citydata = res;
-            console.log('Branch data fetched successfully:', this.citydata);
+
           },
           error: (err) => console.error('Error fetching branch data:', err)
         });
         this.api.VehicleData().subscribe((res:any)=>{
-            console.log('vdata',res);
+
             this.vdata=res;
         });
         // this.api.GetProfileData().subscribe((res:any)=>{
@@ -88,7 +88,7 @@ export class BranchToBranchUnloadingComponent {
           $(this.toBranch.nativeElement).on('select2:select', (event: any) => {
             const selected = event.params.data.id;
             this.form.get('toBranch')?.setValue(selected);
-            console.log('Selected To Branch:', selected);
+
           });
         }, 0);
       }
@@ -107,11 +107,11 @@ export class BranchToBranchUnloadingComponent {
           toBranch: this.form.value.toBranch,
         };
 
-        console.log('Final Payload:', payload);
+
 
         this.api.postBranchtobranchUnLoadingFilter(payload).subscribe({
           next: (response: any) => {
-            console.log('loaded successfully:', response);
+
             this.toast.success('ParcelBranch to Branch Unloaded Successfully', 'Success');
 
             this.data = response;
@@ -168,7 +168,7 @@ export class BranchToBranchUnloadingComponent {
 
           // ✅ Update "Select All" status based on selected values
           this.allSelected = this.data.length === formArray.value.length;
-          console.log('Selected GRN Numbers:', formArray.value);
+
         }
 
         // ✅ Handle "Select All" checkbox
@@ -189,7 +189,7 @@ export class BranchToBranchUnloadingComponent {
 
           // ✅ Update "Select All" status
           this.allSelected = event.target.checked;
-          console.log('All GRN Numbers Selected:', formArray.value);
+
         }
 
         ParcelLoad() {
@@ -203,11 +203,11 @@ export class BranchToBranchUnloadingComponent {
             remarks: this.form1.value.remarks,
           };
 
-          console.log('Final Payload:', payload);
+
 
           this.api.BranchtobranchUnLoading(payload).subscribe({
             next: (response: any) => {
-              console.log('Parcel loaded successfully:', response);
+
               // alert('Parcel Loaded Successfully!');
               setTimeout(() => {
                 this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -223,11 +223,11 @@ export class BranchToBranchUnloadingComponent {
         }
         getProfileData() {
           this.api.GetProfileData().subscribe((res: any) => {
-            console.log('profile', res);
+
             this.ffdata = res.branchId;
             this.pfdata = res.branchId.city;
             this.profileData = res;
-            console.log("profileData:", this.profileData);
+
 
             // Update form controls with profile data
             this.form.patchValue({

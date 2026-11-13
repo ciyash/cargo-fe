@@ -37,11 +37,11 @@ export class FilterGrnComponent implements OnInit {
       return;
     }
 
-    console.log('Search Term:', this.searchTerm);
+
 
     this.api.GetGRNnumber(this.searchTerm.trim()).subscribe(
       (res: any) => {
-        console.log('API Response:', res);
+
 
         if (res && Array.isArray(res.data)) {
           this.data2 = res.data;

@@ -40,7 +40,7 @@ export class CollectionDataComponent {
       if (rawData) {
         try {
           const parsedData = JSON.parse(rawData);
-          console.log('Loaded Collection Data from localStorage:', parsedData);
+
           this.collectionReport = parsedData;
         } catch (error) {
           console.error('Error parsing collection data from localStorage:', error);
@@ -56,7 +56,7 @@ export class CollectionDataComponent {
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log( 'profiledata:',this.pfdata);
+
     });
   }
   printReport() {

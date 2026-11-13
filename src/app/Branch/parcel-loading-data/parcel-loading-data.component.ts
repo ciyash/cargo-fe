@@ -51,7 +51,7 @@ export class ParcelLoadingDataComponent {
     this.getCities();
     this.api.GetBranch().subscribe((res: any) => {
       this.branchdata = res;
-      console.log('branchdata:', this.branchdata);
+
     });
   }
 
@@ -139,12 +139,12 @@ export class ParcelLoadingDataComponent {
     const toCityArray = this.form1.get('toCity') as FormArray;
     toCityArray.clear();
     selectedOptions.forEach(city => toCityArray.push(new FormControl(city)));
-    console.log('Selected To Cities:', toCityArray.value);
+
   }
 
   ParcelLoad() {
-    console.log('ParcelLoad() triggered');
-    console.log('form1 value:', this.form1.value);
+
+
 
     const payload = {
       fromDate: this.form1.value.fromDate,
@@ -155,11 +155,11 @@ export class ParcelLoadingDataComponent {
       dropBranch: this.form1.value.dropBranch,
     };
 
-    console.log("payload:", payload);
+
 
     this.api.ParcelOfflineReport(payload).subscribe({
       next: (response: any) => {
-        console.log("After Load: Response received", response);
+
         const finalData8 = {
           ...response,
           fromDate: this.form1.value.fromDate,

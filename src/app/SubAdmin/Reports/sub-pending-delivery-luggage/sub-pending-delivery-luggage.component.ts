@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component,ElementRef,ViewChild } from '@angular/core';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { BranchService } from 'src/app/service/branch.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
+import type * as XLSX from 'xlsx';
+import { HeaderComponent } from '../../../USER/header/header.component';
 
 declare var $: any;
 @Component({
@@ -65,20 +64,20 @@ export class SubPendingDeliveryLuggageComponent {
     ngOnInit() {
       // Fetch cities
       this.api.GetCities().subscribe((res: any) => {
-        console.log('citydata', res);
+
         this.citydata = res;
         this.getProfileData();
       });
 
       // Fetch branches
       this.api.GetBranch().subscribe((res: any) => {
-        console.log('allbranch:', res);
+
         this.branchdata = res;
       });
 
       // Fetch vehicles
       this.api.VehicleData().subscribe((res: any) => {
-        console.log('allvechicle:', res);
+
         this.allgetvechicle = res;
       });
       this.getProfileData();
@@ -113,18 +112,18 @@ export class SubPendingDeliveryLuggageComponent {
         bookingType: this.form.value.bookingType
       };
 
-      console.log("Payload:", this.payload);
+
 
       this.api.PendingDeliveryLuggageReport(this.payload).subscribe(
         (res: any) => {
           if (res?.data?.length) {
             this.reportData = res.data;
-            console.log("report:",this.reportData);
+
 
             this.totalPages = Math.ceil(this.reportData.length / this.itemsPerPage);
             this.currentPage = 1;
             this.toast.success(res.message || 'Report fetched successfully.');
-            console.log('Luggage Report:', this.reportData);
+
           } else {
             this.reportData = [];
             this.toast.warning(res.message || 'No records found.');
@@ -283,7 +282,7 @@ export class SubPendingDeliveryLuggageComponent {
       if (cityName) {
         this.api.GetBranchbyCity(cityName).subscribe(
           (res: any) => {
-            console.log('Branches for selected city:', res);
+
             this.pdata = res;
           },
           (error: any) => {
@@ -296,13 +295,13 @@ export class SubPendingDeliveryLuggageComponent {
     }
 
     onTocitySelect(event: any) {
-      console.log('Event triggered:', event);
-      console.log('Selected City:', event.target.value);
+
+
       const cityName = event.target.value;
       if (cityName) {
         this.api.GetBranchbyCity(cityName).subscribe(
           (res: any) => {
-            console.log('Branches for selected city:', res);
+
 
             this.tbcdata = res;
           },

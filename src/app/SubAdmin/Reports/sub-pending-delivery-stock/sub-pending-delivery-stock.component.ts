@@ -1,18 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
 import {
-  Component,
-  ElementRef,
-  OnInit,
-  AfterViewInit,
-  ViewChild,
+Component,
+ElementRef,
+ViewChild
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BranchService } from 'src/app/service/branch.service';
+import { HeaderComponent } from '../../../USER/header/header.component';
 declare var $: any;
 
 @Component({
@@ -65,12 +61,12 @@ export class SubPendingDeliveryStockComponent {
         this.citydata = res;
         this.getProfileData()
 
-        console.log('citydata:', this.citydata);
+
       });
 
       this.api.GetBranch().subscribe((res: any) => {
         this.branchdata = res;
-        console.log('branchdata:', this.branchdata);
+
       });
     }
 
@@ -147,7 +143,7 @@ export class SubPendingDeliveryStockComponent {
       if (cityName) {
         this.api.GetBranchbyCity(cityName).subscribe(
           (res: any) => {
-            console.log('Branches for selected city:', res);
+
             this.pdata = res;
           },
           (error: any) => {
@@ -160,13 +156,13 @@ export class SubPendingDeliveryStockComponent {
     }
 
     onTocitySelect(event: any) {
-      console.log('Event triggered:', event);
-      console.log('Selected City:', event.target.value);
+
+
       const cityName = event.target.value;
       if (cityName) {
         this.api.GetBranchbyCity(cityName).subscribe(
           (res: any) => {
-            console.log('Branches for selected city:', res);
+
 
             this.tbcdata = res;
           },
@@ -183,16 +179,16 @@ export class SubPendingDeliveryStockComponent {
 
     DeliveryStockReport() {
       const payload = this.form.value;
-      console.log('payload:', payload);
+
       this.api.PendingDeliveryStockReport(payload).subscribe({
         next: (res: any) => {
-          console.log('pending delivery:', res);
+
 
           const message = res?.message || 'Report fetched successfully';
           this.toast.success(message);
 
           this.gstdata = res;
-          console.log('gstdata:', this.gstdata);
+
 
           // Save data to localStorage
           localStorage.setItem('gstData', JSON.stringify(this.gstdata));

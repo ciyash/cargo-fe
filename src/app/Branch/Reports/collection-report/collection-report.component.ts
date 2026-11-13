@@ -44,12 +44,12 @@ export class CollectionReportComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.api.GetCities().subscribe((res: any) => {
       this.citydata = res;
-      console.log("citydata:", this.citydata);
+
     });
 
     this.api.GetBranch().subscribe((res: any) => {
       this.branchdata = res;
-      console.log("branchdata:", this.branchdata);
+
 
     });
 
@@ -85,7 +85,7 @@ export class CollectionReportComponent implements OnInit, AfterViewInit {
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log('profile', this.pfdata);
+
     });
   }
 
@@ -94,7 +94,7 @@ export class CollectionReportComponent implements OnInit, AfterViewInit {
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
           this.pdata = res;
         },
         (error: any) => {
@@ -108,11 +108,11 @@ export class CollectionReportComponent implements OnInit, AfterViewInit {
 
   getCollectionReport() {
     const payload = this.form.value;
-    console.log("Payload:", payload);
+
 
     this.api.ParcelBranchWiseReport(payload).subscribe({
       next: (res: any) => {
-        console.log("collectiodata:",res);
+
 
         const successMsg = res?.message || 'Report fetched successfully';
         this.toast.success(successMsg);

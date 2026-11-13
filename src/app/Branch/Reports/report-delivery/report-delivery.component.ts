@@ -1,14 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { BranchService } from 'src/app/service/branch.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component,ElementRef,ViewChild } from '@angular/core';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
 import type * as XLSX from 'xlsx';
-import * as FileSaver from 'file-saver';
+import { HeaderComponent } from '../../../USER/header/header.component';
 declare var $: any;
 @Component({
   host: {'class':'reports-page'},
@@ -69,7 +66,7 @@ export class ReportDeliveryComponent {
     ngOnInit() {
       // Fetch cities
       this.api.GetCities().subscribe((res: any) => {
-        console.log('citydata', res);
+
         this.citydata = res;
       });
 
@@ -77,13 +74,13 @@ export class ReportDeliveryComponent {
 
       this.api.GetBranch().subscribe((res: any) => {
         this.branchdata = res;
-        console.log('branchdata:', this.branchdata);
+
       });
 
 
       // Fetch vehicles
       this.api.VehicleData().subscribe((res: any) => {
-        console.log('allvechicle:', res);
+
         this.allgetvechicle = res;
       });
       this.getProfileData();
@@ -137,14 +134,14 @@ export class ReportDeliveryComponent {
     dropBranch: this.form.value.dropBranch,
   };
 
-  console.log("payload:", this.payload);
+
 
   this.reportData = [];
   this.Bdata = null;
 
   this.api.DeliveryStockReport(this.payload).subscribe(
     (res: any) => {
-      console.log("res:", res);
+
 
       const data = res?.data;
 
@@ -152,8 +149,8 @@ export class ReportDeliveryComponent {
         this.reportData = data.deliveries || [];
         this.summmaryData = data.summary || {};
         this.Bdata = data.summary?.bookingTypeSummary || null;
-        console.log("Deliveries:", this.reportData);
-        console.log("Summary:", this.summmaryData);
+
+
       } else {
         this.toast.warning('No data received in response.');
       }
@@ -171,7 +168,7 @@ export class ReportDeliveryComponent {
     getProfileData() {
       this.api.GetProfileData().subscribe((res: any) => {
         this.pfdata = res;
-        console.log('profiledata:', this.pfdata);
+
       });
 
   }
@@ -222,7 +219,7 @@ export class ReportDeliveryComponent {
       if (cityName) {
         this.api.GetBranchbyCity(cityName).subscribe(
           (res: any) => {
-            console.log('Branches for selected city:', res);
+
             this.pdata = res;
           },
           (error: any) => {
@@ -235,13 +232,13 @@ export class ReportDeliveryComponent {
     }
 
     onTocitySelect(event: any) {
-      console.log('Event triggered:', event);
-      console.log('Selected City:', event.target.value);
+
+
       const cityName = event.target.value;
       if (cityName) {
         this.api.GetBranchbyCity(cityName).subscribe(
           (res: any) => {
-            console.log('Branches for selected city:', res);
+
 
             this.tbcdata = res;
           },

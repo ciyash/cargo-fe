@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Component, OnInit, HostListener } from '@angular/core';
-import { ServiceService } from 'src/app/service.service';
 import { BranchService } from 'src/app/service/branch.service';
 import { TokenService } from 'src/app/service/token.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -439,9 +438,7 @@ export class HeaderComponent implements OnInit {
     // profile data
     this.id = this.activeroute.snapshot.params['id'];
     this.api.GetProfileData().subscribe((res: any) => {
-      console.log(res);
       this.data = res;
-      console.log(this.data, 'Profiledat');
     });
   }
 

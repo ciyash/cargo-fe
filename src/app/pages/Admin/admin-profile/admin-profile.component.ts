@@ -55,16 +55,16 @@ export class AdminProfileComponent {
   ngOnInit(){
     this.id = this.activeroute.snapshot.params['id'];
     this.api.GetProfileData().subscribe((res: any) => {
-      console.log(res,'profile');
+
       this.data = res;
       // this.form.patchValue({
       //   password: this.data.password
       // });
     });
     this.api.ALLGetBranch().subscribe((res:any)=>{
-      console.log(res,'branch');
+
       this.ALLbranchdata=res;
-      console.log("GET ALL BRANCHES:",this.ALLbranchdata);
+
 
 
     });
@@ -72,7 +72,7 @@ export class AdminProfileComponent {
 
 
   changePassword(){
-    console.log(this.form1.value);
+
     if (this.form1.valid) {
       const val = {
         oldPassword: this.form1.value.oldPassword,
@@ -81,10 +81,10 @@ export class AdminProfileComponent {
       this.api.ChangePassword(val).subscribe(
         a => {
           if (a) {
-            console.log(a);
+
                this.form1.reset();
           } else {
-            console.log(a);
+
             // this.errorMessage = a.msg.message;
             this.msg1 = 'Password Successfully Updated !!!';
 
@@ -98,7 +98,7 @@ export class AdminProfileComponent {
   }
 
   edit() {
-    console.log(this.form.value);
+
     if (this.form.valid) {
       const val = {
         companyName: this.form.value.companyName,
@@ -113,7 +113,7 @@ export class AdminProfileComponent {
       this.api.UpdateAdminProfile(val).subscribe(
         (a: any) => {
           if (a?.data) {
-            console.log(a);
+
             this.messageService.add({ severity: 'success', summary: 'success', detail: 'Profile Update Successfully' });
             setTimeout(() => {
               this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -121,7 +121,7 @@ export class AdminProfileComponent {
               });
               }, 500);
           } else {
-            console.log(a);
+
             // this.errorMessage = a.msg.message;
             this.msg = 'Profile Successfully Updated !!!';
             this.toastr.success('Profile Successfully Updated ', 'Success');

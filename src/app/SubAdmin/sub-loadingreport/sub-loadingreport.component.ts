@@ -52,7 +52,7 @@ export class SubLoadingreportComponent {
       this.getCities();
       this.api.GetBranch().subscribe((res: any) => {
         this.branchdata = res;
-        console.log('branchdata:', this.branchdata);
+
       });
     }
     getTodayDateString(): string {
@@ -72,9 +72,9 @@ export class SubLoadingreportComponent {
         $(this.selectElem.nativeElement).select2();
         $(this.selectElem.nativeElement).on('select2:select', (event: any) => {
           const selectedCity = event.params.data.id;
-          console.log('Selected City:', selectedCity);
+
           this.form1.patchValue({ fromCity: selectedCity });
-          console.log('Updated form value:', this.form1.value);
+
           this.onFromcitySelect({ target: { value: selectedCity } });
         });
         $(this.pickupbranch.nativeElement).select2();
@@ -135,12 +135,12 @@ export class SubLoadingreportComponent {
       const toCityArray = this.form1.get('toCity') as FormArray;
       toCityArray.clear();
       selectedOptions.forEach(city => toCityArray.push(new FormControl(city)));
-      console.log('Selected To Cities:', toCityArray.value);
+
     }
 
     ParcelLoad() {
-      console.log('ParcelLoad() triggered');
-      console.log('form1 value:', this.form1.value);
+
+
 
       const payload = {
         fromDate: this.form1.value.fromDate,
@@ -151,11 +151,11 @@ export class SubLoadingreportComponent {
         dropBranch: this.form1.value.dropBranch,
       };
 
-      console.log("payload:", payload);
+
 
       this.api.ParcelOfflineReport(payload).subscribe({
         next: (response: any) => {
-          console.log("After Load: Response received", response);
+
           const finalData8 = {
             ...response,
             fromDate: this.form1.value.fromDate,

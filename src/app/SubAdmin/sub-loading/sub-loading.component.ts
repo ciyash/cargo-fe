@@ -1,22 +1,18 @@
-import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
-import { NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../USER/header/header.component';
-import { SubLoadingreportComponent } from '../sub-loadingreport/sub-loadingreport.component';
-import { RippleModule } from 'primeng/ripple';
+import { Component,ElementRef,NgZone,ViewChild } from '@angular/core';
+import { FormArray,FormBuilder,FormControl,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { ActivatedRoute,Router,RouterModule } from '@angular/router';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import {  OnInit,AfterViewInit, Component, ElementRef, ViewChild  } from '@angular/core';
-import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'primeng/api';
+import { RippleModule } from 'primeng/ripple';
 import { BranchService } from 'src/app/service/branch.service';
 import { TokenService } from 'src/app/service/token.service';
-import { MessageService } from 'primeng/api';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Toast } from 'primeng/toast';
-import { ToastrService } from 'ngx-toastr';
+import type * as XLSX from 'xlsx';
+import { HeaderComponent } from '../../USER/header/header.component';
+import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
+import { SubLoadingreportComponent } from '../sub-loadingreport/sub-loadingreport.component';
 declare var $: any;
 declare const SlimSelect: any;
 @Component({
@@ -96,7 +92,7 @@ export class SubLoadingComponent {
     this.form.get('pickUpBranch')?.valueChanges.subscribe(()=>this.clearOriginParcels());
       this.searchTerm = this.activeroute.snapshot.params['grnNo'];
       this.adminData = this.token.getToken();
-      
+
       this.getCities();
       this. getVehicleData();
       this.branchData();
@@ -114,9 +110,9 @@ export class SubLoadingComponent {
     getCities() {
       this.api.GetCities().subscribe({
         next: (response: any) => {
-          console.log('Cities data:', response);
+
           this.cities = response;this.originCitiesReady=true;this.applyLoadingOrigin();
-          
+
 
         },
         error: (error: any) => {
@@ -136,7 +132,7 @@ export class SubLoadingComponent {
 
     selectedOptions.forEach(city => toCityArray.push(new FormControl(city)));
 
-    console.log('Selected To Cities:', toCityArray.value);
+
   }
 
 
@@ -165,12 +161,12 @@ export class SubLoadingComponent {
       payload.pickUpBranch = formValues.pickUpBranch;
     }
 
-    console.log('Final Parcel Load Data:', payload);
+
 
     this.api.FilterParcelLoading(payload).subscribe({
       next: (response: any) => {
         this.toast.success('Parcel Load successful', 'Success');
-        console.log("data:", response);
+
         this.data = Array.isArray(response) ? response : Array.isArray(response?.data) ? response.data : [];
 
         this.LoadSuccess = true;
@@ -227,7 +223,7 @@ export class SubLoadingComponent {
 
       // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Update "Select All" status based on selected values
       this.allSelected = this.data.length === formArray.value.length;
-      console.log('Selected GRN Numbers:', formArray.value);
+
     }
 
     // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Handle "Select All" checkbox
@@ -246,7 +242,7 @@ export class SubLoadingComponent {
       }
       // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Update "Select All" status
       this.allSelected = event.target.checked;
-      console.log('All GRN Numbers Selected:', formArray.value);
+
     }
 
     ngAfterViewInit(): void {
@@ -325,7 +321,7 @@ export class SubLoadingComponent {
     // }
     getQRdata(id: any) {
       this.api.GetQrGRNnumber(id).subscribe((res: any) => {
-        console.log(res, 'qrdata');
+
         let newData: any[] = [];
 
         if (Array.isArray(res)) {
@@ -423,7 +419,7 @@ ParcelLoad() {
         lrNumber: this.form1.value.lrNumber,
       };
 
-      console.log('Final Payload:', payload);
+
 
       this.isSavingParcel = true;
     this.api.ParcelLoading(payload).subscribe({
@@ -449,7 +445,7 @@ ParcelLoad() {
     getVehicleData() {
       this.api.getData('Vehicle').subscribe({
         next: (response: any) => {
-          console.log('Vehicle:', response);
+
           this.vehicle = response;
         },
         error: (error: any) => {
@@ -461,7 +457,7 @@ ParcelLoad() {
     branchData() {
       this.api.getData('branch').subscribe({
         next: (response: any) => {
-          console.log('Branch Datakajdkjanfjandfnaf:', response);
+
           this.branchdata = response;this.originBranchesReady=true;this.onFromcitySelect({target:{value:this.form.get('fromCity')?.value}});this.applyLoadingOrigin(); // Ensure response contains an array of branches
         },
         error: (error: any) => {

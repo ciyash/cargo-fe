@@ -1,5 +1,6 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReportInterceptor } from './service/report.interceptor';
+import { InterInterceptor } from './service/inter.interceptor';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -24,7 +25,11 @@ import { AppComponent } from './app.component';
       preventDuplicates: true,
     }),
   ],
-  providers: [MessageService, {provide: HTTP_INTERCEPTORS, useClass: ReportInterceptor, multi: true}],
+  providers: [
+    MessageService,
+    { provide: HTTP_INTERCEPTORS, useClass: InterInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ReportInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

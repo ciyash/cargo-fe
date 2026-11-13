@@ -1,13 +1,13 @@
+import { readStoredReport } from '../../../shared/stored-report';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
+import * as FileSaver from 'file-saver';
 import { ToastrService } from 'ngx-toastr';
 import { BranchService } from 'src/app/service/branch.service';
 import type * as XLSX from 'xlsx';
-import * as FileSaver from 'file-saver';
+import { HeaderComponent } from '../../../USER/header/header.component';
 
 @Component({
   host: {'class':'reports-page'},
@@ -28,23 +28,13 @@ export class AllParcelBookingReportComponent {
 
   }
 
-  // ngOnInit(): void {
-  //   this.getProfileData();
-  //   const storedData = localStorage.getItem('allParcelBookingData');
-  //   if (storedData) {
-  //     this.data1 = JSON.parse(storedData);
-  //     console.log('Received:', this.data1);
-  //   } else {
-  //     this.toast.error('No booking data found!');
-  //   }
-  // }
   ngOnInit(): void {
     this.getProfileData();
 
-    const storedData = localStorage.getItem('allparcelReportData'); // âœ… Use the correct key
-    if (storedData) {
-      this.data1 = JSON.parse(storedData);
-      console.log('Received:', this.data1);
+    const cachedReport = readStoredReport('allparcelReportData');
+    if (cachedReport) {
+      this.data1 = cachedReport;
+
     } else {
       this.toast.error('No booking data found!');
     }
@@ -54,7 +44,7 @@ export class AllParcelBookingReportComponent {
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log( 'profiledata:',this.pfdata);
+
     });
   }
 
@@ -106,8 +96,6 @@ export class AllParcelBookingReportComponent {
     popupWin!.document.close();
   }
 }
-
-
 
 async ExpoetExcel(): Promise<void> {
     const XLSX = await import('xlsx');

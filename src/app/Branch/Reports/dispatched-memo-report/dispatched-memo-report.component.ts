@@ -68,19 +68,19 @@ today = new Date();
 
     // Fetch cities
     this.api.GetCities().subscribe((res: any) => {
-      console.log('citydata', res);
+
       this.citydata = res;
     });
 
     // Fetch branches
     this.api.GetBranch().subscribe((res: any) => {
-      console.log('allbranch:', res);
+
       this.branchdata = res;
     });
 
     // Fetch vehicles
     this.api.VehicleData().subscribe((res: any) => {
-      console.log('allvechicle:', res);
+
       this.allgetvechicle = res;
     });
 
@@ -150,7 +150,7 @@ today = new Date();
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
           this.pdata = res;
         },
         (error: any) => {
@@ -163,13 +163,13 @@ today = new Date();
   }
 
   onTocitySelect(event: any) {
-    console.log('Event triggered:', event);
-    console.log('Selected City:', event.target.value);
+
+
     const cityName = event.target.value;
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
 
           this.tbcdata = res;
         },
@@ -205,17 +205,17 @@ today = new Date();
     };
     this.fromDate = payload.fromDate;
     this.toDate = payload.toDate;
-    console.log('All Parcel Booking Payload:', payload);
+
     this.api.DispatchedMemoReport(payload).subscribe({
       next: (response: any) => {
-        console.log('All Parcel loaded successfully:', response);
+
         this.DispatchedData = response;
         this.DispatchedData = {
           ...response,
           cityWiseDetails: response.cityWiseDetails || [],
         };
 
-        console.log('report:', this.DispatchedData);
+
 
         // Reset totals
         this.calculateTotals();
@@ -230,7 +230,7 @@ today = new Date();
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log('profiledata:', this.pfdata);
+
     });
   }
 

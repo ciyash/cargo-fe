@@ -1,15 +1,13 @@
-import { DomesticPhoneDirective } from '../../../shared/domestic-phone.directive';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { ButtonModule } from 'primeng/button';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { ActivatedRoute,Router,RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { BranchService } from 'src/app/service/branch.service';
+import { HeaderComponent } from '../../../USER/header/header.component';
+import { DomesticPhoneDirective } from '../../../shared/domestic-phone.directive';
 
 declare var bootstrap: any;
 @Component({
@@ -76,7 +74,7 @@ export class GetCfmasterDataComponent {
 
   ngOnInit(){
     this.api.GetcfmasterData().subscribe((res:any)=>{
-      console.log('cfdata',res);
+
       this.data=res.data;
       this.loading=false;
     });
@@ -85,7 +83,7 @@ export class GetCfmasterDataComponent {
 
   GetCities(){
     this.api.GetCities().subscribe((res:any)=>{
-      console.log('citys',res);
+
       this.citydata=res;
     });
   }
@@ -94,7 +92,7 @@ export class GetCfmasterDataComponent {
 
   getsetcharges(id: any) {
     this.api.GetCFMasterChargesID(id).subscribe((res: any) => {
-      console.log(res, 'charges');
+
       this.scdata = res;
       const modal: any = new bootstrap.Modal(document.getElementById('chargesModal'));
       modal.show();
@@ -103,7 +101,7 @@ export class GetCfmasterDataComponent {
 
   edit(id:any){
 
-    console.log(this.form.value);
+
     if (this.form.valid) {
       const val = {
         gst: this.form.value.gst,
@@ -124,11 +122,11 @@ export class GetCfmasterDataComponent {
       this.api.UpdateCfmaster(id, val).subscribe(
         (a: any) => {
           if (a?.data) {
-            console.log(a);
+
             this.messageService.add({ severity: 'success', summary: 'success', detail: 'Packages Type Update Successfully' });
 
           } else {
-            console.log(a);
+
 
             this.msg = 'Packages Type Successfully Updated !!!';
             setTimeout(() => {
@@ -152,7 +150,7 @@ export class GetCfmasterDataComponent {
     this.api.DeleteCfmaster(id).subscribe(
       (a: any) => {
         if (a) {
-          console.log('deletedid',a);
+
           this.messageService.add({ severity: 'success', summary: 'success', detail: 'Credit party deleted' });
           setTimeout(() => {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -160,7 +158,7 @@ export class GetCfmasterDataComponent {
             });
             }, 1000);
         } else {
-          console.log(a);
+
           // this.errorMessage = a.msg.message;
           this.msg = 'Credit party deleted';
         }
@@ -184,10 +182,10 @@ setcharges() {
     dispatchType: this.form1.value.dispatchType,
     isActive: this.form1.value.isActive,
   };
-  console.log('Final Payload:', payload);
+
   this.api.AddCfmasterCharges(payload).subscribe({
     next: (response: any) => {
-      console.log('Master successfully:', response);
+
 
       setTimeout(() => {
        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

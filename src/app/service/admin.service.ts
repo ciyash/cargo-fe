@@ -1,8 +1,9 @@
-import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TokenService } from './token.service';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { authenticatedOptions } from './http-options';
+import { TokenService } from './token.service';
 
 const AUTH_API = environment.baseUrl.replace(/\/+$/, '') + '/';
 
@@ -25,13 +26,7 @@ export class AdminService {
     country: string;
     alternateMobile: number;
   }) {
-    const token1 = this.token.getToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-      })
-    };
+    const httpOptions = authenticatedOptions(this.token.getToken());
 
     return this.http.post(
       AUTH_API + 'branch',
@@ -64,13 +59,7 @@ export class AdminService {
     country: string;
     alternateMobile: number;
   }) {
-    const token1 = this.token.getToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1
-      })
-    };
+    const httpOptions = authenticatedOptions(this.token.getToken());
 
     return this.http.patch(
       AUTH_API + 'branch/update/' + id,
@@ -92,25 +81,13 @@ export class AdminService {
 
 
   ALLGetBranch(){
-    const token1 = this.token.getToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1
-      })
-    }
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.get(AUTH_API + 'branch', httpOptions);
   }
 
 
     DeleteBranch(id:any){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      }
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.delete(
         AUTH_API + 'branch/delete/'+id,
         httpOptions
@@ -131,14 +108,7 @@ export class AdminService {
     permissions?: string[];
     // companyName:String;
   }) {
-    const token1 = this.token.getToken();
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-      })
-    };
+    const httpOptions = authenticatedOptions(this.token.getToken());
 
     return this.http.post(
       AUTH_API + 'subadmin-auth/signup',
@@ -173,14 +143,7 @@ export class AdminService {
     role: string;
     // companyName:String;
   }) {
-    const token1 = this.token.getToken();
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-      })
-    };
+    const httpOptions = authenticatedOptions(this.token.getToken());
 
     return this.http.post(
       AUTH_API + 'subadmin-auth/signup-by-company',
@@ -219,13 +182,7 @@ export class AdminService {
     companyName:String;
 
   }) {
-    const token1 = this.token.getToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1
-      })
-    };
+    const httpOptions = authenticatedOptions(this.token.getToken());
     return this.http.patch(
       AUTH_API + 'subadmin-auth/update-profile/' + encodeURIComponent(value.id),
       {
@@ -249,13 +206,7 @@ export class AdminService {
 
 
    GetProfileData(){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      }
+    const httpOptions = authenticatedOptions(this.token.getToken());
         return this.http.get<any>(AUTH_API + 'subadmin-auth/profile', httpOptions);
     }
 
@@ -269,13 +220,7 @@ export class AdminService {
       email: string;
       branchId:string;
     }) {
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.patch(
         AUTH_API + 'subadmin-auth/update-profile',   {
           "companyName":value.companyName,
@@ -295,13 +240,7 @@ export class AdminService {
       oldPassword: string;
       newPassword: string;
     }){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.post(
         AUTH_API + 'subadmin-auth/change-password',
         {
@@ -315,13 +254,7 @@ export class AdminService {
     Forgotemailentry(value: {
       email: string;
     }){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.post(
         AUTH_API + 'subadmin-auth/forgot-password',
         {
@@ -336,13 +269,7 @@ export class AdminService {
       otp: number;
       newPassword: string;
     }){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.post(
         AUTH_API + 'subadmin-auth/reset-password',
         {
@@ -365,13 +292,7 @@ export class AdminService {
       branch: string;
       vehicleStatus: string;
     }) {
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
 
       return this.http.post(
         AUTH_API + 'vehicle',
@@ -401,13 +322,7 @@ export class AdminService {
       branch: string;
       vehicleStatus: string;
     }) {
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.patch(
         AUTH_API + 'vehicle/' + id,
         {
@@ -426,13 +341,7 @@ export class AdminService {
     }
 
     DeleteVehicleData(id:any){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      }
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.delete(
         AUTH_API + 'vehicle/'+id,
         httpOptions
@@ -444,13 +353,7 @@ export class AdminService {
       cityName: string;
       state: string;
     }) {
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
 
       return this.http.post(
         AUTH_API + 'multi-router/cities',
@@ -466,13 +369,7 @@ export class AdminService {
       cityName: string;
       state: string;
     }) {
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.patch(
         AUTH_API + 'multi-router/cities/' + id,
         {
@@ -484,13 +381,7 @@ export class AdminService {
     }
 
     DeleteCityname(id:any){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      }
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.delete(
         AUTH_API + 'multi-router/cities/'+id,
         httpOptions
@@ -501,13 +392,7 @@ export class AdminService {
     createdispatch(value: {
       name: string;
     }) {
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
 
       return this.http.post(
         AUTH_API + 'multi-router/dispatch-types',
@@ -519,26 +404,14 @@ export class AdminService {
     }
 
     GetDispatchtypeData(){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      }
+    const httpOptions = authenticatedOptions(this.token.getToken());
         return this.http.get(AUTH_API + 'multi-router/dispatch-types', httpOptions);
     }
 
     Updatedispatch(id: any, value: {
       name: string;
     }) {
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.patch(
         AUTH_API + 'multi-router/dispatch-types/' + id,
         {
@@ -549,13 +422,7 @@ export class AdminService {
     }
 
     Deletedispatch(id:any){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      }
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.delete(
         AUTH_API + 'multi-router/dispatch-types/'+id,
         httpOptions
@@ -570,13 +437,7 @@ export class AdminService {
       loadingCharge:string;
       cartageCharge:string;
     }) {
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
 
       return this.http.post(
         AUTH_API + 'extra-charge',
@@ -592,13 +453,7 @@ export class AdminService {
     }
 
     GetextrachargesData(){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      }
+    const httpOptions = authenticatedOptions(this.token.getToken());
         return this.http.get(AUTH_API + 'extra-charge', httpOptions);
     }
 
@@ -609,13 +464,7 @@ export class AdminService {
       loadingCharge:string;
       cartageCharge:string;
     }) {
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      };
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.patch(
         AUTH_API + 'extra-charge/' + id,
         {
@@ -630,13 +479,7 @@ export class AdminService {
     }
 
     Deletecharges(id:any){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      }
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.delete(
         AUTH_API + 'extra-charge/'+id,
         httpOptions
@@ -645,35 +488,17 @@ export class AdminService {
 //
 //Employees Apis
     GetEmployeesData(){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      }
+    const httpOptions = authenticatedOptions(this.token.getToken());
         return this.http.get(AUTH_API + 'subadmin-auth/subadmins', httpOptions);
     }
 
     GetEmployees(){
-      const token1 = this.token.getToken();
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token1
-        })
-      }
+    const httpOptions = authenticatedOptions(this.token.getToken());
         return this.http.get(AUTH_API + 'subadmin-auth/employees', httpOptions);
     }
 
   GetUnderBranchEmployees(id:any){
-    const token1 = this.token.getToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1
-      })
-    }
+    const httpOptions = authenticatedOptions(this.token.getToken());
     return this.http.get(
       AUTH_API + 'subadmin-auth/branch-wise/'+id,
       httpOptions
@@ -681,13 +506,7 @@ export class AdminService {
   }
   PostData(value: { date: string; }) {
 
-    const token1 = this.token.getToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-      })
-    };
+    const httpOptions = authenticatedOptions(this.token.getToken());
 
     return this.http.post(
       AUTH_API + 'booking/sales-summary-branchwise',
@@ -699,28 +518,14 @@ export class AdminService {
     );
   }
 
-
-
   StatusWiseSummary(){
-    const token1 = this.token.getToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1
-      })
-    }
+    const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.get(AUTH_API + 'booking/status-wise-summary',
        httpOptions);
   }
 
 SummaryReport(value:{date:string}){
-  const token1 = this.token.getToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-      })
-    };
+    const httpOptions = authenticatedOptions(this.token.getToken());
     return this.http.post(
       AUTH_API + 'booking/summary-report',
       {
@@ -733,13 +538,7 @@ SummaryReport(value:{date:string}){
 
 
 BranchData(value:{date:string}){
-  const token1 = this.token.getToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-      })
-    };
+    const httpOptions = authenticatedOptions(this.token.getToken());
     return this.http.post(
       AUTH_API + 'booking/branch-account',
       {
@@ -751,13 +550,7 @@ BranchData(value:{date:string}){
 }
 
 ACpartyData(value:{date:string}){
-  const token1 = this.token.getToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token1 // ✅ Added space after 'Bearer'
-      })
-    };
+    const httpOptions = authenticatedOptions(this.token.getToken());
     return this.http.post(
       AUTH_API + 'booking/acparty-account',
       {

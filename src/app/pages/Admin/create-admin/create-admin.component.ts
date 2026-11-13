@@ -65,7 +65,7 @@ export class CreateAdminComponent {
       ngOnInit(){
         this.branchData();
         this.api.GetEmployeesData().subscribe((res: any) => {
-          console.log('empdata', res);
+
           this.edata = res.map((employee: any) => {
 
             employee.showPassword = false; // Initialize show/hide
@@ -92,7 +92,7 @@ export class CreateAdminComponent {
       branchData() {
         this.bapi.getData('branch').subscribe({
           next: (response: any) => {
-            console.log('Branch Data:', response);
+
             this.branchdata = response;
           },
           error: (error: any) => {
@@ -118,7 +118,7 @@ export class CreateAdminComponent {
         };
         this.api.createAdmin(payload).subscribe({
           next: (response: any) => {
-            console.log('Parcel loaded successfully:', response);
+
             this.toastr.success('Parcel loaded successfully', 'Success');
 
             // this.messageService.add({ severity: 'success', summary: 'success', detail: 'Create Employee successfully' });

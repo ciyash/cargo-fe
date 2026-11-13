@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../USER/header/header.component';
 
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { BranchService } from 'src/app/service/branch.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
+import { Component,ElementRef,ViewChild } from '@angular/core';
+import { FormBuilder,FormGroup,Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-declare var $: any;
-import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
+import type * as XLSX from 'xlsx';
+declare var $: any;
 @Component({
   host: {'class':'reports-page'},
 
@@ -202,7 +202,7 @@ DispatchReport() {
   this.payload = this.form.value;
   this.api.DispatchedReport(this.payload).subscribe({
     next: (res: any) => {
-      console.log("res:",res);
+
 
       if (res.message) {
         this.toast.success(res.message); // âœ… show success toast

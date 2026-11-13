@@ -1,15 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component,ElementRef,ViewChild } from '@angular/core';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
+import * as FileSaver from 'file-saver';
 import { ToastrService } from 'ngx-toastr';
 import { BranchService } from 'src/app/service/branch.service';
-declare var $: any;
 import type * as XLSX from 'xlsx';
-import * as FileSaver from 'file-saver';
+import { HeaderComponent } from '../../../USER/header/header.component';
+declare var $: any;
 @Component({
   host: {'class':'reports-page'},
 
@@ -70,7 +68,7 @@ today = new Date();
 
     // Fetch cities
     this.api.GetCities().subscribe((res: any) => {
-      console.log('citydata', res);
+
       this.citydata = res;
       this.getProfileData();
 
@@ -78,13 +76,13 @@ today = new Date();
 
     // Fetch branches
     this.api.GetBranch().subscribe((res: any) => {
-      console.log('allbranch:', res);
+
       this.branchdata = res;
     });
 
     // Fetch vehicles
     this.api.VehicleData().subscribe((res: any) => {
-      console.log('allvechicle:', res);
+
       this.allgetvechicle = res;
     });
 
@@ -174,7 +172,7 @@ today = new Date();
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
           this.pdata = res;
         },
         (error: any) => {
@@ -187,13 +185,13 @@ today = new Date();
   }
 
   onTocitySelect(event: any) {
-    console.log('Event triggered:', event);
-    console.log('Selected City:', event.target.value);
+
+
     const cityName = event.target.value;
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
 
           this.tbcdata = res;
         },
@@ -229,17 +227,17 @@ today = new Date();
     };
     this.fromDate = payload.fromDate;
     this.toDate = payload.toDate;
-    console.log('All Parcel Booking Payload:', payload);
+
     this.api.DispatchedMemoReport(payload).subscribe({
       next: (response: any) => {
-        console.log('All Parcel loaded successfully:', response);
+
         this.DispatchedData = response;
         this.DispatchedData = {
           ...response,
           cityWiseDetails: response.cityWiseDetails || [],
         };
 
-        console.log('report:', this.DispatchedData);
+
 
         // Reset totals
         this.calculateTotals();

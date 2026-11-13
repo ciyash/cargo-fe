@@ -35,7 +35,7 @@ export class SetChargesComponent {
   ngOnInit(){
     this.id = this.activeroute.snapshot.params['agentName'];
     this.api.GetCFMasterChargesID(this.id).subscribe((res:any)=>{
-      console.log(res);
+
     })
   }
 
@@ -51,10 +51,10 @@ export class SetChargesComponent {
       dispatchType: this.form.value.dispatchType,
       isActive: this.form.value.isActive,
     };
-    console.log('Final Payload:', payload);
+
     this.api.AddCfmasterCharges(payload).subscribe({
       next: (response: any) => {
-        console.log('Master successfully:', response);
+
 
         setTimeout(() => {
          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

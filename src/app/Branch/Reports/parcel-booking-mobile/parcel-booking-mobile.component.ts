@@ -42,7 +42,7 @@ export class ParcelBookingMobileComponent implements OnInit {
     if (storedData) {
       try {
         this.mdata = JSON.parse(storedData);
-        console.log('Loaded data (mdata) from localStorage:', this.mdata);
+
       } catch (error) {
         console.error('Failed to parse localStorage data:', error);
       }
@@ -58,7 +58,7 @@ export class ParcelBookingMobileComponent implements OnInit {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
       this.printBy = res?.name || 'Unknown';
-      console.log('Profile Data:', this.pfdata);
+
     });
   }
 

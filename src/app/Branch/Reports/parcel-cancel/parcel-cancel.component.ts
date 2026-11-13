@@ -41,7 +41,7 @@ export class ParcelCancelComponent implements OnInit {
         this.data4 = stateData.data || stateData;
         this.datedata = stateData;
 
-        console.log('Loaded from localStorage:', stateData);
+
 
         this.toast.success(stateData.message || 'Cancel report data loaded successfully!');
       } catch (e) {
@@ -59,7 +59,7 @@ export class ParcelCancelComponent implements OnInit {
   getProfileData(): void {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log('Profile Data:', this.pfdata);
+
     });
   }
 

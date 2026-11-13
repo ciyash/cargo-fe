@@ -188,11 +188,11 @@ export class ParcelReceivedStockReportComponent implements AfterViewInit {
       dropBranch: this.form.value.dropBranch,
       receiverName: this.form.value.receiverName
     };
-console.log("paload:",this.payload);
+
 
     this.api.ParcelReceivedStockReport(this.payload).subscribe({
       next: (res: any) => {
-        console.log("res:",res);
+
 
         this.reportData = res.data;
         this.totalPages = Math.ceil(this.reportData.length / this.itemsPerPage);

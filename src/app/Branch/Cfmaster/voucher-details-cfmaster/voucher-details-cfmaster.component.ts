@@ -56,14 +56,14 @@ export class VoucherDetailsCfmasterComponent {
         senderName: this.form.value.senderName,
       };
 
-      console.log('Final Payload:', payload);
+
 
       this.api.VoucherDetailsLoad(payload).subscribe({
         next: (response: any) => {
-          console.log('Parcel loaded successfully:', response);
+
           this.toast.success('Vouchers loaded successfully','Success');
           this.vldata=response.data;
-          console.log("vocherdata:",this.vldata);
+
           if (this.vldata.length > 0) {
             this.form1.patchValue({
               fromDate: this.form.value.fromDate,
@@ -92,11 +92,11 @@ export class VoucherDetailsCfmasterComponent {
         senderName: this.form1.value.senderName,
       };
 
-      console.log('Final Payload:', payload);
+
 
       this.api.GetVoucherDetails(payload).subscribe({
         next: (response: any) => {
-          console.log('Parcel loaded successfully:', response);
+
           this.toast.success('Credit statements loaded','Success')
           setTimeout(() => {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -117,7 +117,7 @@ export class VoucherDetailsCfmasterComponent {
       if (searchTerm) {
         this.api.searchCfUser(searchTerm).subscribe(
           (res: any) => {
-            console.log('API Response:', res);
+
             this.userList = res.data.length ? res.data : [];
             this.showDropdown = !!this.userList.length;
           },
@@ -152,7 +152,7 @@ export class VoucherDetailsCfmasterComponent {
 
 
     printName(agentName: string) {
-      console.log('Agent Name:', agentName);
+
 
       const payload = {
         fromDate: this.form.value.fromDate,
@@ -162,7 +162,7 @@ export class VoucherDetailsCfmasterComponent {
 
       this.api.GetVoucherDetails(payload).subscribe({
         next: (response: any) => {
-          console.log('Voucher Details:', response);
+
 
           this.form1.patchValue({
             senderName: response.senderName || agentName

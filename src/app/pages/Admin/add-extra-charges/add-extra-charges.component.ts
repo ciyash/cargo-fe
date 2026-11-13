@@ -1,16 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { FooterComponent } from '../../../USER/footer/footer.component';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { AdminService } from 'src/app/service/admin.service';
 import { BranchService } from 'src/app/service/branch.service';
+import { FooterComponent } from '../../../USER/footer/footer.component';
+import { HeaderComponent } from '../../../USER/header/header.component';
 
 @Component({
   standalone: true,
@@ -54,12 +52,12 @@ export class AddExtraChargesComponent {
 
             ngOnInit(){
               this.api.GetextrachargesData().subscribe((res:any)=>{
-                  console.log(res);
+
                   this.data=res;
                   this.loading=false;
               });
               this.bapi.GetCities().subscribe((res:any)=>{
-                console.log('citys',res);
+
                 this.citydata=res;
               });
             }
@@ -73,11 +71,11 @@ export class AddExtraChargesComponent {
                 cartageCharge: this.form.value.cartageCharge,
               };
 
-              console.log('Final Payload:', payload);
+
 
               this.api.creatextracharges(payload).subscribe({
                 next: (response: any) => {
-                  console.log('Extra Charges successfully:', response);
+
                   this.toastr.success('Create Extra Charges successfully', 'Success');
 
                   setTimeout(() => {
@@ -96,7 +94,7 @@ export class AddExtraChargesComponent {
             }
 
             edit(id:any) {
-              console.log(this.form1.value);
+
               if (this.form1.valid) {
                 const val = {
                   fromCity: this.form1.value.fromCity,
@@ -108,9 +106,9 @@ export class AddExtraChargesComponent {
                 this.api.Updateextracharges(id, val).subscribe(
                   (a: any) => {
                     if (a?.data) {
-                      console.log(a);
+
                     } else {
-                      console.log(a);
+
                       // this.errorMessage = a.msg.message;
                       this.msg = 'addextracharges Successfully Updated !!!';
                       setTimeout(() => {
@@ -133,14 +131,14 @@ export class AddExtraChargesComponent {
               this.api.Deletecharges(id).subscribe(
                 (a: any) => {
                   if (a) {
-                    console.log('deletedid',a);
+
                     setTimeout(() => {
                       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
                         this.router.navigate(['/addextracharges']);
                       });
                       }, 1000);
                   } else {
-                    console.log(a);
+
                     // this.errorMessage = a.msg.message;
                     this.msg = 'addextracharges Successfully Updated !!!';
                   }

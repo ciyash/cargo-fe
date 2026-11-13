@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component,OnInit } from '@angular/core';
+import { FormBuilder,FormGroup,Validators } from '@angular/forms';
+import { ActivatedRoute,Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AdminService } from 'src/app/service/admin.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { TokenService } from 'src/app/service/token.service';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   standalone: true,
@@ -56,6 +56,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.isLoading) return;
     if (this.form.invalid) {
       this.errorMessage = 'Please fill in all required fields';
       return;
@@ -83,8 +84,8 @@ export class LoginComponent implements OnInit {
         this.toast.success(response?.message );
       },
       error: (error) => {
-        const message = error.error.message || 'Login failed';
-        this.toast.error(error?.error?.message );
+        const message = error?.error?.message || 'Login failed. Please try again.';
+        this.toast.error(message);
 
         this.errorMessage = message;
         this.isLoading = false;

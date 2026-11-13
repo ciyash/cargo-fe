@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component,ElementRef,ViewChild } from '@angular/core';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { BranchService } from 'src/app/service/branch.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import type * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
+import type * as XLSX from 'xlsx';
+import { HeaderComponent } from '../../../USER/header/header.component';
 
 declare var $: any;
 @Component({
@@ -62,19 +61,19 @@ export class PendingDeliveryLuggageReportComponent {
   ngOnInit() {
     // Fetch cities
     this.api.GetCities().subscribe((res: any) => {
-      console.log('citydata', res);
+
       this.citydata = res;
     });
 
     // Fetch branches
     this.api.GetBranch().subscribe((res: any) => {
-      console.log('allbranch:', res);
+
       this.branchdata = res;
     });
 
     // Fetch vehicles
     this.api.VehicleData().subscribe((res: any) => {
-      console.log('allvechicle:', res);
+
       this.allgetvechicle = res;
     });
     this.getProfileData();
@@ -114,14 +113,14 @@ totalPagesArray() {
       dropBranch: this.form.value.dropBranch,
       bookingType: this.form.value.bookingType
     };
-    console.log("Payload:", this.payload);
+
     this.api.PendingDeliveryLuggageReport(this.payload).subscribe(
       (res: any) => {
-        console.log("res:",res);
+
           this.reportData = res.data;
 
           this.toast.success(res.message || 'Report fetched successfully.');
-          console.log('Luggage Report:', this.reportData);
+
 
       },
       (error) => {
@@ -134,7 +133,7 @@ totalPagesArray() {
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log('profiledata:', this.pfdata);
+
     });
 }
 
@@ -248,7 +247,7 @@ ngAfterViewInit(): void {
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
           this.pdata = res;
         },
         (error: any) => {
@@ -261,13 +260,13 @@ ngAfterViewInit(): void {
   }
 
   onTocitySelect(event: any) {
-    console.log('Event triggered:', event);
-    console.log('Selected City:', event.target.value);
+
+
     const cityName = event.target.value;
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
 
           this.tbcdata = res;
         },

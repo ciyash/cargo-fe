@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component,OnInit } from '@angular/core';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
+import * as FileSaver from 'file-saver';
+import { ToastrService } from 'ngx-toastr';
 import { BranchService } from 'src/app/service/branch.service';
 import type * as XLSX from 'xlsx';
-import * as FileSaver from 'file-saver';
-import { Toast, ToastrService } from 'ngx-toastr';
+import { HeaderComponent } from '../../../USER/header/header.component';
 
 @Component({
   host: {'class':'reports-page'},
@@ -64,7 +63,7 @@ export class DeliveryStockReportComponent implements OnInit {
       try {
         const parsedData = JSON.parse(pendingDataString);
         this.reportData = parsedData?.data || {};
-        console.log("Received pending delivery data:", this.reportData);
+
 
         this.toast.success(parsedData?.message || 'Pending delivery report loaded successfully.');
       } catch (e) {

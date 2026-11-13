@@ -31,7 +31,6 @@ export class ProfileComponent implements OnInit {
     try {
       this.api.GetProfileData().subscribe({
         next: (response: any) => {
-          console.log('Profile Data:', response);
           this.profileData = response;
           this.loading = false;
         },

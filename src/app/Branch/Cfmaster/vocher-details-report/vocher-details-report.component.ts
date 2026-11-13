@@ -25,9 +25,9 @@ export class VocherDetailsReportComponent {
     const data = localStorage.getItem('voucherDetails');
     if (data) {
       const parsedData = JSON.parse(data);
-      console.log('Loaded voucher data:', parsedData);
+
       this.vocherReport=parsedData
-      console.log("vocherReport:",this.vocherReport)
+
 
 
     } else {

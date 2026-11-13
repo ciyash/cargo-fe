@@ -25,7 +25,7 @@ export class PrintVoucherslistDataComponent {
     ngOnInit(): void {
       this.searchTerm = this.activeroute.snapshot.params['vocherNoUnique'];
       this.api.GetVouchersListData(this.searchTerm).subscribe((res:any)=>{
-        console.log('getgrndata',res);
+
         this.getgrndata=res
       })
     }
@@ -36,7 +36,7 @@ export class PrintVoucherslistDataComponent {
       }
       this.api.getbranchId(this.branchId).subscribe({
         next: (res: any) => {
-          console.log('Branch Data:', res);
+
           this.branchData = res;
         },
         error: (err: any) => {

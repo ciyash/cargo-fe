@@ -1,16 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../USER/header/header.component';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BranchService } from 'src/app/service/branch.service';
-import { AdminService } from 'src/app/service/admin.service';
+import { Component,ElementRef,ViewChild } from '@angular/core';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { ActivatedRoute,Router,RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { AdminService } from 'src/app/service/admin.service';
+import { BranchService } from 'src/app/service/branch.service';
+import { HeaderComponent } from '../../USER/header/header.component';
 declare var $: any;
 declare const SlimSelect: any;
-import {  ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 
 @Component({
   standalone: true,
@@ -76,12 +73,12 @@ export class CancelBookingComponent {
     this.searchTerm = this.activeroute.snapshot.params['grnNo'];
 
     this.api.GetCities().subscribe((res:any)=>{
-      console.log('citys',res);
+
       this.citydata=res;
     });
     //get branches
     this.api.GetBranch().subscribe((res:any)=>{
-      console.log(res);
+
       this.branchdata=res;
 
     });
@@ -92,18 +89,18 @@ export class CancelBookingComponent {
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log('Profile Data:', this.pfdata);
+
     });
   }
 
 
   searchUser(): void {
     if (this.searchTerm && this.searchTerm.trim() !== '') {
-      console.log('Search Term:', this.searchTerm);
+
 
       this.api.GetGRNnumber(this.searchTerm.trim()).subscribe(
         (res: any) => {
-          console.log('API Response:', res);
+
 
           // If `res` is an object, extract the data into an array
           // if (res && Array.isArray(res.data)) {
@@ -151,9 +148,9 @@ export class CancelBookingComponent {
   GetAllEmployee() {
     this.admin.GetEmployees().subscribe({
       next: (res) => {
-        console.log('Employee data:', res);
+
         this.employee = res;
-        console.log('employeeData:', this.employee);
+
       },
       error: (err) => {
         console.error('Error fetching employee data:', err);
@@ -169,10 +166,10 @@ export class CancelBookingComponent {
       ...this.form1.value,
       grnNo: this.searchTerm
     };
-    console.log('Cancel Payload:', payload1);
+
     this.api.BookingCancel(payload1, this.searchTerm).subscribe(
       (res) => {
-        console.log('Booking cancelled successfully:', res);
+
         this.toast.success('Cancellation request processed');
         this.searchUser();
       },
@@ -186,11 +183,11 @@ export class CancelBookingComponent {
 
   onFromcitySelect(event: any) {
     const selectedCity = event.target.value;
-    console.log('Selected City:', selectedCity);
+
     if (selectedCity) {
       this.api.GetBranchbyCity(selectedCity).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
           this.pdata = res;
         },
         (error: any) => {

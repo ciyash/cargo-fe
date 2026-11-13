@@ -1,25 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
 import {
-  Component,
-  ElementRef,
-  OnInit,
-  AfterViewInit,
-  ViewChild,
+Component,
+ElementRef,
+ViewChild
 } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { BranchService } from 'src/app/service/branch.service';
-import type * as XLSX from 'xlsx';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import * as FileSaver from 'file-saver';
 import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
+import type * as XLSX from 'xlsx';
+import { HeaderComponent } from '../../../USER/header/header.component';
 declare module 'file-saver';
 declare var $: any;
 declare const SlimSelect: any;
@@ -74,7 +65,7 @@ export class ConsolidateComponent {
       this.getProfileData();
       this.api.GetBranch().subscribe((res: any) => {
         this.branchdata = res;
-        console.log("branchdata:", this.branchdata);
+
 
       });
     }
@@ -82,7 +73,7 @@ export class ConsolidateComponent {
       this.api.GetCities().subscribe((res: any) => {
         this.citydata = res;
         this.getProfileData();
-        console.log("citydata:", this.citydata);
+
       });
     }
     getProfileData() {
@@ -139,7 +130,7 @@ export class ConsolidateComponent {
       if (cityName) {
         this.api.GetBranchbyCity(cityName).subscribe(
           (res: any) => {
-            console.log('Branches for selected city:', res);
+
             this.pdata = res;
           },
           (error: any) => {
@@ -159,22 +150,22 @@ export class ConsolidateComponent {
         bookedBy: this.form.value.bookedBy,
       };
 
-      console.log('payload:', payload);
+
       this.bdata = payload;
       this.fromDate = this.form.value.fromDate;
       this.toDate = this.form.value.toDate;
 
       this.api.ConsolidatedReport(payload).subscribe({
         next: (res: any) => {
-          console.log('ConsolidatedReport:', res);
+
 
           this.Cdata = res;
           this.Tdata=res
-          console.log("tdata:",this.Tdata)
+
 
 
             this.deliveryData=res.data
-          console.log("devliveryData:",this.deliveryData);
+
 
 
         },

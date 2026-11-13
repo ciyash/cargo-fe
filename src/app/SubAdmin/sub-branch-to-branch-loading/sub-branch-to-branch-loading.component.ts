@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component,ElementRef,ViewChild } from '@angular/core';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../USER/header/header.component';
 import { ToastModule } from 'primeng/toast';
-import { ChangeDetectorRef, Component, OnInit,ElementRef, ViewChild  } from '@angular/core';
+import { HeaderComponent } from '../../USER/header/header.component';
 
-import { BranchService } from 'src/app/service/branch.service';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray,FormBuilder,FormGroup,Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
 declare var $: any;
 declare const SlimSelect: any;
 @Component({
@@ -60,12 +60,12 @@ export class SubBranchToBranchLoadingComponent {
     this.api.GetBranch().subscribe({
       next: (res: any) => {
         this.citydata = res;
-        console.log('Branch data fetched successfully:', this.citydata);
+
       },
       error: (err) => console.error('Error fetching branch data:', err)
     });
     this.api.VehicleData().subscribe((res:any)=>{
-        console.log('vdata',res);
+
         this.vdata=res;
     });
     // this.api.GetProfileData().subscribe((res:any)=>{
@@ -90,21 +90,21 @@ export class SubBranchToBranchLoadingComponent {
       $(this.toBranch.nativeElement).on('select2:select', (event: any) => {
         const selectedBranch = event.params.data.id;
         this.form1.get('toBranch')?.setValue(selectedBranch);
-        console.log('Selected To Branch:', selectedBranch);
+
       });
 
       $(this.fromBranch.nativeElement).select2();
       $(this.fromBranch.nativeElement).on('select2:select', (event: any) => {
         const selectedBranch = event.params.data.id;
         this.form.get('fromBranch')?.setValue(selectedBranch);
-        console.log('Selected To Branch:', selectedBranch);
+
       });
 
       $(this.vehicle.nativeElement).select2();
       $(this.vehicle.nativeElement).on('select2:select', (event: any) => {
         const selectedVehicle = event.params.data.id;
         this.form1.get('vehicalNumber')?.setValue(selectedVehicle);
-        console.log('Selected Vehicle Number:', selectedVehicle);
+
       });
   }, 0);}
 
@@ -115,11 +115,11 @@ export class SubBranchToBranchLoadingComponent {
       fromBranch: this.form.value.fromBranch,
     };
 
-    console.log('Final Payload:', payload);
+
 
     this.api.postBranchLoading(payload).subscribe({
       next: (response: any) => {
-        console.log('loaded successfully:', response);
+
 
         // Show success message from backend (assuming response contains a message property)
         const successMessage = response?.message || 'Parcel Branch loading successfully';
@@ -183,7 +183,7 @@ export class SubBranchToBranchLoadingComponent {
 
       // ✅ Update "Select All" status based on selected values
       this.allSelected = this.data.length === formArray.value.length;
-      console.log('Selected GRN Numbers:', formArray.value);
+
     }
 
     // ✅ Handle "Select All" checkbox
@@ -204,7 +204,7 @@ export class SubBranchToBranchLoadingComponent {
 
       // ✅ Update "Select All" status
       this.allSelected = event.target.checked;
-      console.log('All GRN Numbers Selected:', formArray.value);
+
     }
 
     ParcelLoad() {
@@ -220,11 +220,11 @@ export class SubBranchToBranchLoadingComponent {
         lrNumber: this.form1.value.lrNumber,
       };
 
-      console.log('Final Payload:', payload);
+
 
       this.api.BranchtoBranchLoad(payload).subscribe({
         next: (response: any) => {
-          console.log('Parcel loaded successfully:', response);
+
           // alert('Parcel Loaded Successfully!');
           setTimeout(() => {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -248,7 +248,7 @@ export class SubBranchToBranchLoadingComponent {
           if (this.fromCityValue) {
             this.api.GetBranchbyCity(this.fromCityValue).subscribe(
               (branches: any) => {
-                console.log('Branches for selected city:', branches);
+
                 this.pdata = branches;
               },
               (error: any) => {

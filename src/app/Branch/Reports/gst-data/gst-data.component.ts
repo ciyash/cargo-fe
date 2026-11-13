@@ -26,7 +26,7 @@ export class GstDataComponent {
     this.bookings = stateData?.bookings || [];
 
 
-    console.log("Bookings:", this.bookings);
+
   }
 
   calculateTotalAmount(): number {

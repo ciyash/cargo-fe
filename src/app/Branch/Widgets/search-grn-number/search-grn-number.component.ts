@@ -73,12 +73,12 @@ export class SearchGrnNumberComponent {
       receiverMobile: this.form.value.receiverMobile,
       toPayDeliveredAmount:Number(this.form.value.toPayDeliveredAmount),
     };
-    console.log('Final Payload:', payload);
+
 
     this.api.ReceivedParcelUpdate(payload).subscribe(
       (res: any) => {
         this.saving=false;
-        console.log('Update Status:', res);
+
         this.updata = res;
 
         // âœ… Show success message from backend if available
@@ -126,7 +126,7 @@ export class SearchGrnNumberComponent {
         grnNo: '',
         lrNumber: '',
       };
-      console.log('searchdata:', searchPayload);
+
       switch (this.searchField) {
         case 'senderMobile':
           searchPayload.mobile = this.searchTerm.trim();
@@ -145,7 +145,7 @@ export class SearchGrnNumberComponent {
         this.data2 = res;this.activeTab="booking";this.editing=false;
         const row=this.data2?.[0];
         if(row)this.form.patchValue({grnNo:row.grnNo,receiverName:row.receiverName,receiverMobile:row.receiverMobile,toPayDeliveredAmount:row.bookingType==='toPay'?row.grandTotal:0});
-        console.log('searchdataobject:', this.data2);
+
 
       });
     }

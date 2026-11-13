@@ -51,7 +51,6 @@ export class CompanyLoginComponent implements OnInit {
         this.submitting = false;
         this.token.saveToken(res.token);
         this.token.saveUser({role:'company_admin',accountType:'company',permissions:res.permissions,company:res.company});
-        this.token.setCompanyLoginFlag(); // ✅ Mark as company login (admin role)
         this.router.navigate(['/create-admin']);
       },
       error: (err) => {

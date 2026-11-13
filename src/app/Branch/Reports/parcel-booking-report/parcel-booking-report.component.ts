@@ -1,3 +1,4 @@
+import { readStoredReport } from '../../../shared/stored-report';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -32,24 +33,11 @@ toDate:any;
   this.reportData = nav?.extras?.state?.['reportData'];
   }
   ngOnInit(): void {
-    // setInterval(() => {
-    //   this.currentDate = new Date();
-    //   this.currentTime = new Date();
-    // }, 1000);
-console.log('Report Data:', this.reportData);
 
-    const key = 'parcelReportData';
-    const storedData = localStorage.getItem(key);
 
-    if (storedData) {
-      this.parcelReportData = JSON.parse(storedData);
-      console.log('Loaded Parcel Report Data:', this.parcelReportData);
-    } else {
-      console.warn('No report data found in localStorage');
-    }
-    this.data = this.parcelReportData.data;
+    this.parcelReportData = readStoredReport('parcelReportData') || {};
+    this.data = this.parcelReportData.data || {};
     this.data1 = this.parcelReportData;
-    console.log('Received data:', this.data);
     this.getProfileData();
 
   }
@@ -57,12 +45,9 @@ console.log('Report Data:', this.reportData);
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log( 'profiledata:',this.pfdata);
+
     });
   }
-
-
-
 
   getBookingStatus(status: number): string {
     switch (status) {
@@ -90,28 +75,6 @@ console.log('Report Data:', this.reportData);
       window.location.reload(); // Optional: Reload to restore original content
     }, 500); // Adjust delay as needed
   }
-
-
-
-  // downloadAsPDF() {
-  //   const element = document.getElementById('printableArea');
-  //   if (element) {
-  //     const opt = {
-  //       margin: 1,
-  //       filename: 'parcel_booking_report.pdf',
-  //       image: { type: 'jpeg', quality: 0.98 },
-  //       html2canvas: { scale: 2 },
-  //       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-  //     };
-  //     import('html2pdf.js').then((html2pdf) => {
-  //       html2pdf().from(element).set(opt).save();
-  //     });
-  //   }
-  // }
-
-
-
-
 
     async Export(): Promise<void> {
     const XLSX = await import('xlsx');

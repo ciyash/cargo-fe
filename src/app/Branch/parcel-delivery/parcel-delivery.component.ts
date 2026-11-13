@@ -1,14 +1,12 @@
-import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../USER/header/header.component';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BranchService } from 'src/app/service/branch.service';
-import { AdminService } from 'src/app/service/admin.service';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { ActivatedRoute,Router,RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { AdminService } from 'src/app/service/admin.service';
+import { BranchService } from 'src/app/service/branch.service';
+import { HeaderComponent } from '../../USER/header/header.component';
+import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
 
 @Component({
   standalone: true,
@@ -80,7 +78,7 @@ export class ParcelDeliveryComponent {
     if (this.searchTerm && this.searchTerm.trim() !== '') {
       this.api.GetGRNnumber(this.searchTerm.trim()).subscribe(
         (res: any) => {
-          console.log("data:",res);
+
 
 
           if (res && res.booking) {
@@ -107,7 +105,7 @@ export class ParcelDeliveryComponent {
     this.admin.GetEmployees().subscribe({
       next: (res) => {
         this.employee = res;
-        console.log("emolyee:",this.employee);
+
 
       },
       error: (err) => {

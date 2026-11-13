@@ -42,20 +42,20 @@ export class VoucerOfflineListComponent {
         this.api.GetBranch().subscribe({
           next: (res: any) => {
             this.branchData = res;
-            console.log('Branch data fetched successfully:', this.citydata);
+
           },
           error: (err) => console.error('Error fetching branch data:', err)
         });
         this.api.VehicleData().subscribe((res:any)=>{
-            console.log('vdata',res);
+
             this.vdata=res;
         });
         this.api.GetCities().subscribe((res:any)=>{
-          console.log('citydata',res);
+
           this.citydata=res;
       });
         this.api.GetProfileData().subscribe((res:any)=>{
-          console.log('profile',res);
+
           this.pdata=res.branchId;
         })
       }
@@ -73,7 +73,7 @@ export class VoucerOfflineListComponent {
         if (cityName) {
           this.api.GetBranchbyCity(cityName).subscribe(
             (res: any) => {
-              console.log('Branches for selected city:', res);
+
               this.cbdata = res;
             },
             (error: any) => {
@@ -112,7 +112,7 @@ export class VoucerOfflineListComponent {
 
           // ✅ Update "Select All" status based on selected values
           this.allSelected = this.data1.length === formArray.value.length;
-          console.log('Selected GRN Numbers:', formArray.value);
+
         }
 
 
@@ -126,11 +126,11 @@ export class VoucerOfflineListComponent {
             fromBranch: this.form.value.fromBranch,
           };
 
-          console.log('Final Payload:', payload);
+
 
           this.api.ParcelVouchersDetails(payload).subscribe({
             next: (response: any) => {
-              console.log('Parcel loaded successfully:', response);
+
               // alert('Parcel Loaded Successfully!');
               this.data1=response;
 
@@ -144,9 +144,9 @@ export class VoucerOfflineListComponent {
 
           getvouchersdata(id:any){
         this.api.GetVouchersListData(id).subscribe((res)=>{
-            console.log('vouchersdata',res);
+
             this.vldata=res;
-            console.log("thisvladata:",this.vldata)
+
         })
       }
 

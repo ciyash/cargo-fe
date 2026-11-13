@@ -78,12 +78,12 @@ export class GstReportComponent implements OnInit, AfterViewInit {
 
     const payload = this.form.value;
 
-    console.log("thispayload:", payload);
+
     this.api.SenderRecevierGstReport(payload).subscribe({
       next: (res) => {
-        console.log('wise Report Data:', res);
+
         this.gstdata = res;
-        console.log("gstdta:",this.gstdata);
+
 
         this.router.navigateByUrl('/gstdata', { state: { data: res } });
       },

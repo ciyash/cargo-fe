@@ -1,11 +1,11 @@
-import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
-import { CompanyLogoComponent } from '../../shared/company-logo/company-logo.component';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Router, RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
+import { FormBuilder,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { CompanyLogoComponent } from '../../shared/company-logo/company-logo.component';
+import { DomesticPhoneDirective } from '../../shared/domestic-phone.directive';
 @Component({standalone: true, selector: 'app-signup', imports: [DomesticPhoneDirective, CompanyLogoComponent, CommonModule, ReactiveFormsModule, RouterModule], templateUrl: './signup.component.html', styleUrls: ['./signup.component.scss']})
 export class SignupComponent {
   submitting = false;

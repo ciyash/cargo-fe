@@ -160,20 +160,20 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
   ngOnInit() {
     // Fetch cities
     this.api.GetCities().subscribe((res: any) => {
-      console.log('citydata', res);
+
       this.citydata = res;
     });
 
     // Fetch branches
     this.api.GetBranch().subscribe((res: any) => {
-      console.log('allbranch:', res);
+
 
       this.branchdata = res;
     });
 
     // Fetch vehicles
     this.api.VehicleData().subscribe((res: any) => {
-      console.log('allvechicle:', res);
+
       this.allgetvechicle = res;
     });
   }
@@ -259,7 +259,7 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
         this.form2,
         'fromCity',
         (val) => {
-          console.log('From City selected:', val);
+
           if (this.form2.value.fromCity && this.form2.value.toCity) {
             this.parcelbookingserieno();
           }
@@ -267,20 +267,20 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
       );
 
       initializeSelect2(this.allparcelcity, this.form2, 'toCity', (val) => {
-        console.log('To City selected:', val);
+
         if (this.form.value.fromCity && this.form2.value.toCity) {
           this.parcelbookingserieno();
         }
       });
 
       initializeSelect2(this.parcelfromcity, this.form, 'fromCity', (val) => {
-        console.log('From City selected:', val);
+
         if (this.form.value.fromCity && this.form.value.toCity) {
         }
       });
 
       initializeSelect2(this.allparceltocity, this.form, 'toCity', (val) => {
-        console.log('To City selected:', val);
+
         if (this.form.value.fromCity && this.form.value.toCity) {
         }
       });
@@ -292,7 +292,7 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
           this.pdata = res;
         },
         (error: any) => {
@@ -305,13 +305,13 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
   }
 
   onTocitySelect(event: any) {
-    console.log('Event triggered:', event);
-    console.log('Selected City:', event.target.value);
+
+
     const cityName = event.target.value;
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
 
           this.tbcdata = res;
         },
@@ -339,11 +339,11 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
       bookingStatus: this.form.value.bookingStatus,
       bookingType: this.form.value.bookingType,
     };
-    console.log('parcelbooking:', payload);
+
 
     this.api.ParcelBookingReport(payload).subscribe({
       next: (response: any) => {
-        console.log('Parcel reports1:', response);
+
         const finalData = {
           ...response,
           fromDate: this.form.value.fromDate,
@@ -386,11 +386,11 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
       vehicalNumber: this.form1.value.vehicalNumber || null,
     };
 
-    console.log('All Parcel Booking Payload:', payload1);
+
 
     this.api.AllParcelBookingReport(payload1).subscribe({
       next: (response: any) => {
-        console.log('All Parcel loaded successfully:', response);
+
 
         const finalData1 = {
           ...response,
@@ -431,12 +431,12 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
       toCity: this.form2.value.toCity,
     };
 
-    console.log('Serial No Report Payload:', payload2);
+
 
     this.api.ParcelReportSno(payload2).subscribe({
       next: (response: any) => {
         this.seriesdata = response;
-        console.log('Parcel Booking Series Data:', this.seriesdata);
+
 
         const finalData11 = {
           ...response,
@@ -474,12 +474,12 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
       dropBranch: this.form6.value.dropBranch,
     };
 
-    console.log('Booking Summary Report Payload:', payload5);
+
 
     this.api.ParcelBookingSummeryReport(payload5).subscribe({
       next: (response: any) => {
         this.summaryData = response;
-        console.log("summaryData:",this.summaryData);
+
 
 
         const successMessage =
@@ -521,11 +521,11 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
       bookingType: this.form7.value.bookingType,
     };
 
-    console.log('Cancel Report Payload:', payload6);
+
 
     this.api.ParcelCancelReport(payload6).subscribe({
       next: (response: any) => {
-        console.log('Cancel Report Loaded:', response);
+
         const finalData7 = {
           ...response,
           fromDate: payload6.fromDate,
@@ -562,12 +562,12 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
       bookingStatus: this.form4.value.bookingStatus,
     };
 
-    console.log('Mobile Report Payload:', payload3);
+
 
     this.api.ParcelBookingMobileNumber(payload3).subscribe({
       next: (response: any) => {
         this.mobiledata = response;
-        console.log("mobiledata:",this.mobiledata);
+
 
 
         const successMessage =
@@ -616,18 +616,18 @@ export class BranchReportsDashboardComponent implements AfterViewInit {
       pickUpBranch: this.form5.value.pickUpBranch,
       dropBranch: this.form5.value.dropBranch,
     };
-    console.log('Form5 Values:', this.form5.value);
 
-    console.log('Customer Report Payload:', payload4);
+
+
 
     this.api.ParcelBookingRegularCustomer(payload4).subscribe({
       next: (response: any) => {
         this.customerdata = response;
-        console.log('regularDara:', this.customerdata);
+
         const successMessage =
           response.message || 'Customer report loaded successfully!';
         this.toast.success(successMessage);
-        console.log('Form5 Values:', this.form5.value);
+
 
         const finalData2 = {
           ...response,

@@ -1,25 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
 import {
-  Component,
-  ElementRef,
-  OnInit,
-  AfterViewInit,
-  ViewChild,
+Component,
+ElementRef,
+ViewChild
 } from '@angular/core';
 import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
+FormArray,
+FormBuilder,
+FormControl,
+FormGroup,FormsModule,ReactiveFormsModule,Validators
 } from '@angular/forms';
-import { BranchService } from 'src/app/service/branch.service';
-import type * as XLSX from 'xlsx';
+import { RouterModule } from '@angular/router';
 import * as FileSaver from 'file-saver';
 import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
+import type * as XLSX from 'xlsx';
+import { HeaderComponent } from '../../../USER/header/header.component';
 declare module 'file-saver';
 declare var $: any;
 declare const SlimSelect: any;
@@ -74,7 +70,7 @@ export class ConsolidatedComponent {
   getCities() {
     this.api.GetCities().subscribe({
       next: (response: any) => {
-        console.log('Cities data:', response);
+
         this.cities = response;
       },
       error: (error: any) => {
@@ -101,7 +97,7 @@ export class ConsolidatedComponent {
 
     selectedOptions.forEach((city) => toCityArray.push(new FormControl(city)));
 
-    console.log('Selected To Cities:', toCityArray.value);
+
   }
 
   ngAfterViewInit(): void {
@@ -110,17 +106,17 @@ export class ConsolidatedComponent {
       $(this.selectElem.nativeElement).select2();
       $(this.selectElem.nativeElement).on('select2:select', (event: any) => {
         const selectedCity = event.params.data.id; // Get selected value
-        console.log('Selected City:', selectedCity);
+
         this.form.patchValue({ fromCity: selectedCity }); // Manually update the form
-        console.log('Updated form value:', this.form.value);
+
         this.onFromcitySelect({ target: { value: selectedCity } }); // Trigger API call
       });
       $(this.branchselect.nativeElement).select2();
       $(this.branchselect.nativeElement).on('select2:select', (event: any) => {
         const selectedDropBranch = event.params.data.id;
-        console.log('Selected Drop Branch:', selectedDropBranch);
+
         this.form.patchValue({ pickUpBranch: selectedDropBranch }); // Update form value
-        console.log('Updated form value:', this.form.value);
+
         this.BranchSelect({ target: { value: selectedDropBranch } });
       });
     }, 0);
@@ -131,7 +127,7 @@ export class ConsolidatedComponent {
     if (cityName) {
       this.api.GetBranchbyCity(cityName).subscribe(
         (res: any) => {
-          console.log('Branches for selected city:', res);
+
           this.tbcdata = res;
         },
         (error: any) => {
@@ -145,7 +141,7 @@ export class ConsolidatedComponent {
   branchData() {
     this.api.getData('branch').subscribe({
       next: (response: any) => {
-        console.log('Branch Datakajdkjanfjandfnaf:', response);
+
         this.branchdata = response; // Ensure response contains an array of branches
       },
       error: (error: any) => {
@@ -156,9 +152,9 @@ export class ConsolidatedComponent {
 
   getProfileData() {
     this.api.GetProfileData().subscribe((res: any) => {
-      console.log('profile', res);
+
       this.pfdata = res;
-      console.log(this.pfdata, 'branchid');
+
       if (this.pfdata && this.pfdata.username) {
         this.form.patchValue({
           bookedBy: this.pfdata.username,
@@ -176,22 +172,22 @@ export class ConsolidatedComponent {
       bookedBy: this.form.value.bookedBy,
     };
 
-    console.log('payload:', payload);
+
     this.bdata = payload;
     this.fromDate = this.form.value.fromDate;
     this.toDate = this.form.value.toDate;
 
     this.api.ConsolidatedReport(payload).subscribe({
       next: (res: any) => {
-        console.log('ConsolidatedReport:', res);
+
 
         this.Cdata = res;
         this.Tdata=res
-        console.log("tdata:",this.Tdata)
+
 
 
           this.deliveryData=res.data
-        console.log("devliveryData:",this.deliveryData);
+
 
         // Assuming the data you expect is in res.data or similar field
         // if (res.data && res.data.length > 0) {

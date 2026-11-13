@@ -1,12 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { Component, ElementRef, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BranchService } from 'src/app/service/branch.service';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { BranchService } from 'src/app/service/branch.service';
+import { HeaderComponent } from '../../../USER/header/header.component';
 declare var $: any;
 @Component({
   host: {'class':'reports-page'},
@@ -45,12 +43,12 @@ export class CollectionreportComponent {
       this.getProfileData();
       this.api.GetCities().subscribe((res: any) => {
         this.citydata = res;
-        console.log("citydata:", this.citydata);
+
       });
 
       this.api.GetBranch().subscribe((res: any) => {
         this.branchdata = res;
-        console.log("branchdata:", this.branchdata);
+
 
       });
 
@@ -65,13 +63,13 @@ export class CollectionreportComponent {
 
     getProfileData() {
       this.api.GetProfileData().subscribe((res: any) => {
-        console.log('profile', res);
+
         this.ffdata = res.branchId;
         this.citydata = res;
 
         this.pfdata = res.branchId.city;
         this.profileData = res;
-        console.log("profileData:", this.profileData);
+
 
         // Update form controls with profile data
         this.form.patchValue({
@@ -91,7 +89,7 @@ export class CollectionreportComponent {
 
     getCollectionReport() {
       const payload = this.form.value;
-      console.log("Payload:", payload);
+
 
       this.api.ParcelBranchWiseReport(payload).subscribe({
         next: (res: any) => {
@@ -109,7 +107,7 @@ export class CollectionreportComponent {
             })
           );
           window.open(url, '_blank');
-          console.log("dataStr:",dataStr);
+
 
         },
 

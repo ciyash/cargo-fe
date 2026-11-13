@@ -30,7 +30,7 @@ export class ParcelIncomingReportComponent {
     const state = navigation?.extras?.state as { data: any };
 
     if (state?.data) {
-      console.log('Received from state:', state.data);
+
       this.prow = state.data;
       this.gdata = this.extractGData(state.data);
       localStorage.setItem('incomingReportData', JSON.stringify(state.data));
@@ -38,7 +38,7 @@ export class ParcelIncomingReportComponent {
       const localData = localStorage.getItem('incomingReportData');
       if (localData) {
         const parsedData = JSON.parse(localData);
-        console.log('Received from localStorage:', parsedData);
+
         this.prow = parsedData;
         this.gdata = this.extractGData(parsedData);
       } else {

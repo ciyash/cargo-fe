@@ -1,7 +1,4 @@
 export const environment = {
-    production: true,
-    // baseUrl: 'https://cargologistics.onrender.com',
-    baseUrl:'http://localhost:4000'
-    // baseUrl:'http://localhost:4000',
-
-  };
+  production: true,
+  baseUrl: 'https://nestcargo-be.onrender.com',
+};

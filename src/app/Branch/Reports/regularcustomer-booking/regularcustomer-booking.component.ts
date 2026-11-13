@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../../USER/header/header.component';
-import { Component, OnInit } from '@angular/core';
-import { Router, NavigationExtras } from '@angular/router';
+import { Component,OnInit } from '@angular/core';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { Router,RouterModule } from '@angular/router';
+import * as FileSaver from 'file-saver';
 import { BranchService } from 'src/app/service/branch.service';
 import type * as XLSX from 'xlsx';
-import * as FileSaver from 'file-saver';
+import { HeaderComponent } from '../../../USER/header/header.component';
 
 @Component({
   host: {'class':'reports-page'},
@@ -28,7 +27,7 @@ export class RegularcustomerBookingComponent implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras?.state?.['data7']) {
       this.data7 = navigation.extras.state['data7'];
-      console.log('Customer data from router state:', this.data7);
+
       // âœ… Store in localStorage for refresh support
       // localStorage.setItem('regularCustomerData', JSON.stringify(this.data7));
 
@@ -45,7 +44,7 @@ export class RegularcustomerBookingComponent implements OnInit {
 
       if (storedData) {
         this.data7 = JSON.parse(storedData);
-        console.log('Customer data from localStorage:', this.data7);
+
       } else {
         console.warn('No customer data found in router state or localStorage');
       }
@@ -55,7 +54,7 @@ export class RegularcustomerBookingComponent implements OnInit {
   getProfileData(): void {
     this.api.GetProfileData().subscribe((res: any) => {
       this.pfdata = res;
-      console.log('Profile data:', this.pfdata);
+
     });
   }
 

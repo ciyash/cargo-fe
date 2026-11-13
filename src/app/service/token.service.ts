@@ -9,19 +9,14 @@ const USER_KEY = 'auth-user';
   providedIn: 'root'
 })
 export class TokenService {
-  private companyLoginFlag = false;
   private user: any | null = null;
-  private token: string | null = null;
 
   constructor(private router: Router) {
     this.getUser(); // Load user if stored (optional)
-    this.token = localStorage.getItem(TOKEN_KEY);
   }
 
-  // ✅ Token methods
   public saveToken(token: string): void {
     window.localStorage.setItem(TOKEN_KEY, token);
-    this.token = token;
 
   }
 
@@ -29,9 +24,7 @@ export class TokenService {
     return localStorage.getItem(TOKEN_KEY);
   }
 
-  // ✅ Optional user storage (skip if not using)
   public saveUser(user: any): void {
-    user = {...user, roleVersion: 2};
     user = {...user, roleVersion: 2};
     window.localStorage.setItem(USER_KEY, JSON.stringify(user));
     this.user = user;
@@ -45,11 +38,7 @@ export class TokenService {
         this.user={...this.user,role:legacy[this.user.role]||this.user.role,roleVersion:2};
         localStorage.setItem(USER_KEY,JSON.stringify(this.user));
       }
-      if(this.user && this.user.roleVersion !== 2){
-        const legacy:Record<string,string>={admin:'company_admin',superadmin:'company_admin',subadmin:'admin',branch_admin:'admin',employee:'staff',company:'company_admin'};
-        this.user={...this.user,role:legacy[this.user.role]||this.user.role,roleVersion:2};
-        localStorage.setItem(USER_KEY,JSON.stringify(this.user));
-      }
+
     } catch (error) {
       console.error('Invalid JSON format in localStorage:', error);
       this.user = null;
@@ -76,11 +65,6 @@ export class TokenService {
     return !!this.getToken(); // Only checks token now
   }
 
-  // ✅ In-memory company login flag
-  public setCompanyLoginFlag(): void {
-    this.companyLoginFlag = true;
-  }
-
   public isCompany(): boolean {
     try {
       const payload = JSON.parse(atob((this.getToken() || '').split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
@@ -88,7 +72,6 @@ export class TokenService {
     } catch { return false; }
   }
 
-  // ✅ Role-based checks (if user is saved)
   public isAdmin(): boolean {
     return this.getRole() === 'company_admin';
   }
@@ -113,12 +96,9 @@ export class TokenService {
     return this.getRole() === 'driver';
   }
 
-  // ✅ Logout
   public signOut(): void {
     const loginPath = this.isCompany() ? '/clogin' : '/login';
     this.user = null;
-    this.token = null;
-    this.companyLoginFlag = false;
     window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.removeItem(USER_KEY);
     this.router.navigate([loginPath]);

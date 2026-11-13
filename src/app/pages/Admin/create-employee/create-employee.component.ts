@@ -81,7 +81,7 @@ export class CreateEmployeeComponent {
       this.branchData();
 
       this.api.GetEmployees().subscribe((res: any) => {
-        console.log('empdata', res);
+
         this.edata = res.map((employee: any) => {
           employee.showPassword = false; // Initialize show/hide
           return employee;
@@ -93,7 +93,7 @@ export class CreateEmployeeComponent {
   showDialog(row: any) {
     this.visible = true;
     this.repd = row;
-    console.log("employeedata:", this.repd);
+
 
     this.form1.patchValue({
       name: row.name,
@@ -119,7 +119,7 @@ export class CreateEmployeeComponent {
     branchData() {
       this.bapi.getData('branch').subscribe({
         next: (response: any) => {
-          console.log('Branch Data:', response);
+
           this.branchdata = response;
         },
         error: (error: any) => {
@@ -146,7 +146,7 @@ export class CreateEmployeeComponent {
       };
       this.api.createEmployee(payload).subscribe({
         next: (response: any) => {
-          console.log('Parcel loaded successfully:', response);
+
           this.toastr.success('Staff account created', 'Success');
 
           // this.messageService.add({ severity: 'success', summary: 'success', detail: 'Create Employee successfully' });
@@ -216,7 +216,7 @@ export class CreateEmployeeComponent {
       };
       this.api.UpdateEmployee(payload).subscribe({
         next: (response: any) => {
-          console.log('Employee updated successfully:', response);
+
           this.toastr.success('Employee updated successfully', 'Success');
 
           setTimeout(() => {

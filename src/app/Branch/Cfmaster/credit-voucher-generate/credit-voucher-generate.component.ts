@@ -69,11 +69,11 @@ export class CreditVoucherGenerateComponent {
       senderName: this.form.value.senderName,
     };
 
-    console.log('Final Payload:', payload);
+
 
     this.api.LoadVouchers(payload).subscribe({
       next: (response: any) => {
-        console.log('Parcel loaded successfully:', response);
+
         this.toast.success('Vouchers loaded successfully','Success');
         this.vldata=Array.isArray(response) ? response : (response?.data || []);
 
@@ -125,7 +125,7 @@ export class CreditVoucherGenerateComponent {
     if (searchTerm) {
       this.api.searchCfUser(searchTerm).subscribe(
         (res: any) => {
-          console.log('API Response:', res);
+
           this.userList = res.data.length ? res.data : [];
           this.showDropdown = !!this.userList.length;
         },
