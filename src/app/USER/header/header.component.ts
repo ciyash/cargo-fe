@@ -23,8 +23,8 @@ export class HeaderComponent implements OnInit {
       case 'admin': return '/dashboard';
       case 'staff': return '/booking';
       case 'accountant': return '/reports';
-      case 'superviser': return '/tasks';
-      case 'driver': return '/delivery';
+      case 'superviser': return '/booking';
+      case 'driver': return '/parcel-delivery';
       default: return '/login';
     }
   }
@@ -237,7 +237,7 @@ export class HeaderComponent implements OnInit {
         {
           label: 'Profile',
           icon: 'pi pi-fw pi-user-edit',
-          routerLink: ['/aprofile'],
+          routerLink: ['/profile'],
         },
 
       ];
@@ -383,7 +383,7 @@ export class HeaderComponent implements OnInit {
         {
           label: 'Tasks',
           icon: 'pi pi-fw pi-briefcase',
-          routerLink: ['/tasks'],
+          routerLink: ['/booking'],
         },
       ];
     }
@@ -393,7 +393,7 @@ export class HeaderComponent implements OnInit {
         {
           label: 'Delivery',
           icon: 'pi pi-fw pi-truck',
-          routerLink: ['/delivery'],
+          routerLink: ['/parcel-delivery'],
         },
       ];
     }

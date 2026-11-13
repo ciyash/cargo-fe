@@ -222,7 +222,7 @@ export class AdminService {
     }) {
     const httpOptions = authenticatedOptions(this.token.getToken());
       return this.http.patch(
-        AUTH_API + 'subadmin-auth/update-profile',   {
+        AUTH_API + 'subadmin-auth/admin-profile',   {
           "companyName":value.companyName,
           "name":value.name,
           "username":value.username,

@@ -22,7 +22,7 @@ export class AuthService {
       AUTH_API + 'subadmin-auth/login',
       {
         ...(companyId ? {companyId} : {}),
-        identifier: identifier,
+        identifier: identifier.trim(),
         password: password,
       },
       httpOptions

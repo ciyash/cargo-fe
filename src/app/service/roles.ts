@@ -6,8 +6,8 @@ export const normalizeRole=(role:string):Role|null=>Object.prototype.hasOwnPrope
 export const roleLabel=(role:string)=>ROLE_OPTIONS.find(r=>r.value===normalizeRole(role))?.label||'Staff';
 export function permissionsFor(user:any):string[]{
  if(normalizeRole(user?.role)==='company_admin')return [...WORK_PERMISSIONS.map(p=>p.value),'team','settings','subscription','services','branches'];
- if(Array.isArray(user?.permissions))return user.permissions;
  if(user?.role==='employee'||user?.role==='staff')return WORK_PERMISSIONS.map(p=>p.value);
+ if(Array.isArray(user?.permissions))return user.permissions;
  if(normalizeRole(user?.role)==='admin')return [...WORK_PERMISSIONS.map(p=>p.value),'team'];
  if(user?.role==='accountant')return ['accounts','reports'];
  if(user?.role==='driver')return ['delivery'];

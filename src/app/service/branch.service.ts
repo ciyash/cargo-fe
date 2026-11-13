@@ -397,7 +397,7 @@ postBranchtobranchUnLoadingFilter(value: {
     const httpOptions = authenticatedOptions(this.token.getToken());
 
   return this.http.post(
-    AUTH_API + 'parcel-unloading/branch-to-branch-load',
+    AUTH_API + 'parcel-unloading/branch-to-branch-unload',
     {
       "fromLoadingDate": value.fromLoadingDate,
       "toLoadingDate": value.toLoadingDate,

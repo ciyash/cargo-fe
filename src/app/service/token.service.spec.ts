@@ -21,11 +21,18 @@ describe('Session and permissions', () => {
     expect(service.getRole()).toBe('company_admin'); expect(service.getRole()).toBe('company_admin');
     service.saveUser({role: 'admin'}); expect(service.getRole()).toBe('admin');
   });
-  it('respects an explicit staff permission list, including an empty list', () => {
+  it('matches backend Staff operational access even when an old account saved fewer permissions', () => {
     service.saveUser({role: 'staff', permissions: ['delivery']});
-    expect(service.can('bookings')).toBeFalse(); expect(service.can('delivery')).toBeTrue();
-    expect(service.canAccessRoute('/employee-booking')).toBeFalse();
-    service.saveUser({role: 'staff', permissions: []}); expect(service.permissions()).toEqual([]);
+    expect(service.can('bookings')).toBeTrue(); expect(service.can('delivery')).toBeTrue();
+    expect(service.canAccessRoute('/employee-booking')).toBeTrue();
+    expect(service.canAccessRoute('/createcity')).toBeFalse();
+    expect(service.canAccessRoute('/dashboard')).toBeFalse();
+    service.saveUser({role: 'staff', permissions: []}); expect(service.permissions()).toEqual(['bookings','loading','delivery','accounts','reports']);
+  });
+  it('preserves explicit Branch Admin permissions without granting company settings', () => {
+    service.saveUser({role:'admin',permissions:['delivery']});
+    expect(service.can('bookings')).toBeFalse();expect(service.can('delivery')).toBeTrue();
+    expect(service.canAccessRoute('/createcity')).toBeFalse();
   });
   it('retains default permissions for legacy staff without an explicit list', () => {
     expect(permissionsFor({role: 'employee'})).toContain('bookings');
