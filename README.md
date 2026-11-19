@@ -11,12 +11,11 @@ npm ci
 npm start
 ```
 
-Open http://localhost:4200. The local backend defaults to http://localhost:4000 in `src/environments/environment.development.ts`.
+Open http://localhost:4200.
 
 ## Configuration
 
-- Development uses `environment.development.ts` through Angular file replacement.
-- Production uses `environment.ts`. Set its `baseUrl` to the deployed backend before publishing. The existing localhost value is retained for local use.
+- Set `baseUrl` in `src/environments/environment.ts` to the backend you want to use. Local and deployed builds read the same file.
 - All API services derive their endpoint prefix from `environment.baseUrl`.
 - Never store secrets in environment files: Angular includes these values in the browser bundle.
 - Configure hosting to serve `index.html` for application routes, including direct links to report and print URLs.

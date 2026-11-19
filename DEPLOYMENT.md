@@ -1,14 +1,6 @@
 # Local development and Vercel
 
-Angular selects the API automatically through its existing build configurations:
-
-| Command | API |
-| --- | --- |
-| `npm start` | `http://localhost:4000` |
-| `npm run build:dev` | `http://localhost:4000` |
-| `npm run build` | `https://nestcargo-be.onrender.com` |
-
-Keep the local backend running on port 4000 while developing. No API URL edits are needed when switching between development and production builds.
+Local and deployed builds use `baseUrl` from `src/environments/environment.ts`. Set it to the backend URL you want to use before starting or building the app.
 
 `vercel.json` selects the Angular framework, installs with `npm ci --legacy-peer-deps`, runs `npm run build`, publishes `dist/crm16`, and serves `index.html` for application routes. Existing static files take precedence over the fallback rewrite.
 
@@ -20,7 +12,7 @@ If deploying before this configuration reaches GitHub, expand **Build and Output
 - Build Command: `npm run build`
 - Output Directory: `dist/crm16`
 
-Push the production environment files and `vercel.json` to the branch Vercel builds before redeploying. The dashboard builds the GitHub commit, not uncommitted local changes.
+Commit the desired `baseUrl` and push it to the branch Vercel builds before redeploying.
 
 To deploy from Vercel's dashboard, import this repository and use this frontend directory as the project root. The checked-in configuration supplies the build command and output directory. To deploy from an authenticated CLI, run `vercel --prod` in this directory.
 
